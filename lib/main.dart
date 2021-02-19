@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'login_page.dart';
 // import './Util/image_fetch.dart';
 import 'home_page.dart';
+import 'profile.dart';
+import 'Util/glob_var.dart';
 
 // Images imageHandler = new Images();
+GlobaVar globVar = new GlobaVar();
 
 void main() {
+
   runApp(MyApp());
 }
 
@@ -39,6 +43,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => new LoginPage(),
         '/home' : (context) => new HomePage(),
+        '/profile' : (context) => new Profile(),
       },
     );
   }
