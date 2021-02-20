@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context)=>SimpleDialog(
                 children: [
                   Icon(Icons.meeting_room,size: 85,),
-                  Center(child: Text("Leaving us already ?",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 14,fontWeight: FontWeight.w300),)),
+                  Center(child: Text("Sudah ingin keluar ?",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 14,fontWeight: FontWeight.w300),)),
                   SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: (){
                             Navigator.pop(context,false);
                           },
-                          child: Text("Cancel",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                          child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
                       ),
                       SizedBox(width: 15),
                       FlatButton(
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: (){
                             Navigator.pop(context,true);
                           },
-                          child: Text("Close",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                          child: Text("Keluar",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
                       ),
                     ],
                   ),
@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                                                        ),
                                                        contentPadding: EdgeInsets.all(23),
                                                        hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
-                                                       hintText: "Email Address"
+                                                       hintText: "Alamat Email"
                                                      ),
                                                    ),
                                                  ),
@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                                                  Container(
                                                    padding: EdgeInsets.only(top:15),
                                                    alignment: Alignment.centerRight,
-                                                   child: Text("Forget Password",style: TextStyle(fontWeight: FontWeight.w200,decoration: TextDecoration.underline,color: Color.fromRGBO(5,0,255,1),fontSize: 16,fontStyle: FontStyle.italic,),),
+                                                   child: Text("Lupa Password",style: TextStyle(fontWeight: FontWeight.w200,decoration: TextDecoration.underline,color: Color.fromRGBO(5,0,255,1),fontSize: 16,fontStyle: FontStyle.italic,),),
                                                  ),
                                                  Container(
                                                    padding: EdgeInsets.only(top: 25),
@@ -246,7 +246,7 @@ class _LoginPageState extends State<LoginPage> {
                                },
                                child: Container(
                                  alignment: Alignment.center,
-                                 child: Text("Register",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.black),),
+                                 child: Text("Daftar",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.black),),
                                )),
                          ),
                        ],

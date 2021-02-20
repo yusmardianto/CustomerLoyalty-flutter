@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (context)=>SimpleDialog(
                   children: [
                     Icon(Icons.meeting_room,size: 85,),
-                    Center(child: Text("Leaving us already ?",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 14,fontWeight: FontWeight.w300),)),
+                    Center(child: Text("Sudah ingin keluar ?",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 14,fontWeight: FontWeight.w300),)),
                     SizedBox(height: 15),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
                             onPressed: (){
                               Navigator.pop(context,false);
                             },
-                            child: Text("Cancel",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                            child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
                         ),
                         SizedBox(width: 15),
                         FlatButton(
@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
                             onPressed: (){
                               Navigator.pop(context,true);
                             },
-                            child: Text("Close",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                            child: Text("Keluar",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
                         ),
                       ],
                     ),
@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            child: Text("Home",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 24),),
+                            child: Text("Beranda",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 24),),
                           ),
                           InkWell(
                             onTap: (){
@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            child: Text("My Vouchers :",style: TextStyle(shadows: [
+                            child: Text("Vouchers saya :",style: TextStyle(shadows: [
                               Shadow(
                                 offset: Offset(3.0, 3.0),
                                 blurRadius: 0.5,
@@ -207,7 +207,8 @@ class _HomePageState extends State<HomePage> {
                             ],color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w500,fontSize: 18),),
                           ),
                           Container(
-                            child: Text("Show all",style: TextStyle(
+                            padding: EdgeInsets.only(right: 15),
+                            child: Text("Semua",style: TextStyle(
                                 shadows: [
                                   Shadow(
                                     offset: Offset(3.0, 3.0),
@@ -245,7 +246,7 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            child: Text("Products on promotion sales :",style: TextStyle(shadows: [
+                            child: Text("Product dalam diskon :",style: TextStyle(shadows: [
                               Shadow(
                                 offset: Offset(3.0, 3.0),
                                 blurRadius: 0.5,
@@ -254,7 +255,8 @@ class _HomePageState extends State<HomePage> {
                             ],color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w500,fontSize: 18),),
                           ),
                           Container(
-                            child: Text("Show all",style: TextStyle(
+                            padding: EdgeInsets.only(right: 15),
+                            child: Text("Semua",style: TextStyle(
                                 shadows: [
                                   Shadow(
                                     offset: Offset(3.0, 3.0),
@@ -301,10 +303,42 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color.fromRGBO(61,61, 206, 1),
         type : BottomNavigationBarType.fixed,
-        onTap: (idx){
+        onTap: (idx)async{
           switch(idx){
             case 0 : {
-
+              await showDialog(
+                  context: context,
+                  builder: (context)=>SimpleDialog(
+                children: [
+                  Icon(Icons.support_agent,size: 85,),
+                  Center(child: Text("Butuh bantuan dalam menggunakan aplikasi? \n Silakan hubungi team support kami lewat : ",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 13,fontWeight: FontWeight.w300),)),
+                  SizedBox(height: 15),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                          color: Color.fromRGBO(64, 64, 222, 1), style: BorderStyle.solid, width: 0.80),
+                    ),
+                    child: DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none
+                      ),
+                      isExpanded: true,
+                      onChanged: (value){},
+                      items: [
+                        DropdownMenuItem(child: Text("WhatsApp"),value: "WA",)
+                      ],
+                    ),
+                  ),
+                ],
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    side: BorderSide(color: Colors.transparent)
+                ),
+                contentPadding: EdgeInsets.all(20),
+              )
+          );
             }break;
             case 1 : {
               Navigator.pushNamed(context, "/profile");
@@ -314,8 +348,8 @@ class _HomePageState extends State<HomePage> {
                   isScrollControlled: true,
                   context: context,
                   builder: (context) => Container(
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                    height: MediaQuery.of(context).size.height*0.5,
+                    // padding: EdgeInsets.all(22),
+                    height: MediaQuery.of(context).size.height*0.4,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(25),topRight: Radius.circular(25)),
@@ -323,10 +357,34 @@ class _HomePageState extends State<HomePage> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                            SizedBox(height: 40,),
-                            Container(child: Text("Apa yang mau kita lakukan hari ini ?",style: TextStyle(color: Colors.black),))
+                            SizedBox(height: 20,),
+                            Container(padding: EdgeInsets.all(22),child: Text("Apa yang mau dilakukan hari ini ?",style: TextStyle(fontSize: 18,fontStyle: FontStyle.italic,fontWeight: FontWeight.w200,color: Colors.black),)),
+                          Container(
+                            height: 104.0*2,
+                            child: GridView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.only(top: 22,right: 10,left: 10),
+                                itemCount: 8,
+                                shrinkWrap: true,
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+                                itemBuilder: (context,indx)=>Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Container(
+                                    height: 74,
+                                    width: 74,
+                                    child: Card(
+                                      color: Color.fromRGBO(237, 237, 237, 1),
+                                      child: new GridTile(
+                                        footer: new Text(""),
+                                        child: new Text(""), //just for testing, will fill with image later
+                                      ),
+                                    ),
+                                  ),
+                                )),
+                          )
                         ],
                       ),
                     ),
@@ -337,12 +395,12 @@ class _HomePageState extends State<HomePage> {
 
             }break;
             case 4 : {
-
+              Navigator.pushNamed(context, "/transactions");
             }break;
           }
         },
         items: [
-          BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.commentDots,color: Colors.white,)),
+          BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.headset,color: Colors.white,)),
           BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.addressCard,color: Colors.white,)),
           BottomNavigationBarItem(title: Container(),icon: Icon(Icons.widgets_outlined,color: Colors.white,)),
           BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.gift,color: Colors.white,)),

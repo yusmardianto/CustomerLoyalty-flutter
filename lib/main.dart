@@ -4,6 +4,7 @@ import 'login_page.dart';
 import 'home_page.dart';
 import 'profile.dart';
 import 'Util/glob_var.dart';
+import 'transactions.dart';
 
 // Images imageHandler = new Images();
 GlobaVar globVar = new GlobaVar();
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => new LoginPage(),
         '/home' : (context) => new HomePage(),
         '/profile' : (context) => new Profile(),
+        '/transactions' : (context) => new Transactions(),
       },
     );
   }
