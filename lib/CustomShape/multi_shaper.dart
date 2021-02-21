@@ -13,27 +13,43 @@ class MulltiPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) async{
 
-
-    var paint2 = Paint();
-    paint2.color = Color.fromRGBO(61, 61, 143, 1);
-    paint2.style = PaintingStyle.fill;
-    var path2 = Path();
-    path2.moveTo(0,size.height*0.5);
-    path2.lineTo(size.width,size.height*0.3);
-    path2.lineTo(size.width, size.height);
-    path2.lineTo(0, size.height);
-    canvas.drawPath(path2, paint2);
-
     var paint = Paint();
-    paint.color = Color.fromRGBO(255, 84, 84, 1);
+    paint.color = Color.fromRGBO(223, 76, 76, 1);
     paint.style = PaintingStyle.fill;
     var path = Path();
-    path.moveTo(0, size.height*0.5);
-    path.lineTo(size.width,size.height*0.3);
+    path.moveTo(size.width*0.7, 0);
+    path.quadraticBezierTo(size.width*0.6,size.height*0.15,size.width, size.height*0.16);
     path.lineTo(size.width, 0);
-    path.lineTo(0, 0);
-    // TODO: Draw your path
+    path.lineTo(size.width*0.75, 0);
     canvas.drawPath(path, paint);
+
+    var paint2 = Paint();
+    paint2.color = Color.fromRGBO(243, 54, 54, 1);
+    paint2.style = PaintingStyle.fill;
+    var path2 = Path();
+    path2.moveTo(0, size.height*0.22);
+    path2.lineTo(size.width*0.54, size.height*0.4);
+    path2.lineTo(size.width*0.3, size.height*0.67);
+    path2.lineTo(0, size.height*0.67);
+    canvas.drawPath(path2, paint2);
+
+    var paint3 = Paint();
+    paint3.color = Color.fromRGBO(39, 50, 155, 1);
+    paint3.style = PaintingStyle.fill;
+    var path3 = Path();
+    path3.moveTo(size.width, size.height*0.52);
+    path3.lineTo(size.width*0.7, size.height);
+    path3.lineTo(size.width, size.height);
+    canvas.drawPath(path3, paint3);
+
+    var paint4 = Paint();
+    paint4.color = Color.fromRGBO(122, 119, 119, 0.53);
+    paint4.style = PaintingStyle.fill;
+    var path4 = Path();
+    path4.lineTo(size.width, 0);
+    path4.lineTo(size.width, size.height);
+    path4.lineTo(0, size.height);
+    canvas.drawPath(path4, paint4);
   }
 
   @override

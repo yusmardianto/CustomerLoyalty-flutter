@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    // imageHandler.load('images/deal.jpg').then((i){
+    // imageHandler.load('images/d.jpg').then((i){
     //   setState(() {
     //     assetImage = i;
     //   });

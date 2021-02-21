@@ -6,6 +6,7 @@ import 'CustomShape/diagonal_shaper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'main.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -139,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Text("Points : ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 14),),
                               ),
                               Container(
-                                child: Text("18000",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 18, fontFamily: "PT_Mono"),),
+                                child: Text("18000",style: GoogleFonts.ptMono(textStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 18, ),)),
                               ),
                               Container(
                                 padding: EdgeInsets.only(left: 5),
@@ -392,7 +393,7 @@ class _HomePageState extends State<HomePage> {
               );
             }break;
             case 3 : {
-
+              Navigator.pushNamed(context, "/vouchers");
             }break;
             case 4 : {
               Navigator.pushNamed(context, "/transactions");
