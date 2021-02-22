@@ -69,22 +69,94 @@ class _ProfileState extends State<Profile> {
                       ),
                       Expanded(
                         flex: 1,
-                        child: FlatButton(
-                          onPressed: (){},
-                          minWidth: 180,
-                          padding: EdgeInsets.all(12),
-                          color: Color.fromRGBO(255, 84, 84, 1),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(FontAwesomeIcons.pencilAlt,color: Colors.white,size: 18,),
-                              Text(" Edit Profil",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w700),),
-                            ],
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            FlatButton(
+                              onPressed: (){},
+                              minWidth: 180,
+                              padding: EdgeInsets.all(12),
+                              color: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(FontAwesomeIcons.pencilAlt,color: Colors.white,size: 18,),
+                                  Text(" Edit Profil",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w700),),
+                                ],
+                              ),
+                            ),
+                            FlatButton(
+                              onPressed: ()async {
+                                var logout = await showDialog(
+                                    context: context,
+                                    builder: (context)=>SimpleDialog(
+                                      children: [
+                                        Icon(FontAwesomeIcons.signOutAlt,size: 85,),
+                                        Center(child: Text("Logout dari akun ini?",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 16,fontWeight: FontWeight.w400),)),
+                                        SizedBox(height: 15),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            FlatButton(
+                                                minWidth: 120,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(15.0),
+                                                    side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                                                ),
+                                                padding: EdgeInsets.all(10),
+                                                onPressed: (){
+                                                  Navigator.pop(context,false);
+                                                },
+                                                child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                                            ),
+                                            SizedBox(width: 15),
+                                            FlatButton(
+                                                minWidth: 120,
+                                                color: Color.fromRGBO(254, 83, 83, 1),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(15.0)
+                                                ),
+                                                padding: EdgeInsets.all(10),
+                                                onPressed: (){
+                                                  Navigator.pop(context,true);
+                                                },
+                                                child: Text("Logout",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                      backgroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(25.0),
+                                          side: BorderSide(color: Colors.transparent)
+                                      ),
+                                      contentPadding: EdgeInsets.all(20),
+                                    )
+                                );
+                                if(logout??false){
+                                  Navigator.pushNamed(context, '/login');
+                                }
+                              },
+                              minWidth: 180,
+                              padding: EdgeInsets.all(10),
+                              color: Color.fromRGBO(255, 84, 84, 1),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(FontAwesomeIcons.signOutAlt,color: Colors.white,size: 20,),
+                                  Text("  Logout",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w700),),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Expanded(

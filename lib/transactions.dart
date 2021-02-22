@@ -70,7 +70,7 @@ class _TransactionsState extends State<Transactions> {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text("45.000.000",style: GoogleFonts.robotoMono(textStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic)),),
+                            Text("45.000.000",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black54,fontSize: 18,fontWeight: FontWeight.w300,fontStyle: FontStyle.italic)),),
                             Text(" IDR",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,fontStyle: FontStyle.italic))
                           ],
                         ),
@@ -94,7 +94,7 @@ class _TransactionsState extends State<Transactions> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Text(("PT. Yamaha Central Palembang").length>23?"PT. Yamaha Central Pal..":"PT. Yamaha Central Palembang",style: TextStyle(fontSize: 13,fontWeight: FontWeight.w200),)
+                                      Text(("PT. Yamaha Central Palembang").length>23?"PT. Yamaha Central Pal..":"PT. Yamaha Central Palembang",style: TextStyle(fontSize: 13,fontWeight: FontWeight.w400),)
                                     ],
                                   ),
                                   Row(
@@ -104,7 +104,7 @@ class _TransactionsState extends State<Transactions> {
                                       Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Text("15.000.000",style: GoogleFonts.robotoMono(textStyle: TextStyle(fontWeight: FontWeight.w100,fontSize: 18,fontStyle: FontStyle.italic)),),
+                                          Text("15.000.000",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black54,fontWeight: FontWeight.w300,fontSize: 18,fontStyle: FontStyle.italic)),),
                                           Text(" IDR",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
                                         ],
                                       )
@@ -118,7 +118,7 @@ class _TransactionsState extends State<Transactions> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Icon(FontAwesomeIcons.angleDoubleUp,size: 17,color: Color.fromRGBO(34, 168, 56, 1),),
-                                          Text("1500",style: GoogleFonts.robotoMono(textStyle: TextStyle(fontWeight: FontWeight.w100,fontSize: 18,fontStyle: FontStyle.italic)),),
+                                          Text("1500",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black54,fontWeight: FontWeight.w400,fontSize: 18,fontStyle: FontStyle.italic)),),
                                           SizedBox(width: 2,),
                                           Icon(FontAwesomeIcons.coins,size: 17,color: Colors.amber,),
                                         ],
@@ -139,7 +139,7 @@ class _TransactionsState extends State<Transactions> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        Text(("PT. Yamaha Central Palembang").length>23?"PT. Yamaha Central Pal..":"PT. Yamaha Central Palembang",style: TextStyle(fontSize: 13,fontWeight: FontWeight.w200),)
+                                        Text(("PT. Yamaha Central Palembang").length>23?"PT. Yamaha Central Pal..":"PT. Yamaha Central Palembang",style: TextStyle(fontSize: 13,fontWeight: FontWeight.w400),)
                                       ],
                                     ),
                                     Row(
@@ -149,7 +149,7 @@ class _TransactionsState extends State<Transactions> {
                                         Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Text("15.000.000",style: GoogleFonts.robotoMono(textStyle: TextStyle(fontWeight: FontWeight.w100,fontSize: 18,fontStyle: FontStyle.italic)),),
+                                            Text("15.000.000",style: GoogleFonts.robotoMono(color: Colors.black54,textStyle: TextStyle(fontWeight: FontWeight.w300,fontSize: 18,fontStyle: FontStyle.italic)),),
                                             Text(" IDR",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
                                           ],
                                         )
@@ -163,7 +163,7 @@ class _TransactionsState extends State<Transactions> {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Icon(FontAwesomeIcons.angleDoubleUp,size: 17,color: Color.fromRGBO(34, 168, 56, 1),),
-                                            Text("1500",style: GoogleFonts.robotoMono(textStyle: TextStyle(fontWeight: FontWeight.w100,fontSize: 18,fontStyle: FontStyle.italic)),),
+                                            Text("1500",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black54,fontWeight: FontWeight.w300,fontSize: 18,fontStyle: FontStyle.italic)),),
                                             SizedBox(width: 2,),
                                             Icon(FontAwesomeIcons.coins,size: 17,color: Colors.amber,),
                                           ],

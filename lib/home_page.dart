@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (context)=>SimpleDialog(
                   children: [
                     Icon(Icons.meeting_room,size: 85,),
-                    Center(child: Text("Sudah ingin keluar ?",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 14,fontWeight: FontWeight.w300),)),
+                    Center(child: Text("Sudah ingin keluar ?",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 16,fontWeight: FontWeight.w400),)),
                     SizedBox(height: 15),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Text("Points : ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 14),),
                               ),
                               Container(
-                                child: Text("18000",style: GoogleFonts.ptMono(textStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 18, ),)),
+                                child: Text("18000",style: GoogleFonts.ptMono(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 18, ),)),
                               ),
                               Container(
                                 padding: EdgeInsets.only(left: 5),
@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Text("Level \t: ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 14),),
                               ),
                               Container(
-                                child: Text("Besty",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 16, fontFamily: "PT_Mono"),),
+                                child: Text("Besty",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 16, fontFamily: "PT_Mono"),),
                               ),
                               Container(
                                 padding: EdgeInsets.only(left: 5),
@@ -207,18 +207,23 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w500,fontSize: 18),),
                           ),
-                          Container(
-                            padding: EdgeInsets.only(right: 15),
-                            child: Text("Semua",style: TextStyle(
-                                shadows: [
-                                  Shadow(
-                                    offset: Offset(3.0, 3.0),
-                                    blurRadius: 0.5,
-                                    color: Colors.black.withOpacity(0.4),
-                                  ),
-                                ],
-                                decoration: TextDecoration.underline,
-                                color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,fontSize: 14),),
+                          InkWell(
+                            onTap: (){
+                              Navigator.pushNamed(context, "/vouchers");
+                            },
+                            child: Container(
+                              padding: EdgeInsets.only(right: 15),
+                              child: Text("Semua",style: TextStyle(
+                                  shadows: [
+                                    Shadow(
+                                      offset: Offset(3.0, 3.0),
+                                      blurRadius: 0.5,
+                                      color: Colors.black.withOpacity(0.4),
+                                    ),
+                                  ],
+                                  decoration: TextDecoration.underline,
+                                  color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,fontSize: 14),),
+                            ),
                           ),
                         ],
                       ),
@@ -307,105 +312,122 @@ class _HomePageState extends State<HomePage> {
         onTap: (idx)async{
           switch(idx){
             case 0 : {
-              await showDialog(
-                  context: context,
-                  builder: (context)=>SimpleDialog(
-                children: [
-                  Icon(Icons.support_agent,size: 85,),
-                  Center(child: Text("Butuh bantuan dalam menggunakan aplikasi? \n Silakan hubungi team support kami lewat : ",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 13,fontWeight: FontWeight.w300),)),
-                  SizedBox(height: 15),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                          color: Color.fromRGBO(64, 64, 222, 1), style: BorderStyle.solid, width: 0.80),
-                    ),
-                    child: DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none
-                      ),
-                      isExpanded: true,
-                      onChanged: (value){},
-                      items: [
-                        DropdownMenuItem(child: Text("WhatsApp"),value: "WA",)
-                      ],
-                    ),
-                  ),
-                ],
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    side: BorderSide(color: Colors.transparent)
-                ),
-                contentPadding: EdgeInsets.all(20),
-              )
-          );
+              // await showDialog(
+              //         context: context,
+              //         builder: (context)=>SimpleDialog(
+              //       children: [
+              //         Icon(Icons.support_agent,size: 85,),
+              //         Center(child: Text("Butuh bantuan dalam menggunakan aplikasi? \n Silakan hubungi team support kami lewat : ",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 16,fontWeight: FontWeight.w400),)),
+              //         SizedBox(height: 15),
+              //         Container(
+              //           decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(15),
+              //             border: Border.all(
+              //                 color: Color.fromRGBO(64, 64, 222, 1), style: BorderStyle.solid, width: 0.80),
+              //           ),
+              //           child: DropdownButtonFormField(
+              //             decoration: InputDecoration(
+              //               contentPadding: EdgeInsets.only(left:20,right:20),
+              //               border: InputBorder.none
+              //             ),
+              //             isExpanded: true,
+              //             onChanged: (value){},
+              //             items: [
+              //               DropdownMenuItem(child: Text("WhatsApp"),value: "WA",)
+              //             ],
+              //           ),
+              //         ),
+              //       ],
+              //       backgroundColor: Colors.white,
+              //       shape: RoundedRectangleBorder(
+              //           borderRadius: BorderRadius.circular(25.0),
+              //           side: BorderSide(color: Colors.transparent)
+              //       ),
+              //       contentPadding: EdgeInsets.all(20),
+              //     )
+              // );
+              Navigator.pushReplacementNamed(context, "/home");
             }break;
             case 1 : {
-              Navigator.pushNamed(context, "/profile");
+              Navigator.pushNamed(context, "/transactions");
+
             }break;
             case 2 : {
-              showModalBottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (context) => Container(
-                    // padding: EdgeInsets.all(22),
-                    height: MediaQuery.of(context).size.height*0.4,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(25),topRight: Radius.circular(25)),
-                    ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                            SizedBox(height: 20,),
-                            Container(padding: EdgeInsets.all(22),child: Text("Apa yang mau dilakukan hari ini ?",style: TextStyle(fontSize: 18,fontStyle: FontStyle.italic,fontWeight: FontWeight.w200,color: Colors.black),)),
-                          Container(
-                            height: 104.0*2,
-                            child: GridView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.only(top: 22,right: 10,left: 10),
-                                itemCount: 8,
-                                shrinkWrap: true,
-                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-                                itemBuilder: (context,indx)=>Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Container(
-                                    height: 74,
-                                    width: 74,
-                                    child: Card(
-                                      color: Color.fromRGBO(237, 237, 237, 1),
-                                      child: new GridTile(
-                                        footer: new Text(""),
-                                        child: new Text(""), //just for testing, will fill with image later
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-              );
+
+              // showModalBottomSheet(
+              //     isScrollControlled: true,
+              //     context: context,
+              //     builder: (context) => Container(
+              //       // padding: EdgeInsets.all(22),
+              //       height: MediaQuery.of(context).size.height*0.4,
+              //       decoration: BoxDecoration(
+              //         color: Colors.white,
+              //         borderRadius: BorderRadius.only(topLeft: Radius.circular(25),topRight: Radius.circular(25)),
+              //       ),
+              //       child: SingleChildScrollView(
+              //         scrollDirection: Axis.vertical,
+              //         child: Column(
+              //           crossAxisAlignment: CrossAxisAlignment.start,
+              //           mainAxisSize: MainAxisSize.min,
+              //           children: [
+              //               SizedBox(height: 20,),
+              //               Container(padding: EdgeInsets.all(22),child: Text("Apa yang mau dilakukan hari ini ?",style: TextStyle(fontSize: 18,fontStyle: FontStyle.italic,fontWeight: FontWeight.w300,color: Colors.black),)),
+              //             Container(
+              //               height: 106.0*2,
+              //               child: GridView.builder(
+              //                   physics: NeverScrollableScrollPhysics(),
+              //                   padding: EdgeInsets.only(top: 22,right: 10,left: 10),
+              //                   itemCount: 8,
+              //                   shrinkWrap: true,
+              //                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+              //                   itemBuilder: (context,indx)=>Padding(
+              //                     padding: const EdgeInsets.all(10.0),
+              //                     child: Container(
+              //                       height: 74,
+              //                       width: 74,
+              //                       child: Card(
+              //                         color: (indx==0)?Colors.white:Color.fromRGBO(237, 237, 237, 1),
+              //                         elevation: 5,
+              //                         // color: Color.fromRGBO(237, 237, 237, 1),
+              //                         child: InkWell(
+              //                           onTap: (){},
+              //                           child: new GridTile(
+              //                             footer: Center(child: new Text((indx==0)?"Transfer":"",style: TextStyle(fontStyle: FontStyle.italic,fontWeight: FontWeight.w500,fontSize: 14,color: Color.fromRGBO(148, 148, 148, 0.9)),)),
+              //                             child: (indx==0)?Padding(
+              //                               padding: const EdgeInsets.only(top: 6,left: 6,right: 6,bottom: 14),
+              //                               child: Image(
+              //                                 image: AssetImage("images/transfer.png"),
+              //                                 alignment: Alignment.topCenter,
+              //                                 fit: BoxFit.cover,
+              //                               ),
+              //                             ):Container(), //just for testing, will fill with image later
+              //                           ),
+              //                         ),
+              //                       ),
+              //                     ),
+              //                   )),
+              //             )
+              //           ],
+              //         ),
+              //       ),
+              //     )
+              // );
             }break;
             case 3 : {
               Navigator.pushNamed(context, "/vouchers");
             }break;
             case 4 : {
-              Navigator.pushNamed(context, "/transactions");
+              Navigator.pushNamed(context, "/profile");
             }break;
           }
         },
         items: [
-          BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.headset,color: Colors.white,)),
-          BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.addressCard,color: Colors.white,)),
-          BottomNavigationBarItem(title: Container(),icon: Icon(Icons.widgets_outlined,color: Colors.white,)),
-          BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.gift,color: Colors.white,)),
+          BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.home,color: Colors.white,)),
           BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.receipt,color: Colors.white,)),
+          BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.dollarSign,color: Colors.white,)),
+          // BottomNavigationBarItem(title: Container(),icon: Icon(Icons.widgets_outlined,color: Colors.white,)),          // BottomNavigationBarItem(title: Container(),icon: Icon(Icons.widgets_outlined,color: Colors.white,)),
+          BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.gift,color: Colors.white,)),
+          BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.addressCard,color: Colors.white,)),
         ],
       ),
     );
