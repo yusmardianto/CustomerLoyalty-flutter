@@ -231,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                     Container(
                       height: (152.0+15)*2,
                       child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
+                        // physics: NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.only(right: 18,left: 18),
                         itemCount: 2,
                         itemBuilder: (context,index)=>Padding(
@@ -246,59 +246,59 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Text("Product dalam diskon :",style: TextStyle(shadows: [
-                              Shadow(
-                                offset: Offset(3.0, 3.0),
-                                blurRadius: 0.5,
-                                color: Colors.black.withOpacity(0.4),
-                              ),
-                            ],color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w500,fontSize: 18),),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(right: 15),
-                            child: Text("Semua",style: TextStyle(
-                                shadows: [
-                                  Shadow(
-                                    offset: Offset(3.0, 3.0),
-                                    blurRadius: 0.5,
-                                    color: Colors.black.withOpacity(0.4),
-                                  ),
-                                ],
-                                decoration: TextDecoration.underline,
-                                color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,fontSize: 14),),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: 200.0*2,
-                      child: GridView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.only(left: 8,right: 8),
-                        itemCount: 4,
-                          shrinkWrap: true,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                          itemBuilder: (context,indx)=>Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: 175,
-                              width: 175,
-                              child: Card(
-                                color: Color.fromRGBO(237, 237, 237, 1),
-                                child: new GridTile(
-                                  footer: new Text(""),
-                                  child: new Text(""), //just for testing, will fill with image later
-                                ),
-                              ),
-                            ),
-                          )),
-                    )
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: [
+                    //       Container(
+                    //         child: Text("Product dalam diskon :",style: TextStyle(shadows: [
+                    //           Shadow(
+                    //             offset: Offset(3.0, 3.0),
+                    //             blurRadius: 0.5,
+                    //             color: Colors.black.withOpacity(0.4),
+                    //           ),
+                    //         ],color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w500,fontSize: 18),),
+                    //       ),
+                    //       Container(
+                    //         padding: EdgeInsets.only(right: 15),
+                    //         child: Text("Semua",style: TextStyle(
+                    //             shadows: [
+                    //               Shadow(
+                    //                 offset: Offset(3.0, 3.0),
+                    //                 blurRadius: 0.5,
+                    //                 color: Colors.black.withOpacity(0.4),
+                    //               ),
+                    //             ],
+                    //             decoration: TextDecoration.underline,
+                    //             color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,fontSize: 14),),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    // Container(
+                    //   height: 200.0*2,
+                    //   child: GridView.builder(
+                    //     physics: NeverScrollableScrollPhysics(),
+                    //     padding: EdgeInsets.only(left: 8,right: 8),
+                    //     itemCount: 4,
+                    //       shrinkWrap: true,
+                    //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                    //       itemBuilder: (context,indx)=>Padding(
+                    //         padding: const EdgeInsets.all(8.0),
+                    //         child: Container(
+                    //           height: 175,
+                    //           width: 175,
+                    //           child: Card(
+                    //             color: Color.fromRGBO(237, 237, 237, 1),
+                    //             child: new GridTile(
+                    //               footer: new Text(""),
+                    //               child: new Text(""), //just for testing, will fill with image later
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       )),
+                    // )
                   ],
                 ),
               ),
