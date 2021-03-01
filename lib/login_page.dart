@@ -217,8 +217,12 @@ class _LoginPageState extends State<LoginPage> {
                                                        color: Color.fromRGBO(64, 64, 222, 1),
                                                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0)),
                                                        padding: EdgeInsets.all(12),
-                                                       onPressed: (){
-                                                         Navigator.pushReplacementNamed(context, "/home");
+                                                       onPressed: ()async {
+                                                          await utils.tokenFetch();
+                                                         globVar.prefs.setString("cust_id", "88");
+                                                         // var res = await utils.Get("https://loyalty.thamrin.xyz/ords/loyalty/loyaltymobile/customer/88");
+                                                         // print("get token $res");
+                                                         // Navigator.pushReplacementNamed(context, "/home");
                                                        },
                                                        child: Text("Login",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.white),)),
                                                  ),

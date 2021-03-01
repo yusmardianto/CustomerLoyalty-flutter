@@ -24,6 +24,8 @@ dependencies:
   font_awesome_flutter:
   carousel_slider:
   google_fonts:
+  shared_preferences:
+  oauth2:
   flutter:
     sdk: flutter
 

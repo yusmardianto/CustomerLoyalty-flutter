@@ -1,4 +1,3 @@
-import 'package:customer_loyalty/Util/glob_var.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

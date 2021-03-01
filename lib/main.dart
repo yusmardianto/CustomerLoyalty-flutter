@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'login_page.dart';
-// import './Util/image_fetch.dart';
 import 'home_page.dart';
 import 'profile.dart';
 import 'Util/glob_var.dart';
+import 'Util/utils.dart';
+
 import 'transactions.dart';
 import 'vouchers_list.dart';
 
 // Images imageHandler = new Images();
 GlobaVar globVar = new GlobaVar();
+Util utils = new Util();
 
-void main() {
-
-  runApp(MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await globVar.initGlobVar();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_)async {
+          runApp(new MyApp());
+      });
 }
 
 class MyApp extends StatelessWidget {
