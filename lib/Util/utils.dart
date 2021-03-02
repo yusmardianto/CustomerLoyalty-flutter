@@ -6,24 +6,30 @@ import '../main.dart';
 
 class Util{
   tokenFetch() async {
-    final tokenEndpoint = Uri.parse('https://loyalty.thamrin.xyz/ords/loyalty/oauth/token');
-    var clients =  globVar.clientRest;
-    oauth2.Client grant = await oauth2.clientCredentialsGrant(tokenEndpoint, clients["id"], clients["secret"]);
-    print(grant.credentials.accessToken);
+    if((globVar.tokenExpire != null && DateTime.now().isBefore(globVar.tokenExpire))||globVar.tokenRest==null){
+      final tokenEndpoint = Uri.parse('https://loyalty.thamrin.xyz/ords/loyalty/oauth/token');
+      var clients =  JsonDecoder().convert(globVar.prefs.getString("clientCred"));
+      oauth2.Client grant = await oauth2.clientCredentialsGrant(tokenEndpoint, clients["id"], clients["secret"]);
+      globVar.tokenExpire=grant.credentials.expiration;
+      globVar.tokenRest=grant.credentials.accessToken;
+    }
   }
-  Post(Map jsonData, String url,{timeout:false,second:10}) async{
+  Post(Map jsonData, String url,{secure:false,timeout:false,second:10}) async{
     const JsonDecoder decoder = const JsonDecoder();
     try {
-      http.Response response;
+      var headers = {'Content-type': 'application/json'};
+      if(secure) {
+        await tokenFetch();
+        headers["Authorization"] =
+            "bearer ${globVar.prefs.getString("tokenRest")}";
+      }
+      Future<http.Response> futureResponse = http.post(
+          '$url', headers: headers,
+          body: json.encode(jsonData));;
       if (timeout)
-        response = await http.post(
-            '$url', headers: {'Content-type': 'application/json'},
-            body: json.encode(jsonData)).timeout(
+        futureResponse.timeout(
             Duration(seconds: second));
-      else
-        response = await http.post(
-            '$url', headers: {'Content-type': 'application/json'},
-            body: json.encode(jsonData));
+      http.Response response = await Future.sync(() => futureResponse);
       if(response.statusCode != 200){
         return {"STATUS":0,"DATA":response.body.toString()};
       }
@@ -38,17 +44,21 @@ class Util{
       return {"STATUS":"ERROR","DATA":"Not Connected to Server"};
     }
   }
-  Get(String url,{timeout:false,second:10}) async{
+  Get(String url,{secure:false,timeout:false,second:10}) async{
     const JsonDecoder decoder = const JsonDecoder();
     try {
-      http.Response response;
+      var headers = {'Content-type': 'application/json'};
+      if(secure) {
+        await tokenFetch();
+        headers["Authorization"] =
+            "bearer ${globVar.prefs.getString("tokenRest")}";
+      }
+      Future<http.Response> futureResponse = http.get(
+          '$url', headers: headers);
       if (timeout)
-        response = await http.get(
-            '$url', headers: {'Authorization': 'bearer 3eYXmkaWwlePiHwyzasqgg'}).timeout(
+        futureResponse.timeout(
             Duration(seconds: second));
-      else
-        response = await http.get(
-            '$url', headers: {'Authorization': 'bearer 3eYXmkaWwlePiHwyzasqgg'});
+      http.Response response = await Future.sync(() => futureResponse);
       if(response.statusCode != 200){
         return {"STATUS":0,"DATA":response.body.toString()};
       }
