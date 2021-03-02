@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import './CustomShape/round_shaper.dart';
 import 'dart:ui' as ui;
 import 'main.dart';
+import "api/auth.dart";
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -129,6 +130,8 @@ class _LoginPageState extends State<LoginPage> {
                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0)),
                                padding: EdgeInsets.all(12),
                                onPressed: (){
+                                 final userText = new TextEditingController();
+                                 final passText = new TextEditingController();
                                  showModalBottomSheet(
                                    isScrollControlled: true,
                                    context: context,
@@ -166,6 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                                                  Padding(
                                                    padding: const EdgeInsets.only(top: 50),
                                                    child: TextField(
+                                                     controller: userText,
                                                      decoration: InputDecoration(
                                                          focusedBorder: new OutlineInputBorder(
                                                            borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
@@ -187,6 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                                                  Padding(
                                                    padding: const EdgeInsets.only(top: 20,),
                                                    child: TextField(
+                                                     controller: passText,
                                                      decoration: InputDecoration(
                                                          focusedBorder: new OutlineInputBorder(
                                                            borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
@@ -218,9 +223,10 @@ class _LoginPageState extends State<LoginPage> {
                                                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0)),
                                                        padding: EdgeInsets.all(12),
                                                        onPressed: ()async {
-                                                         globVar.prefs.setString("cust_id", "88");
-                                                         var res = await utils.Get("https://loyalty.thamrin.xyz/ords/loyalty/loyaltymobile/customer/88",secure: true);
-                                                         print("get token $res");
+                                                         await Auth().login(userText.text, passText.text);
+                                                         // globVar.prefs.setString("cust_id", "88");
+                                                         // var res = await utils.Get("https://loyalty.thamrin.xyz/ords/loyalty/loyaltymobile/customer/88",secure: true);
+                                                         // print("get token $res");
                                                          // Navigator.pushReplacementNamed(context, "/home");
                                                        },
                                                        child: Text("Login",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.white),)),

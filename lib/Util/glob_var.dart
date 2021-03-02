@@ -2,6 +2,8 @@ import "package:shared_preferences/shared_preferences.dart";
 import 'dart:convert';
 
 class GlobaVar{
+  String hostRest = "https://loyalty.thamrin.xyz/ords/loyalty/loyaltymobile";
+
   //=====================shownotif============================
   bool _isShowNotif;
   bool get isShowNotif => _isShowNotif;
