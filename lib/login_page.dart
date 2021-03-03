@@ -62,7 +62,8 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(15.0)
                           ),
                           padding: EdgeInsets.all(10),
-                          onPressed: (){
+                          onPressed: ()async {
+                            await utils.backupGlobVar();
                             Navigator.pop(context,true);
                           },
                           child: Text("Keluar",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
@@ -228,13 +229,8 @@ class _LoginPageState extends State<LoginPage> {
                                                            Navigator.pushReplacementNamed(context, "/home");
                                                          }
                                                          else{
-                                                           print("masuk");
                                                            utils.toast(res["DATA"],type: "ERROR");
                                                          }
-                                                         // globVar.prefs.setString("cust_id", "88");
-                                                         // var res = await utils.Get("https://loyalty.thamrin.xyz/ords/loyalty/loyaltymobile/customer/88",secure: true);
-                                                         // print("get token $res");
-                                                         //
                                                        },
                                                        child: Text("Login",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.white),)),
                                                  ),

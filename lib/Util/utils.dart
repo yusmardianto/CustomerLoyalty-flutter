@@ -8,11 +8,12 @@ import '../DataType/rest.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../DataType/user.dart';
 
+
 class Util{
   tokenFetch() async {
     if(globVar.tokenRest==null||globVar.tokenRest.token==null||(globVar.tokenRest.expire != null && DateTime.now().isAfter(globVar.tokenRest.expire))){
       final tokenEndpoint = Uri.parse('https://loyalty.thamrin.xyz/ords/loyalty/oauth/token');
-      var clients =  JsonDecoder().convert(globVar.prefs.getString("clientCred"));
+      var clients =  JsonDecoder().convert(prefs.getString("clientCred"));
       oauth2.Client grant = await oauth2.clientCredentialsGrant(tokenEndpoint, clients["id"], clients["secret"]);
       globVar.tokenRest=Rest(grant.credentials.accessToken,grant.credentials.expiration);
       await backupGlobVar();
@@ -25,7 +26,7 @@ class Util{
       if(secure) {
         await tokenFetch();
         headers["Authorization"] =
-            "bearer ${globVar.prefs.getString("tokenRest")}";
+            "bearer ${prefs.getString("tokenRest")}";
       }
       Future<http.Response> futureResponse = http.post(
           '$url', headers: headers,
@@ -55,7 +56,7 @@ class Util{
       if(secure) {
         await tokenFetch();
         headers["Authorization"] =
-            "bearer ${globVar.prefs.getString("tokenRest")}";
+            "bearer ${prefs.getString("tokenRest")}";
       }
       Future<http.Response> futureResponse = http.get(
           '$url', headers: headers);
@@ -77,20 +78,20 @@ class Util{
     }
   }
   backupGlobVar()async{
-    globVar.prefs.setString("token", JsonEncoder().convert(globVar.tokenRest.toJson()));
-    globVar.prefs.setString("user", JsonEncoder().convert(globVar.user.toJson()));
+    prefs.setString("token", JsonEncoder().convert(globVar.tokenRest.toJson()));
+    if(globVar.user!=null)prefs.setString("user", JsonEncoder().convert(globVar.user.toJson()));
   }
   restoreGlobVar()async{
-    if(globVar.prefs.getString("token")!=null){
-      globVar.tokenRest = Rest.fromJson(JsonDecoder().convert(globVar.prefs.getString("token")));
+    if(prefs.getString("token")!=null){
+      globVar.tokenRest = Rest.fromJson(JsonDecoder().convert(prefs.getString("token")));
     }
-    if(globVar.prefs.getString("user")!=null){
-      globVar.user = User.fromJson(JsonDecoder().convert(globVar.prefs.getString("user")));
+    if(prefs.getString("user")!=null){
+      globVar.user = User.fromJson(JsonDecoder().convert(prefs.getString("user")));
     }
   }
   removeBackupGlobVar()async{
-    globVar.prefs.remove("token");
-    globVar.prefs.remove("user");
+    prefs.remove("token");
+    prefs.remove("user");
   }
   toast(text,{type:"REGULAR"})async{
     await Fluttertoast.cancel();

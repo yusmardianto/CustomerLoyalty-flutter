@@ -51,7 +51,8 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(15.0)
                           ),
                             padding: EdgeInsets.all(10),
-                            onPressed: (){
+                            onPressed: ()async{
+                              await utils.backupGlobVar();
                               Navigator.pop(context,true);
                             },
                             child: Text("Keluar",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)

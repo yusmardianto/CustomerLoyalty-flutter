@@ -1,3 +1,4 @@
+import 'package:customer_loyalty/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -122,6 +123,8 @@ class _ProfileState extends State<Profile> {
                                                 ),
                                                 padding: EdgeInsets.all(10),
                                                 onPressed: (){
+                                                  globVar.user = null;
+                                                  prefs.remove("user");
                                                   Navigator.pop(context,true);
                                                 },
                                                 child: Text("Logout",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)

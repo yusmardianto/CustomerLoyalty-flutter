@@ -10,9 +10,6 @@ class GlobaVar{
   bool _isShowNotif;
   bool get isShowNotif => _isShowNotif;
   set isShowNotif(value) => _isShowNotif = value;
-  //======================shared_pref=========================
-  SharedPreferences _prefs;
-  SharedPreferences get prefs => _prefs;
   //======================token && expiration==================
   Rest _tokenRest;
   Rest get tokenRest => _tokenRest;
@@ -22,9 +19,6 @@ class GlobaVar{
   User get user => _user;
   set user(value) => _user = value;
 //=============================================================
-
-
-
 
 
   //============================================================
@@ -38,9 +32,9 @@ class GlobaVar{
   }
   Future initGlobVar() async {
     _isShowNotif = true;
-    _prefs = await SharedPreferences.getInstance();
-    if(_prefs.getString("clientCred")==null){
-      _prefs.setString("clientCred", json.encode({
+    prefs = await SharedPreferences.getInstance();
+    if(prefs.getString("clientCred")==null){
+      prefs.setString("clientCred", json.encode({
         "id": "S1BiT8Wwxgypz7B4DdxZsw..",
         "secret" : "uxj_dNikz8JcvasOd1l3jA.."
       }).toString());
