@@ -1,20 +1,24 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:oauth2/oauth2.dart' as oauth2;
 import '../main.dart';
+import '../DataType/rest.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '../DataType/user.dart';
 
 class Util{
   tokenFetch() async {
-    if((globVar.tokenExpire != null && DateTime.now().isBefore(globVar.tokenExpire))||globVar.tokenRest==null){
+    if(globVar.tokenRest==null||globVar.tokenRest.token==null||(globVar.tokenRest.expire != null && DateTime.now().isAfter(globVar.tokenRest.expire))){
       final tokenEndpoint = Uri.parse('https://loyalty.thamrin.xyz/ords/loyalty/oauth/token');
       var clients =  JsonDecoder().convert(globVar.prefs.getString("clientCred"));
       oauth2.Client grant = await oauth2.clientCredentialsGrant(tokenEndpoint, clients["id"], clients["secret"]);
-      globVar.tokenExpire=grant.credentials.expiration;
-      globVar.tokenRest=grant.credentials.accessToken;
+      globVar.tokenRest=Rest(grant.credentials.accessToken,grant.credentials.expiration);
+      await backupGlobVar();
     }
   }
-  Post(Map jsonData, String url,{secure:false,timeout:false,second:10}) async{
+  post(Map jsonData, String url,{secure:false,timeout:false,second:10}) async{
     const JsonDecoder decoder = const JsonDecoder();
     try {
       var headers = {'Content-type': 'application/json'};
@@ -34,7 +38,7 @@ class Util{
         return {"STATUS":0,"DATA":response.body.toString()};
       }
       final Map data = decoder.convert(response.body);
-      return {"STATUS":1,"DATA":data};
+      return {"STATUS":1,"DATA":decoder.convert(data["res"])};
     } on TimeoutException catch(e){
       return {"STATUS":"0","DATA":"Request Timeout"};
     }
@@ -44,7 +48,7 @@ class Util{
       return {"STATUS":"ERROR","DATA":"Not Connected to Server"};
     }
   }
-  Get(String url,{secure:false,timeout:false,second:10}) async{
+  get(String url,{secure:false,timeout:false,second:10}) async{
     const JsonDecoder decoder = const JsonDecoder();
     try {
       var headers = {'Content-type': 'application/json'};
@@ -71,5 +75,33 @@ class Util{
       print([url,exception]);
       return {"STATUS":"ERROR","DATA":"Not Connected to Server"};
     }
+  }
+  backupGlobVar()async{
+    globVar.prefs.setString("token", JsonEncoder().convert(globVar.tokenRest.toJson()));
+    globVar.prefs.setString("user", JsonEncoder().convert(globVar.user.toJson()));
+  }
+  restoreGlobVar()async{
+    if(globVar.prefs.getString("token")!=null){
+      globVar.tokenRest = Rest.fromJson(JsonDecoder().convert(globVar.prefs.getString("token")));
+    }
+    if(globVar.prefs.getString("user")!=null){
+      globVar.user = User.fromJson(JsonDecoder().convert(globVar.prefs.getString("user")));
+    }
+  }
+  removeBackupGlobVar()async{
+    globVar.prefs.remove("token");
+    globVar.prefs.remove("user");
+  }
+  toast(text,{type:"REGULAR"})async{
+    await Fluttertoast.cancel();
+    Fluttertoast.showToast(
+        msg: text,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: type=="REGULAR"?Colors.grey:Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
   }
 }
