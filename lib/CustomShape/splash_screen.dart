@@ -4,7 +4,10 @@ import '../main.dart';
 import 'round_shaper.dart';
 
 class Splashscreen extends StatefulWidget {
-  Splashscreen({Key key}) : super(key: key);
+  double _percentage;
+  String _state;
+  Splashscreen(this._percentage,this._state);
+  // Splashscreen({Key key}) : super(key: key);
 
   @override
   _SplashscreenState createState() => _SplashscreenState();
@@ -14,13 +17,11 @@ class _SplashscreenState extends State<Splashscreen> {
   Timer step;
   double percentage = 0;
   String state = "Mempersiapkan data";
-  bool isLoading = false;
-
   @override
   void initState() {
-    percentage = preLoadPercentage??percentage;
+    state = this.state;
+    percentage = this.percentage;
     step = Timer.periodic(Duration(seconds: 1), (timer){
-      print(percentage);
       if(percentage >= 1){
         setState(() {
           state = "Memulai aplikasi";
@@ -29,8 +30,11 @@ class _SplashscreenState extends State<Splashscreen> {
         });
       }
       else{
+        if (percentage<=preLoadPercentage){
+          percentage = preLoadPercentage;
+          state = preLoadState;
+        }
         setState(() {
-          state = preLoadState?? state;
           percentage = percentage +0.01;
         });
       }

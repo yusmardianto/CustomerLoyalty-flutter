@@ -12,6 +12,7 @@ import 'transactions.dart';
 import 'vouchers_list.dart';
 import 'CustomShape/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 // Images imageHandler = new Images();
 GlobaVar globVar;
@@ -19,6 +20,7 @@ Util utils = new Util();
 SharedPreferences prefs;
 String preLoadState;
 double preLoadPercentage;
+Intl intl = new Intl();
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,15 +31,16 @@ void main() async{
 }
 
 Future preload()async{
+  preLoadState = "Mempersiapkan data";
   await Future.delayed(Duration(seconds: 1));
-  preLoadState = "Mengecek Penyimpanan";
+  preLoadState = "Mengecek penyimpanan";
   prefs = await SharedPreferences.getInstance();
   preLoadPercentage = 1/2;
   await Future.delayed(Duration(seconds: 1));
   preLoadState = "Hampir selesai";
   globVar = new GlobaVar();
-  preLoadPercentage = 2/2;
-
+  preLoadPercentage = 2/2-0.02;
+  await Future.delayed(Duration(seconds: 2));
 }
 
 class MyApp extends StatelessWidget {
@@ -49,7 +52,7 @@ class MyApp extends StatelessWidget {
       builder: (context, AsyncSnapshot snapshot) {
         // Show splash screen while waiting for app resources to load:
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return MaterialApp(home: Splashscreen());
+          return MaterialApp(home: Splashscreen(preLoadPercentage,preLoadState));
         } else {
           // Loading is done, return the app:
           return LifeCycleManager(

@@ -23,10 +23,11 @@ class Util{
     const JsonDecoder decoder = const JsonDecoder();
     try {
       var headers = {'Content-type': 'application/json'};
+
       if(secure) {
         await tokenFetch();
         headers["Authorization"] =
-            "bearer ${prefs.getString("tokenRest")}";
+            "bearer ${globVar.tokenRest.token}";
       }
       Future<http.Response> futureResponse = http.post(
           '$url', headers: headers,
@@ -35,18 +36,21 @@ class Util{
         futureResponse.timeout(
             Duration(seconds: second));
       http.Response response = await Future.sync(() => futureResponse);
-      if(response.statusCode != 200){
-        return {"STATUS":0,"DATA":response.body.toString()};
+      if(htmlErrorTitle(response.body.toString())!=""){
+        return {"STATUS":(response.statusCode != 200)?0:1,"DATA":htmlErrorTitle(response.body.toString())};
       }
-      final Map data = decoder.convert(response.body);
-      return {"STATUS":1,"DATA":decoder.convert(data["res"])};
+      else{
+        final Map data = decoder.convert(response.body);
+        var res = decoder.convert(data["res"]);
+        return {"STATUS":(response.statusCode != 200)?0:1,"DATA":res};
+      }
     } on TimeoutException catch(e){
-      return {"STATUS":"0","DATA":"Request Timeout"};
+      return {"STATUS":0,"DATA":"Request Timeout"};
     }
     on Exception catch(exception){
       print([url,exception]);
 //      Toast("Not Connected to Server", Colors.red);
-      return {"STATUS":"ERROR","DATA":"Not Connected to Server"};
+      return {"STATUS":0,"DATA":"Not Connected to Server"};
     }
   }
   get(String url,{secure:false,timeout:false,second:10}) async{
@@ -56,7 +60,7 @@ class Util{
       if(secure) {
         await tokenFetch();
         headers["Authorization"] =
-            "bearer ${prefs.getString("tokenRest")}";
+            "bearer ${globVar.tokenRest.token}";
       }
       Future<http.Response> futureResponse = http.get(
           '$url', headers: headers);
@@ -64,17 +68,28 @@ class Util{
         futureResponse.timeout(
             Duration(seconds: second));
       http.Response response = await Future.sync(() => futureResponse);
-      if(response.statusCode != 200){
-        return {"STATUS":0,"DATA":response.body.toString()};
+      if(htmlErrorTitle(response.body.toString())!=""){
+        return {"STATUS":(response.statusCode != 200)?0:1,"DATA":htmlErrorTitle(response.body.toString())};
       }
-      final Map data = decoder.convert(response.body);
-      return {"STATUS":1,"DATA":data};
+      else{
+        final Map res = decoder.convert(response.body);
+        return {"STATUS":(response.statusCode != 200)?0:1,"DATA":res};
+      }
     } on TimeoutException catch(e){
-      return {"STATUS":"0","DATA":"Request Timeout"};
+      return {"STATUS":0,"DATA":"Request Timeout"};
     }
     on Exception catch(exception){
       print([url,exception]);
-      return {"STATUS":"ERROR","DATA":"Not Connected to Server"};
+      return {"STATUS":0,"DATA":"Not Connected to Server"};
+    }
+  }
+  htmlErrorTitle(String html){
+    try{
+      String titleElement = html.substring(html.indexOf("<title>"),html.indexOf("<\/title>"));
+      return titleElement;
+    }
+    catch(e){
+      return '';
     }
   }
   backupGlobVar()async{
@@ -104,5 +119,24 @@ class Util{
         textColor: Colors.white,
         fontSize: 16.0
     );
+  }
+  showLoadingFuture(context,future,{dismiss=false,onWillPop})async {
+    var dialogContext;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        dialogContext = context;
+        return WillPopScope(
+          onWillPop: onWillPop??()async{return true;},
+          child: new Center(
+            child: new CircularProgressIndicator(),
+          ),
+        );
+      },
+      barrierDismissible: dismiss,
+    );
+    var res = await future;
+    Navigator.pop(dialogContext);
+    return res;
   }
 }

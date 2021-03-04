@@ -65,7 +65,7 @@ class _ProfileState extends State<Profile> {
                       Expanded(
                         flex: 1,
                         child: Container(
-                          child: Text("{#Name BLABLA}",style: TextStyle(color: Colors.white,fontSize: 16,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700),),
+                          child: Text(globVar.user.name,style: TextStyle(color: Colors.white,fontSize: 16,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700),),
                         ),
                       ),
                       Expanded(
@@ -172,22 +172,28 @@ class _ProfileState extends State<Profile> {
                 Expanded(
                   child: ListView.builder(
                     padding: EdgeInsets.all(33),
-                    itemCount: 4,
-                      itemBuilder: (context,idx)=>Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 22.5,left: 45,right: 45,bottom: 22.5),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("FULL NAME",style: TextStyle(fontSize: 14,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Color.fromRGBO(146, 146, 146, 1)),),
-                                  Text("Lucas Steinfield",style: TextStyle(fontSize: 15,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6))),
-                                ],
-                              ),
-                            ),
-                            Divider(),
-                          ],
-                      ))
+                    itemCount: globVar.user != null ?globVar.user.toJsonDisplay().keys.length:0,
+                      itemBuilder: (context,idx)
+                          {
+                            var arr = globVar.user.toJsonDisplay().keys.toList();
+                            var key = arr[idx];
+                            var val = globVar.user.toJsonDisplay()[arr[idx]].toString();
+                            return Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(top: 22.5,left: 30,right: 30,bottom: 22.5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(flex:1,child: Text(key,style: TextStyle(fontSize: 14,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Color.fromRGBO(146, 146, 146, 1)),)),
+                                      Flexible(flex:1,child: Align(alignment: Alignment.centerRight,child: Text(val,textAlign: TextAlign.right,style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6))))),
+                                    ],
+                                  ),
+                                ),
+                                Divider(),
+                              ],
+                              );
+                          })
                 ),
               ],
             ),
