@@ -2,6 +2,7 @@ import "package:shared_preferences/shared_preferences.dart";
 import 'dart:convert';
 import '../DataType/user.dart';
 import '../DataType/rest.dart';
+import '../DataType/auth.dart';
 import '../main.dart';
 class GlobaVar{
   String hostRest = "https://loyalty.thamrin.xyz/ords/loyalty/loyaltymobile";
@@ -18,8 +19,10 @@ class GlobaVar{
   User _user;
   User get user => _user;
   set user(value) => _user = value;
-//=============================================================
-
+//=======================Auth_Data=============================
+  Auth _auth;
+  Auth get auth => _auth;
+  set auth(value) => _auth = value;
 
   //============================================================
 

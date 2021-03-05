@@ -12,7 +12,6 @@ import 'transactions.dart';
 import 'vouchers_list.dart';
 import 'CustomShape/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
 
 // Images imageHandler = new Images();
 GlobaVar globVar;
@@ -20,7 +19,6 @@ Util utils = new Util();
 SharedPreferences prefs;
 String preLoadState;
 double preLoadPercentage;
-Intl intl = new Intl();
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

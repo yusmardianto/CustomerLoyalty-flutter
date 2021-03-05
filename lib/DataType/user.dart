@@ -1,8 +1,6 @@
 import 'package:intl/intl.dart';
 
-import '../main.dart';
 class User {
-  String login_id;
   int cust_id;
   String name;
   String corp;
@@ -13,11 +11,9 @@ class User {
   String company_name;
   String street_name;
   String postal_code;
-  String user_type;
-  String force_change;
+
 
   User(
-      this.login_id,
       this.cust_id,
       this.name,
       this.corp,
@@ -28,11 +24,10 @@ class User {
       this.company_name,
       this.street_name,
       this.postal_code,
-      this.user_type,
-      this.force_change,);
+  );
 
   User.fromJson(Map<String, dynamic> json)
-      : login_id = json['login_id'],
+      :
         cust_id = json['cust_id'],
         name = json['name'],
         corp = json['corp'],
@@ -42,13 +37,9 @@ class User {
         phone = json["phone"],
         company_name = json["company_name"],
         street_name = json["street_name"],
-        postal_code = json["postal_code"],
-        user_type = json["user_type"],
-        force_change = json['force_change']
-  ;
+        postal_code = json["postal_code"];
 
   Map<String, dynamic> toJson()=>{
-    "login_id":login_id,
     "cust_id":cust_id,
     "name":name,
     "corp":corp,
@@ -58,19 +49,17 @@ class User {
     "phone":phone,
     "company_name":company_name,
     "street_name":street_name,
-    "postal_code":postal_code,
-    "user_type":user_type,
-    "force_change":force_change
+    "postal_code":postal_code
   };
 
   Map<String, dynamic> toJsonDisplay()=>{
-    "Nama Pelanggan":name??'-',
+    "Nama_Pelanggan":name??'-',
     "Gender":gender,
-    "Tanggal Lahir":(birth_date==null)?'-':DateFormat("dd-MM-yyyy").format(birth_date),
+    "Tanggal_Lahir":(birth_date==null)?'-':DateFormat("dd-MMM-yyyy").format(birth_date),
     "Email":email??'-',
-    "Telephone":phone??'-',
+    "Phone":phone??'-',
     "Perusahaan":company_name??'-',
     "Alamat":street_name??'-',
-    "Kode Pos":postal_code??'-',
+    "Kode_Pos":postal_code??'-',
   };
 }

@@ -1,10 +1,16 @@
+import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import './CustomShape/round_shaper.dart';
 import 'dart:ui' as ui;
 import 'main.dart';
 import "api/auth.dart";
+import "package:flutter_form_builder/flutter_form_builder.dart";
+import "DataType/user.dart";
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -224,7 +230,7 @@ class _LoginPageState extends State<LoginPage> {
                                                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0)),
                                                        padding: EdgeInsets.all(12),
                                                        onPressed: ()async {
-                                                         Future future = Auth().login(userText.text, passText.text);
+                                                         Future future = Auths().login(userText.text, passText.text);
                                                          var res = await utils.showLoadingFuture(context,future);
                                                          if(res["STATUS"]){
                                                            Navigator.pushReplacementNamed(context, "/home");
@@ -255,205 +261,268 @@ class _LoginPageState extends State<LoginPage> {
                                padding: EdgeInsets.all(12),
                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0),side: BorderSide(width: 2,color: Color.fromRGBO(133, 131, 249, 1))),
                                onPressed: (){
-                                 final userText = new TextEditingController();
-                                 final passText = new TextEditingController();
+                                 final _formKey = GlobalKey<FormBuilderState>();
+                                 var gender;
+                                 final passText  = TextEditingController();
+                                 final confirmPassText  = TextEditingController();
                                  showModalBottomSheet(
                                      isScrollControlled: true,
                                      context: context,
-                                     builder: (context) => Container(
-                                       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                       height: MediaQuery.of(context).size.height*0.85,
-                                       decoration: BoxDecoration(
-                                         color: Colors.white,
-                                         borderRadius: BorderRadius.only(topLeft: Radius.circular(25),topRight: Radius.circular(25)),
-                                       ),
-                                       child: SingleChildScrollView(
-                                         scrollDirection: Axis.vertical,
-                                         child: Column(
-                                           mainAxisSize: MainAxisSize.min,
-                                           children: [
-                                             Padding(
-                                               padding: const EdgeInsets.only(left:53,right: 53),
-                                               child: Column(
-                                                 children: [
-                                                   Padding(
-                                                     padding: const EdgeInsets.only(top: 40,),
-                                                     child: TextField(
-                                                       controller: passText,
-                                                       decoration: InputDecoration(
-                                                           focusedBorder: new OutlineInputBorder(
-                                                             borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
+                                     builder: (context) => StatefulBuilder(
+                                       builder: (context,setState) =>Container(
+                                         padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                         height: MediaQuery.of(context).size.height*0.85,
+                                         decoration: BoxDecoration(
+                                           color: Colors.white,
+                                           borderRadius: BorderRadius.only(topLeft: Radius.circular(25),topRight: Radius.circular(25)),
+                                         ),
+                                         child: SingleChildScrollView(
+                                           scrollDirection: Axis.vertical,
+                                           child: Column(
+                                             mainAxisSize: MainAxisSize.min,
+                                             children: [
+                                               Padding(
+                                                 padding: const EdgeInsets.only(left:53,right: 53),
+                                                 child: Column(
+                                                   children: [
+                                                     Padding(
+                                                       padding: const EdgeInsets.only(top:25.0),
+                                                       child: FormBuilder(
+                                                         key: _formKey,
+                                                         autovalidateMode: AutovalidateMode.disabled,
+                                                         child: Column(
+                                                           children: [
+                                                             Padding(
+                                                               padding: const EdgeInsets.only(top: 15,),
+                                                               child: FormBuilderTextField(
+                                                                 validator: (value) =>
+                                                                 value == null || value.isEmpty ? 'Name tidak boleh kosong' : null,
+                                                                 name: "nama",
+                                                                 decoration: InputDecoration(
+                                                                     focusedBorder: new OutlineInputBorder(
+                                                                       borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                                       borderRadius: const BorderRadius.all(
+                                                                         const Radius.circular(15.0),
+                                                                       ),
+                                                                     ),
+                                                                     border: new OutlineInputBorder(
+                                                                       borderRadius: const BorderRadius.all(
+                                                                         const Radius.circular(15.0),
+                                                                       ),
+                                                                     ),
+                                                                     contentPadding: EdgeInsets.all(23),
+                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                                     hintText: "Nama"
+                                                                 ),
+                                                               ),
                                                              ),
-                                                           ),
-                                                           border: new OutlineInputBorder(
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
+                                                             Padding(
+                                                               padding: const EdgeInsets.only(top: 15,),
+                                                               child: FormBuilderDateTimePicker(
+                                                                 inputType: InputType.date,
+                                                                 name: "tgl_lahir",
+                                                                 validator: (value) =>
+                                                                 value == null ? 'Tanggal lahir tidak boleh kosong' : null,
+                                                                 format: DateFormat("dd    /    MMM   /    yyyy"),
+                                                                 decoration: InputDecoration(
+                                                                     suffixIcon: Icon(FontAwesomeIcons.solidCalendarAlt,color: Color.fromRGBO(35, 35, 222, 1),),
+                                                                     focusedBorder: new OutlineInputBorder(
+                                                                       borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                                       borderRadius: const BorderRadius.all(
+                                                                         const Radius.circular(15.0),
+                                                                       ),
+                                                                     ),
+                                                                     border: new OutlineInputBorder(
+                                                                       borderRadius: const BorderRadius.all(
+                                                                         const Radius.circular(15.0),
+                                                                       ),
+                                                                     ),
+                                                                     contentPadding: EdgeInsets.all(23),
+                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                                     hintText: "Tgl    /    Bln   /    Tahun"
+                                                                 ),
+                                                               ),
                                                              ),
-                                                           ),
-                                                           contentPadding: EdgeInsets.all(23),
-                                                           hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
-                                                           hintText: "Nama"
+                                                             Padding(
+                                                               padding: const EdgeInsets.only(top: 15,),
+                                                               child: FormBuilderChoiceChip(
+                                                                 crossAxisAlignment: WrapCrossAlignment.center,
+                                                                 alignment: WrapAlignment.spaceEvenly,
+                                                                 name: "gender",
+                                                                 validator : (value) =>
+                                                                 value == null ? 'Gender tidak boleh kosong' : null,
+                                                                 selectedColor: Color.fromRGBO(35, 35, 222, 1),
+                                                                 decoration: InputDecoration(
+                                                                   border: InputBorder.none,
+                                                                 ),
+                                                                 onChanged: (value){
+                                                                   setState(() {
+                                                                     gender = value;
+                                                                   });
+                                                                 },
+                                                                 options: [
+                                                                   FormBuilderFieldOption(
+                                                                       value: 'Male', child: Container(padding: EdgeInsets.all((gender == "Male")?15.0:8.0),width: (MediaQuery.of(context).size.width-180)/2,child: Row(
+                                                                         mainAxisAlignment: MainAxisAlignment.center,
+                                                                         children: [
+                                                                           Icon(FontAwesomeIcons.male,color: (gender=="Male")?Colors.white:Colors.black,),
+                                                                           Text('Pria',style: (gender == "Male")?TextStyle(color: Colors.white):TextStyle(),),
+                                                                         ],
+                                                                       ))),
+                                                                   FormBuilderFieldOption(
+                                                                       value: 'Female', child: Container(padding:EdgeInsets.all((gender == "Female")?15.0:8.0),width: (MediaQuery.of(context).size.width-180)/2,child: Row(
+                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                          children: [
+                                                                           Icon(FontAwesomeIcons.female,color: (gender=="Female")?Colors.white:Colors.black,),
+                                                                           Text('Wanita',style: (gender == "Female")?TextStyle(color: Colors.white):TextStyle(),),
+                                                                         ],
+                                                                       ))),
+                                                                 ],
+                                                               ),
+                                                             ),
+                                                             Padding(
+                                                               padding: const EdgeInsets.only(top: 15,),
+                                                               child: FormBuilderTextField(
+                                                                 name: "phone",
+                                                                 validator : (value) =>
+                                                                 value == null || value.isEmpty ? 'No Handphone tidak boleh kosong' : null,
+                                                                 decoration: InputDecoration(
+                                                                     focusedBorder: new OutlineInputBorder(
+                                                                       borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                                       borderRadius: const BorderRadius.all(
+                                                                         const Radius.circular(15.0),
+                                                                       ),
+                                                                     ),
+                                                                     border: new OutlineInputBorder(
+                                                                       borderRadius: const BorderRadius.all(
+                                                                         const Radius.circular(15.0),
+                                                                       ),
+                                                                     ),
+                                                                     contentPadding: EdgeInsets.all(23),
+                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                                     hintText: "No Handphone"
+                                                                 ),
+                                                               ),
+                                                             ),
+                                                             Padding(
+                                                               padding: const EdgeInsets.only(top: 15,),
+                                                               child: FormBuilderTextField(
+                                                                 name:"email",
+                                                                 validator : (value) =>
+                                                                 value == null || value.isEmpty ? 'Email tidak boleh kosong' : null,
+                                                                 decoration: InputDecoration(
+                                                                     focusedBorder: new OutlineInputBorder(
+                                                                       borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                                       borderRadius: const BorderRadius.all(
+                                                                         const Radius.circular(15.0),
+                                                                       ),
+                                                                     ),
+                                                                     border: new OutlineInputBorder(
+                                                                       borderRadius: const BorderRadius.all(
+                                                                         const Radius.circular(15.0),
+                                                                       ),
+                                                                     ),
+                                                                     contentPadding: EdgeInsets.all(23),
+                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                                     hintText: "Alamat Email"
+                                                                 ),
+                                                               ),
+                                                             ),
+                                                             Padding(
+                                                               padding: const EdgeInsets.only(top: 15,),
+                                                               child: FormBuilderTextField(
+                                                                 controller: passText,
+                                                                 name: "pass",
+                                                                 validator : (value) =>
+                                                                 value == null || value.isEmpty ? 'Password tidak boleh kosong' : null,
+                                                                 decoration: InputDecoration(
+                                                                     focusedBorder: new OutlineInputBorder(
+                                                                       borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                                       borderRadius: const BorderRadius.all(
+                                                                         const Radius.circular(15.0),
+                                                                       ),
+                                                                     ),
+                                                                     border: new OutlineInputBorder(
+                                                                       borderRadius: const BorderRadius.all(
+                                                                         const Radius.circular(15.0),
+                                                                       ),
+                                                                     ),
+                                                                     contentPadding: EdgeInsets.all(23),
+                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                                     hintText: "Password"
+                                                                 ),
+                                                               ),
+                                                             ),
+                                                             Padding(
+                                                               padding: const EdgeInsets.only(top: 15,),
+                                                               child: TextFormField(
+                                                                 controller: confirmPassText,
+                                                                 validator : (value) =>
+                                                                 value == null || value.isEmpty ? 'Password tidak boleh kosong' : null,
+                                                                 decoration: InputDecoration(
+                                                                     focusedBorder: new OutlineInputBorder(
+                                                                       borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                                       borderRadius: const BorderRadius.all(
+                                                                         const Radius.circular(15.0),
+                                                                       ),
+                                                                     ),
+                                                                     border: new OutlineInputBorder(
+                                                                       borderRadius: const BorderRadius.all(
+                                                                         const Radius.circular(15.0),
+                                                                       ),
+                                                                     ),
+                                                                     contentPadding: EdgeInsets.all(23),
+                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                                     hintText: "Ulangi Password"
+                                                                 ),
+                                                               ),
+                                                             ),
+                                                           ],
+                                                         ),
                                                        ),
                                                      ),
-                                                   ),
-                                                   Padding(
-                                                     padding: const EdgeInsets.only(top: 15,),
-                                                     child: TextField(
-                                                       controller: passText,
-                                                       decoration: InputDecoration(
-                                                           focusedBorder: new OutlineInputBorder(
-                                                             borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
-                                                             ),
-                                                           ),
-                                                           border: new OutlineInputBorder(
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
-                                                             ),
-                                                           ),
-                                                           contentPadding: EdgeInsets.all(23),
-                                                           hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
-                                                           hintText: "Password"
-                                                       ),
+                                                     Container(
+                                                       padding: EdgeInsets.only(top: 25),
+                                                       width: 286,
+                                                       child: FlatButton(
+                                                           color: Color.fromRGBO(64, 64, 222, 1),
+                                                           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0)),
+                                                           padding: EdgeInsets.all(12),
+                                                           onPressed: ()async {
+                                                               if(passText.text.trim()==confirmPassText.text.trim()){
+                                                                 _formKey.currentState.save();
+                                                                 if (_formKey.currentState.validate()) {
+                                                                   // print(_formKey.currentState.value);
+                                                                    final Map<String, dynamic> mapUser = new Map<String, dynamic>.from(_formKey.currentState.value);
+                                                                   mapUser.update("tgl_lahir", (value) => DateFormat("dd-MMM-yyyy").format(value));
+                                                                   Future future = Auths().register(mapUser);
+                                                                   var res = await utils.showLoadingFuture(context,future);
+                                                                   utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
+                                                                   if(res["STATUS"]) {
+                                                                        // print([mapUser["email"], mapUser["pass"]]);
+                                                                        Future future = Auths().login(mapUser["email"], mapUser["pass"]);
+                                                                        var res = await utils.showLoadingFuture(context,future);
+                                                                        Navigator.pop(context);
+                                                                        if(res["STATUS"]){
+                                                                          Navigator.pushReplacementNamed(context, "/home");
+                                                                        }
+                                                                      }
+                                                                    } else {
+                                                                   utils.toast("Data belum lengkap. Silakan cek kembali",type:"ERROR");
+                                                                 }
+                                                               }
+                                                               else{
+                                                                 utils.toast("Password tidak sama. Silakan cek kembali",type:"ERROR");
+                                                               }
+                                                           },
+                                                           child: Text("Daftar",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.white),)),
                                                      ),
-                                                   ),
-                                                   Padding(
-                                                     padding: const EdgeInsets.only(top: 15,),
-                                                     child: TextField(
-                                                       controller: passText,
-                                                       decoration: InputDecoration(
-                                                           focusedBorder: new OutlineInputBorder(
-                                                             borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
-                                                             ),
-                                                           ),
-                                                           border: new OutlineInputBorder(
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
-                                                             ),
-                                                           ),
-                                                           contentPadding: EdgeInsets.all(23),
-                                                           hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
-                                                           hintText: "Password"
-                                                       ),
-                                                     ),
-                                                   ),
-                                                   Padding(
-                                                     padding: const EdgeInsets.only(top: 15,),
-                                                     child: TextField(
-                                                       controller: passText,
-                                                       decoration: InputDecoration(
-                                                           focusedBorder: new OutlineInputBorder(
-                                                             borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
-                                                             ),
-                                                           ),
-                                                           border: new OutlineInputBorder(
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
-                                                             ),
-                                                           ),
-                                                           contentPadding: EdgeInsets.all(23),
-                                                           hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
-                                                           hintText: "No Handphone"
-                                                       ),
-                                                     ),
-                                                   ),
-                                                   Padding(
-                                                     padding: const EdgeInsets.only(top: 15,),
-                                                     child: TextField(
-                                                       controller: passText,
-                                                       decoration: InputDecoration(
-                                                           focusedBorder: new OutlineInputBorder(
-                                                             borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
-                                                             ),
-                                                           ),
-                                                           border: new OutlineInputBorder(
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
-                                                             ),
-                                                           ),
-                                                           contentPadding: EdgeInsets.all(23),
-                                                           hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
-                                                           hintText: "Alamat Email"
-                                                       ),
-                                                     ),
-                                                   ),
-                                                   Padding(
-                                                     padding: const EdgeInsets.only(top: 15,),
-                                                     child: TextField(
-                                                       controller: passText,
-                                                       decoration: InputDecoration(
-                                                           focusedBorder: new OutlineInputBorder(
-                                                             borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
-                                                             ),
-                                                           ),
-                                                           border: new OutlineInputBorder(
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
-                                                             ),
-                                                           ),
-                                                           contentPadding: EdgeInsets.all(23),
-                                                           hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
-                                                           hintText: "Password"
-                                                       ),
-                                                     ),
-                                                   ),
-                                                   Padding(
-                                                     padding: const EdgeInsets.only(top: 15,),
-                                                     child: TextField(
-                                                       controller: passText,
-                                                       decoration: InputDecoration(
-                                                           focusedBorder: new OutlineInputBorder(
-                                                             borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
-                                                             ),
-                                                           ),
-                                                           border: new OutlineInputBorder(
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
-                                                             ),
-                                                           ),
-                                                           contentPadding: EdgeInsets.all(23),
-                                                           hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
-                                                           hintText: "Ulangi Password"
-                                                       ),
-                                                     ),
-                                                   ),
-                                                   Container(
-                                                     padding: EdgeInsets.only(top: 25),
-                                                     width: 286,
-                                                     child: FlatButton(
-                                                         color: Color.fromRGBO(64, 64, 222, 1),
-                                                         shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0)),
-                                                         padding: EdgeInsets.all(12),
-                                                         onPressed: ()async {
-                                                           Future future = Auth().login(userText.text, passText.text);
-                                                           var res = await utils.showLoadingFuture(context,future);
-                                                           if(res["STATUS"]){
-                                                             Navigator.pushReplacementNamed(context, "/home");
-                                                           }
-                                                           else{
-                                                             utils.toast(res["DATA"],type: "ERROR");
-                                                           }
-                                                         },
-                                                         child: Text("Daftar",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.white),)),
-                                                   ),
-                                                 ],
+                                                   ],
+                                                 ),
                                                ),
-                                             ),
 
-                                           ],
+                                             ],
+                                           ),
                                          ),
                                        ),
                                      )

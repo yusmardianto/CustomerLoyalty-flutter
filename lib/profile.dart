@@ -2,7 +2,10 @@ import 'package:customer_loyalty/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'CustomShape/wave_shaper.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'api/user.dart';
 
 class Profile extends StatefulWidget {
   Profile({Key key}) : super(key: key);
@@ -12,10 +15,13 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  bool toggleEdit = false;
+  bool changed = false;
+  final _formKey = GlobalKey<FormBuilderState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -65,7 +71,7 @@ class _ProfileState extends State<Profile> {
                       Expanded(
                         flex: 1,
                         child: Container(
-                          child: Text(globVar.user.name,style: TextStyle(color: Colors.white,fontSize: 16,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700),),
+                          child: Text(globVar.user!=null?globVar.user.name:"#NAME#",style: TextStyle(color: Colors.white,fontSize: 16,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700),),
                         ),
                       ),
                       Expanded(
@@ -74,21 +80,59 @@ class _ProfileState extends State<Profile> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             FlatButton(
-                              onPressed: (){},
+                              onPressed: ()async{
+                                if(changed){
+                                  if(toggleEdit){
+                                    _formKey.currentState.save();
+                                    if (_formKey.currentState.validate()) {
+                                      // print(_formKey.currentState.value);
+                                      final Map<String, dynamic> mapUser = new Map<String, dynamic>.from(_formKey.currentState.value);
+                                      mapUser["cust_id"] = globVar.user.cust_id;
+                                      Future future = Users().update(mapUser);
+                                      var res = await utils.showLoadingFuture(context,future);
+                                      utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
+                                      if(res["STATUS"]) {
+                                        changed = false;
+                                        setState(() {
+                                          toggleEdit = !toggleEdit;
+                                        });
+                                      }
+                                    }
+                                    else {
+                                      utils.toast("Data belum lengkap. Silakan cek kembali",type:"ERROR");
+                                    }
+                                  }
+                                }
+                                else{
+                                  setState(() {
+                                    toggleEdit = !toggleEdit;
+                                  });
+                                }
+
+                              },
                               minWidth: 180,
                               padding: EdgeInsets.all(12),
-                              color: Colors.blue,
+                              color: toggleEdit?Colors.green:Colors.blue,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)
                               ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(FontAwesomeIcons.pencilAlt,color: Colors.white,size: 18,),
-                                  Text(" Edit Profil",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w700),),
-                                ],
-                              ),
+                              child: toggleEdit
+                                  ?Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(FontAwesomeIcons.check,color: Colors.white,size: 18,),
+                                      Text(" Save Profil",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w700),),
+                                    ],
+                                  )
+                                  :Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(FontAwesomeIcons.pencilAlt,color: Colors.white,size: 18,),
+                                        Text(" Edit Profil",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w700),),
+                                      ],
+                                    ),
                             ),
                             FlatButton(
                               onPressed: ()async {
@@ -170,30 +214,51 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    padding: EdgeInsets.all(33),
-                    itemCount: globVar.user != null ?globVar.user.toJsonDisplay().keys.length:0,
-                      itemBuilder: (context,idx)
-                          {
-                            var arr = globVar.user.toJsonDisplay().keys.toList();
-                            var key = arr[idx];
-                            var val = globVar.user.toJsonDisplay()[arr[idx]].toString();
-                            return Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(top: 22.5,left: 30,right: 30,bottom: 22.5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(flex:1,child: Text(key,style: TextStyle(fontSize: 14,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Color.fromRGBO(146, 146, 146, 1)),)),
-                                      Flexible(flex:1,child: Align(alignment: Alignment.centerRight,child: Text(val,textAlign: TextAlign.right,style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6))))),
-                                    ],
+                  child: FormBuilder(
+                    key: _formKey,
+                    enabled: toggleEdit,
+                    onChanged: (){
+                      changed = true;
+                    },
+                    autovalidateMode: AutovalidateMode.disabled,
+                    initialValue: globVar.user.toJsonDisplay(),
+                    child: ListView.builder(
+                      padding: EdgeInsets.all(33),
+                      itemCount: globVar.user != null ?globVar.user.toJsonDisplay().keys.length:0,
+                        itemBuilder: (context,idx)
+                            {
+                              var arr = globVar.user.toJsonDisplay().keys.toList();
+                              var key = arr[idx];
+                              var val = globVar.user.toJsonDisplay()[arr[idx]].toString();
+                              return Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 22.5,left: 30,right: 30,bottom: 22.5),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(flex:1,child: Text(key.replaceAll("_", " "),style: TextStyle(fontSize: 14,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Color.fromRGBO(146, 146, 146, 1)),)),
+                                        Flexible(flex:1,child: Align(alignment: Alignment.centerRight,
+                                            child:
+                                            FormBuilderTextField(
+                                              name: key,
+                                              validator: (value) =>
+                                              value == null || value.isEmpty ? '$key tidak boleh kosong' : null,
+                                              decoration: InputDecoration(
+                                                border: (toggleEdit)?null:InputBorder.none,
+                                              ),
+                                              style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6)),
+                                            )
+                                            // Text(val,textAlign: TextAlign.right,style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6)))
+                                        )),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Divider(),
-                              ],
-                              );
-                          })
+                                  Divider(),
+                                ],
+                                );
+                            }),
+                  )
                 ),
               ],
             ),
