@@ -45,13 +45,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // return FutureBuilder(
-    //   future: preload(),
-    //   builder: (context, AsyncSnapshot snapshot) {
-    //     // Show splash screen while waiting for app resources to load:
-    //     if (snapshot.connectionState == ConnectionState.waiting) {
-    //       return MaterialApp(home: Splashscreen(preLoadPercentage,preLoadState));
-    //     } else {
+    return FutureBuilder(
+      future: preload(),
+      builder: (context, AsyncSnapshot snapshot) {
+        // Show splash screen while waiting for app resources to load:
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return MaterialApp(home: Splashscreen(preLoadPercentage,preLoadState));
+        } else {
           // Loading is done, return the app:
           return LifeCycleManager(
             child: MaterialApp(
@@ -74,8 +74,8 @@ class MyApp extends StatelessWidget {
               },
             ),
           );
-    //     }
-    //   },
-    // );
+        }
+      },
+    );
   }
 }
