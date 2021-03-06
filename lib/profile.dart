@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'CustomShape/wave_shaper.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'api/user.dart';
+import 'api/auth.dart';
 
 class Profile extends StatefulWidget {
   Profile({Key key}) : super(key: key);
@@ -17,7 +18,22 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   bool toggleEdit = false;
   bool changed = false;
+  Map<String,dynamic> userData;
   final _formKey = GlobalKey<FormBuilderState>();
+  var gender;
+
+  reloadUser(){
+    userData = new Map<String,dynamic>.from(globVar.user.toJsonDisplay());
+    userData.update("Tanggal_Lahir", (value) => DateFormat("dd-MMM-yyyy").parse(value));
+    gender = userData["Gender"];
+  }
+
+  @override
+  void initState() {
+    reloadUser();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,11 +104,14 @@ class _ProfileState extends State<Profile> {
                                       // print(_formKey.currentState.value);
                                       final Map<String, dynamic> mapUser = new Map<String, dynamic>.from(_formKey.currentState.value);
                                       mapUser["cust_id"] = globVar.user.cust_id;
+                                      mapUser["corp"] = globVar.auth.corp;
+                                      mapUser.update("Tanggal_Lahir", (value) => DateFormat("dd-MMM-yyyy").format(value));
                                       Future future = Users().update(mapUser);
                                       var res = await utils.showLoadingFuture(context,future);
                                       utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
                                       if(res["STATUS"]) {
                                         changed = false;
+                                        reloadUser();
                                         setState(() {
                                           toggleEdit = !toggleEdit;
                                         });
@@ -213,6 +232,172 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                 ),
+                Container(
+                  padding: EdgeInsets.only(top:10,left: 10,right: 10),
+                  alignment: Alignment.centerRight,
+                  child: InkWell(
+                    onTap: ()async{
+                      Map<String,dynamic> passMap;
+                      final _formPassKey = GlobalKey<FormBuilderState>();
+                      await showDialog(
+                          context: context,
+                          builder: (context)=>StatefulBuilder(
+                              builder: (context,setState)=>SimpleDialog(
+                                children: [
+                                  FormBuilder(
+                                      key: _formPassKey,
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: FormBuilderTextField(
+                                                name:"old",
+                                                validator: (value)=>
+                                                value == null || value.isEmpty ? "Masukkan password lama":null,
+                                              decoration: InputDecoration(
+                                                  focusedBorder: new OutlineInputBorder(
+                                                    borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                    borderRadius: const BorderRadius.all(
+                                                      const Radius.circular(15.0),
+                                                    ),
+                                                  ),
+                                                  border: new OutlineInputBorder(
+                                                    borderRadius: const BorderRadius.all(
+                                                      const Radius.circular(15.0),
+                                                    ),
+                                                  ),
+                                                  contentPadding: EdgeInsets.all(23),
+                                                  hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                  hintText: "Password lama"
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: FormBuilderTextField(
+                                              name:"pass",
+                                              validator: (value)=>
+                                              value == null || value.isEmpty ? "Masukkan password baru":null,
+                                              decoration: InputDecoration(
+                                                  focusedBorder: new OutlineInputBorder(
+                                                    borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                    borderRadius: const BorderRadius.all(
+                                                      const Radius.circular(15.0),
+                                                    ),
+                                                  ),
+                                                  border: new OutlineInputBorder(
+                                                    borderRadius: const BorderRadius.all(
+                                                      const Radius.circular(15.0),
+                                                    ),
+                                                  ),
+                                                  contentPadding: EdgeInsets.all(23),
+                                                  hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                  hintText: "Password baru"
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: FormBuilderTextField(
+                                              name:"confirm",
+                                              decoration: InputDecoration(
+                                                  focusedBorder: new OutlineInputBorder(
+                                                    borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                    borderRadius: const BorderRadius.all(
+                                                      const Radius.circular(15.0),
+                                                    ),
+                                                  ),
+                                                  border: new OutlineInputBorder(
+                                                    borderRadius: const BorderRadius.all(
+                                                      const Radius.circular(15.0),
+                                                    ),
+                                                  ),
+                                                  contentPadding: EdgeInsets.all(23),
+                                                  hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                  hintText: "Konfirmasi password"
+                                              ),
+                                              validator: (value)=>
+                                              value == null || value.isEmpty ? "Masukkan password baru":null,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                  ),
+                                  SizedBox(height: 15),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      FlatButton(
+                                          minWidth: 120,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(15.0),
+                                              side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                                          ),
+                                          padding: EdgeInsets.all(10),
+                                          onPressed: (){
+                                            Navigator.pop(context,false);
+                                          },
+                                          child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                                      ),
+                                      SizedBox(width: 15),
+                                      FlatButton(
+                                          minWidth: 120,
+                                          color: Colors.amber,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(15.0)
+                                          ),
+                                          padding: EdgeInsets.all(10),
+                                          onPressed: ()async {
+                                            _formPassKey.currentState.save();
+                                            if (_formPassKey.currentState.validate()) {
+                                                if(_formPassKey.currentState.value["pass"] == _formPassKey.currentState.value["confirm"]){
+                                                  passMap = Map<String,dynamic>.from(_formPassKey.currentState.value);
+                                                  passMap.remove("confirm");
+                                                  passMap["login_id"]= globVar.auth.login_id;
+                                                    Future future = Auths().changePass(passMap);
+                                                    var res = await utils.showLoadingFuture(context,future);
+                                                    utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
+                                                    if(res["STATUS"]) {
+                                                      Navigator.pop(context);
+                                                    }
+                                                }
+                                                else{
+                                                  utils.toast("Password baru tidak sama");
+                                                }
+                                            }
+                                          },
+                                          child: Text("Change",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    side: BorderSide(color: Colors.transparent)
+                                ),
+                                contentPadding: EdgeInsets.all(20),
+                              )
+                          )
+                      );
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.amber
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(FontAwesomeIcons.key,size: 15 ,),
+                          SizedBox(width: 10,),
+                          Text("Baru",style: TextStyle(fontWeight: FontWeight.w400, color: Colors.black,fontSize: 16,fontStyle: FontStyle.italic,),),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: FormBuilder(
                     key: _formKey,
@@ -221,34 +406,79 @@ class _ProfileState extends State<Profile> {
                       changed = true;
                     },
                     autovalidateMode: AutovalidateMode.disabled,
-                    initialValue: globVar.user.toJsonDisplay(),
+                    initialValue: userData,
                     child: ListView.builder(
-                      padding: EdgeInsets.all(33),
+                      padding: EdgeInsets.only(left: 33,right: 33,bottom: 33,top: 10),
                       itemCount: globVar.user != null ?globVar.user.toJsonDisplay().keys.length:0,
                         itemBuilder: (context,idx)
                             {
                               var arr = globVar.user.toJsonDisplay().keys.toList();
                               var key = arr[idx];
                               var val = globVar.user.toJsonDisplay()[arr[idx]].toString();
+                              Widget formWidget;
+                              if(key == 'Tanggal_Lahir'){
+                                formWidget = FormBuilderDateTimePicker(
+                                  name: key,
+                                  validator: (value) =>
+                                  value == null ? '$key tidak boleh kosong' : null,
+                                  decoration: InputDecoration(
+                                    suffixIcon: (toggleEdit)?Icon(FontAwesomeIcons.calendarAlt,color: Color.fromRGBO(35, 35, 222, 1),):Text(''),
+                                    border: (toggleEdit)?null:InputBorder.none,
+                                  ),
+                                  style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6)),
+                                  format: DateFormat("dd-MMM-yyyy"),
+                                  inputType: InputType.date,
+                                );
+                              }
+                              else if(key == "Gender" && toggleEdit){
+                                formWidget = FormBuilderChoiceChip(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  alignment: WrapAlignment.spaceEvenly,
+                                  name: key,
+                                  validator : (value) =>
+                                  value == null ? 'Gender tidak boleh kosong' : null,
+                                  selectedColor: Color.fromRGBO(35, 35, 222, 1),
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                  onChanged: (value){
+                                    setState(() {
+                                      gender = value;
+                                    });
+                                  },
+                                  options: [
+                                    FormBuilderFieldOption(
+                                        value: 'Male', child: Container(padding: EdgeInsets.all(8.0),child:
+                                        Icon(FontAwesomeIcons.male,color: (gender=="Male")?Colors.white:Colors.black,),
+                                        )),
+                                    FormBuilderFieldOption(
+                                        value: 'Female', child: Container(padding:EdgeInsets.all(8.0),child:
+                                        Icon(FontAwesomeIcons.female,color: (gender=="Female")?Colors.white:Colors.black,),
+                                        )),
+                                  ],
+                                );
+                              }
+                              else{
+                                formWidget = FormBuilderTextField(
+                                  name: key,
+                                  validator: (value) =>
+                                  value == null || value.isEmpty ? '$key tidak boleh kosong' : null,
+                                  decoration: InputDecoration(
+                                    border: (toggleEdit)?null:InputBorder.none,
+                                  ),
+                                  style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6)),
+                                );
+                              }
                               return Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(top: 22.5,left: 30,right: 30,bottom: 22.5),
+                                    padding: EdgeInsets.only(top: 10,left: 30,right: 30,bottom: 10),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Flexible(flex:1,child: Text(key.replaceAll("_", " "),style: TextStyle(fontSize: 14,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Color.fromRGBO(146, 146, 146, 1)),)),
                                         Flexible(flex:1,child: Align(alignment: Alignment.centerRight,
-                                            child:
-                                            FormBuilderTextField(
-                                              name: key,
-                                              validator: (value) =>
-                                              value == null || value.isEmpty ? '$key tidak boleh kosong' : null,
-                                              decoration: InputDecoration(
-                                                border: (toggleEdit)?null:InputBorder.none,
-                                              ),
-                                              style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6)),
-                                            )
+                                            child:formWidget
                                             // Text(val,textAlign: TextAlign.right,style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6)))
                                         )),
                                       ],

@@ -36,4 +36,14 @@ class Auths{
       return {"STATUS":false,"DATA":"Gagal menghubungi server. ${e}."};
     }
   }
+  changePass (Map<String,dynamic> passMap)async{
+    try{
+      var res = await utils.put(passMap, globVar.hostRest+"/auth/change",secure: true);
+      return {"STATUS":res["STATUS"]==1,"DATA":res["DATA"]};
+    }
+    catch(e){
+      print(e);
+      return {"STATUS":false,"DATA":"Gagal menghubungi server. ${e}."};
+    }
+  }
 }

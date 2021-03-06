@@ -139,113 +139,124 @@ class _LoginPageState extends State<LoginPage> {
                                onPressed: (){
                                  final userText = new TextEditingController();
                                  final passText = new TextEditingController();
+                                 bool obscure = true;
                                  showModalBottomSheet(
                                    isScrollControlled: true,
                                    context: context,
-                                   builder: (context) => Container(
-                                     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                     height: MediaQuery.of(context).size.height*0.8,
-                                     decoration: BoxDecoration(
-                                       color: Colors.white,
-                                       borderRadius: BorderRadius.only(topLeft: Radius.circular(25),topRight: Radius.circular(25)),
-                                     ),
-                                     child: SingleChildScrollView(
-                                       scrollDirection: Axis.vertical,
-                                       child: Column(
-                                         mainAxisSize: MainAxisSize.min,
-                                         children: [
-                                           Container(
-                                             height: MediaQuery.of(context).size.height*0.38,
-                                             padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.10,left: MediaQuery.of(context).size.width*0.24,right: MediaQuery.of(context).size.width*0.24,bottom: MediaQuery.of(context).size.height*0.03),
-                                             child: Container(
-                                               height: 218,
-                                               width: 205,
-                                               decoration: BoxDecoration(
-                                                   image: DecorationImage(
-                                                     image: AssetImage("images/icon.png"),
-                                                     // colorFilter: ColorFilter.mode(Color.fromRGBO(10, 10, 249, 0.5), BlendMode.modulate ),
-                                                     fit: BoxFit.fitHeight,
-                                                   )
+                                   builder: (context) => StatefulBuilder(
+                                     builder: (context,setState)=>Container(
+                                       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                       height: MediaQuery.of(context).size.height*0.8,
+                                       decoration: BoxDecoration(
+                                         color: Colors.white,
+                                         borderRadius: BorderRadius.only(topLeft: Radius.circular(25),topRight: Radius.circular(25)),
+                                       ),
+                                       child: SingleChildScrollView(
+                                         scrollDirection: Axis.vertical,
+                                         child: Column(
+                                           mainAxisSize: MainAxisSize.min,
+                                           children: [
+                                             Container(
+                                               height: MediaQuery.of(context).size.height*0.38,
+                                               padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.10,left: MediaQuery.of(context).size.width*0.24,right: MediaQuery.of(context).size.width*0.24,bottom: MediaQuery.of(context).size.height*0.03),
+                                               child: Container(
+                                                 height: 218,
+                                                 width: 205,
+                                                 decoration: BoxDecoration(
+                                                     image: DecorationImage(
+                                                       image: AssetImage("images/icon.png"),
+                                                       // colorFilter: ColorFilter.mode(Color.fromRGBO(10, 10, 249, 0.5), BlendMode.modulate ),
+                                                       fit: BoxFit.fitHeight,
+                                                     )
+                                                 ),
                                                ),
                                              ),
-                                           ),
-                                           Padding(
-                                             padding: const EdgeInsets.only(left:53,right: 53),
-                                             child: Column(
-                                               children: [
-                                                 Padding(
-                                                   padding: const EdgeInsets.only(top: 50),
-                                                   child: TextField(
-                                                     controller: userText,
-                                                     decoration: InputDecoration(
-                                                         focusedBorder: new OutlineInputBorder(
-                                                           borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                           borderRadius: const BorderRadius.all(
-                                                             const Radius.circular(15.0),
+                                             Padding(
+                                               padding: const EdgeInsets.only(left:53,right: 53),
+                                               child: Column(
+                                                 children: [
+                                                   Padding(
+                                                     padding: const EdgeInsets.only(top: 50),
+                                                     child: TextField(
+                                                       controller: userText,
+                                                       decoration: InputDecoration(
+                                                           focusedBorder: new OutlineInputBorder(
+                                                             borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                             borderRadius: const BorderRadius.all(
+                                                               const Radius.circular(15.0),
+                                                             ),
                                                            ),
-                                                         ),
-                                                       border: new OutlineInputBorder(
-                                                         borderRadius: const BorderRadius.all(
-                                                           const Radius.circular(15.0),
-                                                         ),
+                                                           border: new OutlineInputBorder(
+                                                             borderRadius: const BorderRadius.all(
+                                                               const Radius.circular(15.0),
+                                                             ),
+                                                           ),
+                                                           contentPadding: EdgeInsets.all(23),
+                                                           hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                           hintText: "Alamat Email"
                                                        ),
-                                                       contentPadding: EdgeInsets.all(23),
-                                                       hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
-                                                       hintText: "Alamat Email"
                                                      ),
                                                    ),
-                                                 ),
-                                                 Padding(
-                                                   padding: const EdgeInsets.only(top: 20,),
-                                                   child: TextField(
-                                                     controller: passText,
-                                                     decoration: InputDecoration(
-                                                         focusedBorder: new OutlineInputBorder(
-                                                           borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                           borderRadius: const BorderRadius.all(
-                                                             const Radius.circular(15.0),
+                                                   Padding(
+                                                     padding: const EdgeInsets.only(top: 20,),
+                                                     child: TextField(
+                                                       obscureText: obscure,
+                                                       controller: passText,
+                                                       decoration: InputDecoration(
+                                                           suffixIcon: InkWell(
+                                                               onTap: (){
+                                                                 setState(() {
+                                                                   obscure = !obscure;
+                                                                 });
+                                                               },
+                                                               child: Icon((obscure)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
+                                                           focusedBorder: new OutlineInputBorder(
+                                                             borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                             borderRadius: const BorderRadius.all(
+                                                               const Radius.circular(15.0),
+                                                             ),
                                                            ),
-                                                         ),
-                                                         border: new OutlineInputBorder(
-                                                           borderRadius: const BorderRadius.all(
-                                                             const Radius.circular(15.0),
+                                                           border: new OutlineInputBorder(
+                                                             borderRadius: const BorderRadius.all(
+                                                               const Radius.circular(15.0),
+                                                             ),
                                                            ),
-                                                         ),
-                                                         contentPadding: EdgeInsets.all(23),
-                                                         hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
-                                                         hintText: "Password"
+                                                           contentPadding: EdgeInsets.all(23),
+                                                           hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                           hintText: "Password"
+                                                       ),
                                                      ),
                                                    ),
-                                                 ),
-                                                 Container(
-                                                   padding: EdgeInsets.only(top:15),
-                                                   alignment: Alignment.centerRight,
-                                                   child: Text("Lupa Password",style: TextStyle(fontWeight: FontWeight.w200,decoration: TextDecoration.underline,color: Color.fromRGBO(5,0,255,1),fontSize: 16,fontStyle: FontStyle.italic,),),
-                                                 ),
-                                                 Container(
-                                                   padding: EdgeInsets.only(top: 25),
-                                                   width: 286,
-                                                   child: FlatButton(
-                                                       color: Color.fromRGBO(64, 64, 222, 1),
-                                                       shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0)),
-                                                       padding: EdgeInsets.all(12),
-                                                       onPressed: ()async {
-                                                         Future future = Auths().login(userText.text, passText.text);
-                                                         var res = await utils.showLoadingFuture(context,future);
-                                                         if(res["STATUS"]){
-                                                           Navigator.pushReplacementNamed(context, "/home");
-                                                         }
-                                                         else{
-                                                           utils.toast(res["DATA"],type: "ERROR");
-                                                         }
-                                                       },
-                                                       child: Text("Login",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.white),)),
-                                                 ),
-                                               ],
+                                                   Container(
+                                                     padding: EdgeInsets.only(top:15),
+                                                     alignment: Alignment.centerRight,
+                                                     child: Text("Lupa Password",style: TextStyle(fontWeight: FontWeight.w200,decoration: TextDecoration.underline,color: Color.fromRGBO(5,0,255,1),fontSize: 16,fontStyle: FontStyle.italic,),),
+                                                   ),
+                                                   Container(
+                                                     padding: EdgeInsets.only(top: 25),
+                                                     width: 286,
+                                                     child: FlatButton(
+                                                         color: Color.fromRGBO(64, 64, 222, 1),
+                                                         shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0)),
+                                                         padding: EdgeInsets.all(12),
+                                                         onPressed: ()async {
+                                                           Future future = Auths().login(userText.text, passText.text);
+                                                           var res = await utils.showLoadingFuture(context,future);
+                                                           if(res["STATUS"]){
+                                                             Navigator.pushReplacementNamed(context, "/home");
+                                                           }
+                                                           else{
+                                                             utils.toast(res["DATA"],type: "ERROR");
+                                                           }
+                                                         },
+                                                         child: Text("Login",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.white),)),
+                                                   ),
+                                                 ],
+                                               ),
                                              ),
-                                           ),
 
-                                         ],
+                                           ],
+                                         ),
                                        ),
                                      ),
                                    )
@@ -265,6 +276,9 @@ class _LoginPageState extends State<LoginPage> {
                                  var gender;
                                  final passText  = TextEditingController();
                                  final confirmPassText  = TextEditingController();
+                                 bool obscurePass = true;
+                                 bool obscureConfirm = true;
+
                                  showModalBottomSheet(
                                      isScrollControlled: true,
                                      context: context,
@@ -432,6 +446,7 @@ class _LoginPageState extends State<LoginPage> {
                                                                padding: const EdgeInsets.only(top: 15,),
                                                                child: FormBuilderTextField(
                                                                  controller: passText,
+                                                                 obscureText: obscurePass,
                                                                  name: "pass",
                                                                  validator : (value) =>
                                                                  value == null || value.isEmpty ? 'Password tidak boleh kosong' : null,
@@ -441,6 +456,14 @@ class _LoginPageState extends State<LoginPage> {
                                                                        borderRadius: const BorderRadius.all(
                                                                          const Radius.circular(15.0),
                                                                        ),
+                                                                     ),
+                                                                     suffixIcon: InkWell(
+                                                                       onTap: (){
+                                                                         setState((){
+                                                                           obscurePass = !obscurePass;
+                                                                         });
+                                                                       },
+                                                                       child: Icon((obscurePass)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye),
                                                                      ),
                                                                      border: new OutlineInputBorder(
                                                                        borderRadius: const BorderRadius.all(
@@ -456,6 +479,7 @@ class _LoginPageState extends State<LoginPage> {
                                                              Padding(
                                                                padding: const EdgeInsets.only(top: 15,),
                                                                child: TextFormField(
+                                                                 obscureText: obscureConfirm,
                                                                  controller: confirmPassText,
                                                                  validator : (value) =>
                                                                  value == null || value.isEmpty ? 'Password tidak boleh kosong' : null,
@@ -465,6 +489,14 @@ class _LoginPageState extends State<LoginPage> {
                                                                        borderRadius: const BorderRadius.all(
                                                                          const Radius.circular(15.0),
                                                                        ),
+                                                                     ),
+                                                                     suffixIcon: InkWell(
+                                                                       onTap: (){
+                                                                         setState((){
+                                                                           obscureConfirm = !obscureConfirm;
+                                                                         });
+                                                                       },
+                                                                       child: Icon((obscurePass)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye),
                                                                      ),
                                                                      border: new OutlineInputBorder(
                                                                        borderRadius: const BorderRadius.all(
