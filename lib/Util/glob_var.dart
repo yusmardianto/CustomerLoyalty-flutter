@@ -42,6 +42,5 @@ class GlobaVar{
         "secret" : "uxj_dNikz8JcvasOd1l3jA.."
       }).toString());
     }
-    await utils.restoreGlobVar();
   }
 }

@@ -27,7 +27,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
       await utils.backupGlobVar();
     }
     else if(state == AppLifecycleState.resumed){
-      await utils.removeBackupGlobVar();
+      // await utils.removeBackupGlobVar();
     }
   }
   @override

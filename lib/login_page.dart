@@ -145,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                                    context: context,
                                    builder: (context) => StatefulBuilder(
                                      builder: (context,setState)=>Container(
-                                       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                       // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                                        height: MediaQuery.of(context).size.height*0.8,
                                        decoration: BoxDecoration(
                                          color: Colors.white,
@@ -284,7 +284,7 @@ class _LoginPageState extends State<LoginPage> {
                                      context: context,
                                      builder: (context) => StatefulBuilder(
                                        builder: (context,setState) =>Container(
-                                         padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                         // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                                          height: MediaQuery.of(context).size.height*0.85,
                                          decoration: BoxDecoration(
                                            color: Colors.white,

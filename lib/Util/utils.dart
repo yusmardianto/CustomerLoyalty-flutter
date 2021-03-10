@@ -137,8 +137,9 @@ class Util{
     }
   }
   backupGlobVar()async{
-    prefs.setString("token", JsonEncoder().convert(globVar.tokenRest.toJson()));
-    if(globVar.user!=null)prefs.setString("user", JsonEncoder().convert(globVar.user.toJson()));
+    await prefs.setString("token", JsonEncoder().convert(globVar.tokenRest.toJson()));
+    if(globVar.auth!=null) await prefs.setString("auth", JsonEncoder().convert(globVar.auth.toJson()));
+    if(globVar.user!=null) await prefs.setString("user", JsonEncoder().convert(globVar.user.toJson()));
   }
   restoreGlobVar()async{
     if(prefs.getString("token")!=null){
@@ -152,9 +153,10 @@ class Util{
     }
   }
   removeBackupGlobVar()async{
+    print("clear prefs");
     // prefs.remove("token");
-    prefs.remove("user");
-    prefs.remove("auth");
+    await prefs.remove("user");
+    await prefs.remove("auth");
   }
   toast(text,{type:"REGULAR"})async{
     await Fluttertoast.cancel();

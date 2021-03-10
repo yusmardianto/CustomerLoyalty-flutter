@@ -29,16 +29,18 @@ void main() async{
 }
 
 Future preload()async{
-  preLoadState = "Mempersiapkan data";
-  await Future.delayed(Duration(seconds: 1));
-  preLoadState = "Mengecek penyimpanan";
-  prefs = await SharedPreferences.getInstance();
-  preLoadPercentage = 1/2;
-  await Future.delayed(Duration(seconds: 1));
-  preLoadState = "Hampir selesai";
-  globVar = new GlobaVar();
-  preLoadPercentage = 2/2-0.02;
-  await Future.delayed(Duration(seconds: 2));
+    preLoadState = "Mempersiapkan data";
+    if(prefs==null)prefs = await SharedPreferences.getInstance();
+    // print('test${[globVar==null,prefs==null,prefs.getString("user")]}');
+    if(globVar==null){
+    preLoadState = "Mengecek penyimpanan";
+    globVar = new GlobaVar();
+    preLoadPercentage = 1/2;
+    await utils.restoreGlobVar();
+    preLoadState = "Hampir selesai";
+    preLoadPercentage = 2/2-0.02;
+    await Future.delayed(Duration(seconds: 2));
+    }
 }
 
 class MyApp extends StatelessWidget {
@@ -64,7 +66,7 @@ class MyApp extends StatelessWidget {
                 ),
                 visualDensity: VisualDensity.adaptivePlatformDensity,
               ),
-              home: (prefs.getString("user")!=null)?HomePage():LoginPage(),
+              home: (globVar.user!=null)?HomePage():LoginPage(),
               routes: {
                 '/login': (context) => new LoginPage(),
                 '/home' : (context) => new HomePage(),
