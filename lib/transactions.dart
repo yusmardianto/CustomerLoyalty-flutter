@@ -153,51 +153,6 @@ class _TransactionsState extends State<Transactions> {
                               )
                             ),
                           ), // Loop pakek map agek ini
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 2.0),
-                            child: Container(
-                                padding: EdgeInsets.all(4.0),
-                                color: Colors.white,
-                                child:Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Text(("PT. Yamaha Central Palembang").length>23?"PT. Yamaha Central Pal..":"PT. Yamaha Central Palembang",style: TextStyle(fontSize: 13,fontWeight: FontWeight.w400),)
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("NMAX Honda",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text("15.000.000",style: GoogleFonts.robotoMono(color: Colors.black54,textStyle: TextStyle(fontWeight: FontWeight.w300,fontSize: 18,fontStyle: FontStyle.italic)),),
-                                            Text(" IDR",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("debit-card",style: TextStyle(fontWeight: FontWeight.w200,fontSize: 14),),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Icon(FontAwesomeIcons.angleDoubleUp,size: 17,color: Color.fromRGBO(34, 168, 56, 1),),
-                                            Text("1500",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black54,fontWeight: FontWeight.w300,fontSize: 18,fontStyle: FontStyle.italic)),),
-                                            SizedBox(width: 2,),
-                                            Icon(FontAwesomeIcons.coins,size: 17,color: Colors.amber,),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                )
-                            ),
-                          ),
                         ],
                       )
                     )),
