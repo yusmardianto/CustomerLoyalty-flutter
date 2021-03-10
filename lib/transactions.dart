@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'CustomShape/multi_shaper.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'main.dart';
+import 'api/transactions.dart';
+import 'DataType/transaction.dart';
 
 class Transactions extends StatefulWidget {
   Transactions({Key key}) : super(key: key);
@@ -13,6 +16,25 @@ class Transactions extends StatefulWidget {
 
 class _TransactionsState extends State<Transactions> {
   final search = new TextEditingController();
+  List<Transaction> transList = [];
+  void loadTransactions()async{
+    var res = await Trans().getList();
+    if(res["STATUS"]==1){
+      for(var i = 0;i<res["DATA"].length;i++){
+        transList.add(Transaction.fromJson(res["DATA"][i]));
+      }
+      setState(() {
+
+      });
+    }
+
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    loadTransactions();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +100,7 @@ class _TransactionsState extends State<Transactions> {
                     ),
                   ),
                   Expanded(
-                    child: ListView.builder(padding: EdgeInsets.all(0.0),itemCount: 3,itemBuilder: (context,index)=>Container(
+                    child: ListView.builder(padding: EdgeInsets.all(0.0),itemCount: transList.length,itemBuilder: (context,index)=>Container(
                       color: Color.fromRGBO(244, 238, 238, 1),
                       child:Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,8 +139,10 @@ class _TransactionsState extends State<Transactions> {
                                       Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Icon(FontAwesomeIcons.angleDoubleUp,size: 17,color: Color.fromRGBO(34, 168, 56, 1),),
-                                          Text("1500",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black54,fontWeight: FontWeight.w400,fontSize: 18,fontStyle: FontStyle.italic)),),
+                                          transList[index].POINT_EARN>=0
+                                              ?Icon(FontAwesomeIcons.angleDoubleUp,size: 17,color: Color.fromRGBO(34, 168, 56, 1),)
+                                              :Icon(FontAwesomeIcons.angleDoubleDown,size: 17,color: Colors.redAccent,),
+                                          Text(transList[index].POINT_EARN.toString()??'-',style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black54,fontWeight: FontWeight.w400,fontSize: 18,fontStyle: FontStyle.italic)),),
                                           SizedBox(width: 2,),
                                           Icon(FontAwesomeIcons.coins,size: 17,color: Colors.amber,),
                                         ],

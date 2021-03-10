@@ -1,7 +1,7 @@
 import "../main.dart";
 import '../DataType/user.dart';
 import '../DataType/auth.dart';
-import 'user.dart';
+import 'users.dart';
 class Auths{
   login (user,pass)async{
     try{
@@ -10,7 +10,7 @@ class Auths{
         var json = res["DATA"];
         globVar.auth = Auth.fromJson(json);
         if(json["STATUS"]=="OK"){
-          var fetchUser = await Users().saveUser(json["G_CUST_ID"]);
+          var fetchUser = await Users().saveUser(json["G_CUST_ID"],json["G_CORP"]);
           if(!fetchUser){
             return {"STATUS":false,"DATA":"Gagal menghubungi server. Silakan mengecek internet anda."};
           }

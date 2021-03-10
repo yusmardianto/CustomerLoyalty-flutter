@@ -23,7 +23,6 @@ class GlobaVar{
   Auth _auth;
   Auth get auth => _auth;
   set auth(value) => _auth = value;
-
   //============================================================
 
   static final GlobaVar _instance = GlobaVar._internal();

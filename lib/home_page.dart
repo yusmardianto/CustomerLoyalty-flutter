@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         children: [
                           Text("Hi ",style: TextStyle(fontSize:18,color: Colors.white,fontWeight: FontWeight.w300),),
-                          Text("${globVar.user!=null?globVar.user.name:""},",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,color: Colors.white,fontWeight: FontWeight.w500),)
+                          Text("${globVar.user!=null?globVar.user.NAME:""},",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,color: Colors.white,fontWeight: FontWeight.w500),)
                         ],
                       )
                     ),

@@ -5,8 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'CustomShape/wave_shaper.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'api/user.dart';
-import 'api/auth.dart';
+import 'api/users.dart';
+import 'api/auths.dart';
 
 class Profile extends StatefulWidget {
   Profile({Key key}) : super(key: key);
@@ -87,7 +87,7 @@ class _ProfileState extends State<Profile> {
                       Expanded(
                         flex: 1,
                         child: Container(
-                          child: Text(globVar.user!=null?globVar.user.name:"#NAME#",style: TextStyle(color: Colors.white,fontSize: 16,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700),),
+                          child: Text(globVar.user!=null?globVar.user.NAME:"#NAME#",style: TextStyle(color: Colors.white,fontSize: 16,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700),),
                         ),
                       ),
                       Expanded(
@@ -103,7 +103,7 @@ class _ProfileState extends State<Profile> {
                                     if (_formKey.currentState.validate()) {
                                       // print(_formKey.currentState.value);
                                       final Map<String, dynamic> mapUser = new Map<String, dynamic>.from(_formKey.currentState.value);
-                                      mapUser["cust_id"] = globVar.user.cust_id;
+                                      mapUser["cust_id"] = globVar.user.CUST_ID;
                                       mapUser["corp"] = globVar.auth.corp;
                                       mapUser.update("Tanggal_Lahir", (value) => DateFormat("dd-MMM-yyyy").format(value));
                                       Future future = Users().update(mapUser);

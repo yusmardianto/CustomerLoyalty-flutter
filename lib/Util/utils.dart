@@ -22,7 +22,7 @@ class Util{
       await backupGlobVar();
     }
   }
-  post(Map jsonData, String url,{secure:false,timeout:false,second:10}) async{
+  post(Map jsonData, String url,{secure:false,timeout:false,second:10,many=false}) async{
     const JsonDecoder decoder = const JsonDecoder();
     try {
       var headers = {'Content-type': 'application/json'};
@@ -44,8 +44,9 @@ class Util{
       }
       else{
         final Map data = decoder.convert(response.body);
-        var res = decoder.convert(data["res"]);
-        return {"STATUS":(response.statusCode != 200)?0:1,"DATA":res};
+        // prin
+        // var res = decoder.convert(data["res"]);
+        return {"STATUS":(response.statusCode != 200)?0:1,"DATA":(many)?data["res"]:decoder.convert(data["res"])};
       }
     } on TimeoutException catch(e){
       return {"STATUS":0,"DATA":"Request Timeout"};
