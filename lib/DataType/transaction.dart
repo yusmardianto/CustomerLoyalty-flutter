@@ -6,6 +6,7 @@ class Transaction{
   String CUST_NAME;
   DateTime TRANSACTION_DATE;
   int POINT_EARN;
+  int GRAND_TOTAL;
 
   Transaction(
       this.LOYALTY_TRANSACTION_ID,
@@ -14,7 +15,8 @@ class Transaction{
       this.POS_NAME,
       this.CUST_NAME,
       this.TRANSACTION_DATE,
-      this.POINT_EARN
+      this.POINT_EARN,
+      this.GRAND_TOTAL
       );
 
   Transaction.fromJson(Map<String, dynamic> json)
@@ -24,7 +26,8 @@ class Transaction{
         POS_NAME = json["POS_NAME"],
         CUST_NAME = json["CUST_NAME"],
         TRANSACTION_DATE = DateTime.parse(json["TRANSACTION_DATE"]),
-        POINT_EARN = json["POINT_EARN"]
+        POINT_EARN = json["POINT_EARN"],
+        GRAND_TOTAL = json["GRAND_TOTAL"]
   ;
 
   Map<String, dynamic> toJson()=>{
@@ -34,6 +37,7 @@ class Transaction{
     "POS_NAME" : POS_NAME,
     "CUST_NAME" : CUST_NAME,
     "TRANSACTION_DATE" : TRANSACTION_DATE,
-    "POINT_EARN" : POINT_EARN
+    "POINT_EARN" : POINT_EARN,
+    "GRAND_TOTAL" : GRAND_TOTAL
   };
 }
