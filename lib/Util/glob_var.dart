@@ -7,6 +7,10 @@ import '../main.dart';
 class GlobaVar{
   String hostRest = "https://loyalty.thamrin.xyz/ords/loyalty/loyaltymobile";
 
+  //=====================isLoading============================
+  bool _isLoading;
+  bool get isLoading => _isLoading;
+  set isLoading(value) => _isLoading = value;
   //=====================shownotif============================
   bool _isShowNotif;
   bool get isShowNotif => _isShowNotif;
@@ -34,6 +38,7 @@ class GlobaVar{
   }
   Future initGlobVar() async {
     _isShowNotif = true;
+    _isLoading = false;
     prefs = await SharedPreferences.getInstance();
     if(prefs.getString("clientCred")==null){
       prefs.setString("clientCred", json.encode({

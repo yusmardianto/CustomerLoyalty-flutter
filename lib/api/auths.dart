@@ -6,19 +6,17 @@ class Auths{
   login (user,pass)async{
     try{
       var res = await utils.post({"user":user,"pass":pass}, globVar.hostRest+"/auth/",secure: true);
-      if(res["STATUS"]==1){
-        var json = res["DATA"];
+      var json = res["DATA"];
+      if(res["STATUS"]==1 && json["STATUS"]=="OK"){
         globVar.auth = Auth.fromJson(json);
-        if(json["STATUS"]=="OK"){
           var fetchUser = await Users().saveUser(json["G_CUST_ID"],json["G_CORP"]);
-          if(!fetchUser){
+        if(!fetchUser){
             return {"STATUS":false,"DATA":"Gagal menghubungi server. Silakan mengecek internet anda."};
           }
-        }
         return {"STATUS":json["STATUS"]=="OK","DATA":json["LOGIN_MESSAGE"]};
       }
       else{
-        return {"STATUS":false,"DATA":"Gagal menghubungi server. Silakan mengecek internet anda."};
+        return {"STATUS":false,"DATA":(res["STATUS"]==1)?res["DATA"]:"Gagal menghubungi server. Silakan mengecek internet anda."};
       }
     }
     catch(e){

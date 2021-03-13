@@ -19,12 +19,11 @@ class Transactions extends StatefulWidget {
 class _TransactionsState extends State<Transactions> {
   final search = new TextEditingController();
   List<Transaction> transList = [];
-  bool isLoading = false;
   String start_date = DateFormat('dd-MMM-yyyy').format(DateTime(DateTime.now().year,1,1));
   String end_date = DateFormat('dd-MMM-yyyy').format(DateTime.now());
   void loadTransactions()async{
     setState(() {
-      isLoading = true;
+      globVar.isLoading = true;
     });
     var res = await Trans().getList(start_date,end_date);
     if(res["STATUS"]==1){
@@ -34,7 +33,7 @@ class _TransactionsState extends State<Transactions> {
       }
     }
     setState(() {
-      isLoading = false;
+      globVar.isLoading = false;
     });
   }
   @override
@@ -91,7 +90,7 @@ class _TransactionsState extends State<Transactions> {
                   ),
                   SizedBox(height: 26,),
                   Expanded(
-                    child: (transList.length==0)?Center(child: (isLoading)?CircularProgressIndicator():Text("Data kosong",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Colors.black54),)):Column(
+                    child: (transList.length==0)?Center(child: (globVar.isLoading)?CircularProgressIndicator():Text("Data kosong",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Colors.black54),)):Column(
                       children: [
                         // Container(
                         //   padding: EdgeInsets.only(left: 18,right:18,top: 11,bottom: 11),

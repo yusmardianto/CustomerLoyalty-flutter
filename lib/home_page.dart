@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'CustomShape/diagonal_shaper.dart';
+import 'CustomShape/voucher_shape.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'main.dart';
@@ -15,6 +16,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  loadVoucher()async {
+    setState(() {
+      globVar.isLoading = true;
+    });
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      globVar.isLoading = false;
+    });
+
+  }
+  @override
+  void initState() {
+    loadVoucher();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -236,12 +253,61 @@ class _HomePageState extends State<HomePage> {
                         itemCount: 2,
                         itemBuilder: (context,index)=>Padding(
                           padding: EdgeInsets.only(top:15),
-                          child: Container(
-                            height: 152,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Color.fromRGBO(237, 237, 237, 1)
-                            ),
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: 152,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.white,
+                                ),
+                                child: CustomPaint(
+                                  painter: VoucherPainter("Voucher Code"),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(15),
+                                height: 152,
+                                decoration: (globVar.isLoading)?BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Color.fromRGBO(237, 237, 237, 1)
+                                ):null,
+                                child: (globVar.isLoading)?null:Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 34, fontStyle: FontStyle.italic),),),
+                                        Text("DISCOUNT CODE",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
+                                      ],
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
+                                          child: Row(
+                                            children: [
+                                              Text("15000",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
+                                              Container(
+                                                padding: EdgeInsets.only(left: 5),
+                                                child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Text("Potongan 15000",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 16, fontStyle: FontStyle.italic),),),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
