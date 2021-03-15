@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'CustomDialog/voucher_detail.dart';
 import 'CustomShape/diagonal_shaper.dart';
 import 'CustomShape/voucher_shape.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'api/vouchers.dart';
+import 'DataType/voucher.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -16,12 +19,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
+  List<Voucher> voucherList = [];
   loadVoucher()async {
     setState(() {
       globVar.isLoading = true;
     });
-    await Future.delayed(Duration(seconds: 2));
+    var res = await Vouchers().getList();
+    if(res["STATUS"]==1){
+      voucherList.clear();
+      for(var i = 0;i<res["DATA"].length;i++){
+        voucherList.add(Voucher.fromJson(res["DATA"][i]));
+      }
+    }
     setState(() {
       globVar.isLoading = false;
     });
@@ -216,13 +225,31 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            child: Text("Vouchers saya :",style: TextStyle(shadows: [
-                              Shadow(
-                                offset: Offset(3.0, 3.0),
-                                blurRadius: 0.5,
-                                color: Colors.black.withOpacity(0.4),
-                              ),
-                            ],color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w500,fontSize: 18),),
+                            child: Row(
+                              children: [
+                                Text("Kamu punya ",style: TextStyle(shadows: [
+                                  Shadow(
+                                    offset: Offset(3.0, 3.0),
+                                    blurRadius: 0.5,
+                                    color: Colors.black.withOpacity(0.4),
+                                  ),
+                                ],color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w300,fontSize: 18),),
+                                (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${voucherList.length}",style: TextStyle(shadows: [
+                                  Shadow(
+                                    offset: Offset(3.0, 3.0),
+                                    blurRadius: 0.5,
+                                    color: Colors.black.withOpacity(0.4),
+                                  ),
+                                ],color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w500,fontSize: 18),),
+                                Text(" voucher",style: TextStyle(shadows: [
+                                  Shadow(
+                                    offset: Offset(3.0, 3.0),
+                                    blurRadius: 0.5,
+                                    color: Colors.black.withOpacity(0.4),
+                                  ),
+                                ],color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w500,fontSize: 18),),
+                              ],
+                            ),
                           ),
                           InkWell(
                             onTap: (){
@@ -230,7 +257,7 @@ class _HomePageState extends State<HomePage> {
                             },
                             child: Container(
                               padding: EdgeInsets.only(right: 15),
-                              child: Text("Semua",style: TextStyle(
+                              child: Text("Lihat Semua",style: TextStyle(
                                   shadows: [
                                     Shadow(
                                       offset: Offset(3.0, 3.0),
@@ -245,69 +272,81 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
+                    (globVar.isLoading==null||globVar.isLoading)?Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Container(
+                          height: 152,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Color.fromRGBO(237, 237, 237, 1)
+                          )
+                      ),
+                    ):
                     Container(
-                      height: (152.0+15)*2,
+                      height: (voucherList.length>=2)?(152.0+15)*2:(152.0+15)*voucherList.length,
                       child: ListView.builder(
-                        // physics: NeverScrollableScrollPhysics(),
+                        physics: NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.only(right: 18,left: 18),
-                        itemCount: 2,
+                        itemCount: (voucherList.length>=2)?2:voucherList.length,
                         itemBuilder: (context,index)=>Padding(
                           padding: EdgeInsets.only(top:15),
-                          child: Stack(
-                            children: [
-                              Container(
-                                height: 152,
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white,
-                                ),
-                                child: CustomPaint(
-                                  painter: VoucherPainter("Voucher Code"),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(15),
-                                height: 152,
-                                decoration: (globVar.isLoading)?BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Color.fromRGBO(237, 237, 237, 1)
-                                ):null,
-                                child: (globVar.isLoading)?null:Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 34, fontStyle: FontStyle.italic),),),
-                                        Text("DISCOUNT CODE",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
-                                      ],
+                          child: InkWell(
+                            onTap: ()=>VoucherDialog().showDialog(voucherList[index], context),
+                            child: Hero(
+                              tag: "details",
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    height: 152,
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colors.white,
                                     ),
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                    child: CustomPaint(
+                                      painter: VoucherPainter(voucherList[index].CAMPAIGN_TYPE),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(15),
+                                    height: 152,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
-                                        Padding(
-                                          padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
-                                          child: Row(
-                                            children: [
-                                              Text("15000",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
-                                              Container(
-                                                padding: EdgeInsets.only(left: 5),
-                                                child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
-                                              ),
-                                            ],
-                                          ),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 34, fontStyle: FontStyle.italic),),),
+                                            Text(voucherList[index].CAMPAIGN_TYPE??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
+                                          ],
                                         ),
-                                        Text("Potongan 15000",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 16, fontStyle: FontStyle.italic),),),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: [
+                                            Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
+                                            Padding(
+                                              padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
+                                              child: Row(
+                                                children: [
+                                                  Text("${voucherList[index].REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
+                                                  Container(
+                                                    padding: EdgeInsets.only(left: 5),
+                                                    child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Text(voucherList[index].NAME,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 16, fontStyle: FontStyle.italic),),),
+                                          ],
+                                        ),
                                       ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),

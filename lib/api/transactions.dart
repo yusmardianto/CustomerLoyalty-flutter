@@ -9,7 +9,7 @@ class Trans{
         // {"cust_id": globVar.user.CUST_ID, "corp": globVar.user.CORP},
         {
           "cust_id": 1825,
-          "corp": 'TBG',
+          "corp": globVar.auth.corp,
           "start_date":start_date??"01-Jan-2021",
           "end_date":end_date??"31-Jan-2021"
         },

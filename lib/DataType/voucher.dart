@@ -7,6 +7,7 @@ class Voucher{
   String PERIOD;
   int COST_IN_POINT;
   int REWARD_VALUE;
+  int LOYALTY_CAMPAIGN_ID;
   String SHORT_DESC;
   String CONDITION_DESC;
   String HOW_TO_USE;
@@ -21,6 +22,7 @@ class Voucher{
       this.PERIOD,
       this.COST_IN_POINT,
       this.REWARD_VALUE,
+      this.LOYALTY_CAMPAIGN_ID,
       this.SHORT_DESC,
       this.CONDITION_DESC,
       this.HOW_TO_USE,
@@ -36,6 +38,7 @@ class Voucher{
         PERIOD = json["PERIOD"],
         COST_IN_POINT = json["COST_IN_POINT"],
         REWARD_VALUE = json["REWARD_VALUE"],
+        LOYALTY_CAMPAIGN_ID = json["LOYALTY_CAMPAIGN_ID"],
         SHORT_DESC = json["SHORT_DESC"],
         CONDITION_DESC = json["CONDITION_DESC"],
         HOW_TO_USE = json["HOW_TO_USE"],
@@ -51,9 +54,60 @@ class Voucher{
     "PERIOD" : PERIOD,
     "COST_IN_POINT" : COST_IN_POINT,
     "REWARD_VALUE" : REWARD_VALUE,
+    "LOYALTY_CAMPAIGN_ID" : LOYALTY_CAMPAIGN_ID,
     "SHORT_DESC" : SHORT_DESC,
     "CONDITION_DESC" : CONDITION_DESC,
     "HOW_TO_USE" : HOW_TO_USE,
     "BRAND_DESC" : BRAND_DESC
+  };
+  Map<String, dynamic> toJsonDisplay()=>{
+    "Nama" : NAME,
+    "Brand" : BRAND_NAME,
+    "Berlaku" : PERIOD,
+    "Tipe Voucher" : CAMPAIGN_TYPE,
+    "Info Detail" : INFORMATION_LINK,
+    "Harga Point" : COST_IN_POINT,
+    "Point Hadiah" : REWARD_VALUE,
+    "Deskripsi" : SHORT_DESC,
+    "Syarat" : CONDITION_DESC,
+    "Penggunaan" : HOW_TO_USE,
+    "Tentang Brand" : BRAND_DESC
+  };
+}
+
+class MyVoucher{
+  String DESCRIPTION;
+  String STATUS;
+  String COUPON;
+  String PERIOD;
+  DateTime CREATED_DATE;
+  int REWARD_VALUE;
+
+
+  MyVoucher(
+      this.DESCRIPTION,
+      this.STATUS,
+      this.COUPON,
+      this.PERIOD,
+      this.CREATED_DATE,
+      this.REWARD_VALUE
+      );
+
+  MyVoucher.fromJson(Map<String, dynamic> json)
+      : DESCRIPTION = json['DESCRIPTION'],
+        STATUS = json['STATUS'],
+        COUPON = json["COUPON"],
+        PERIOD = json["PERIOD"],
+        CREATED_DATE = json["CREATED_DATE"],
+        REWARD_VALUE = json["REWARD_VALUE"]
+  ;
+
+  Map<String, dynamic> toJson()=>{
+    "DESCRIPTION" : DESCRIPTION,
+    "STATUS" : STATUS,
+    "COUPON" : COUPON,
+    "PERIOD" : PERIOD,
+    "CREATED_DATE" : CREATED_DATE,
+    "REWARD_VALUE" : REWARD_VALUE
   };
 }
