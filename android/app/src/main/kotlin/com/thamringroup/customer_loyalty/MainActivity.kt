@@ -1,4 +1,4 @@
-package com.thamringroup.customer_loyalty
+package com.thamringroup.customerloyalty
 
 import io.flutter.embedding.android.FlutterActivity
 

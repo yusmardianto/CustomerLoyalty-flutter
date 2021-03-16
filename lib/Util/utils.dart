@@ -144,12 +144,15 @@ class Util{
   }
   restoreGlobVar()async{
     if(prefs.getString("token")!=null){
+      print("restore token");
       globVar.tokenRest = Rest.fromJson(JsonDecoder().convert(prefs.getString("token")));
     }
     if(prefs.getString("user")!=null){
+      print("restore user");
       globVar.user = User.fromJson(JsonDecoder().convert(prefs.getString("user")));
     }
     if(prefs.getString("auth")!=null){
+      print("restore auth");
       globVar.auth = Auth.fromJson(JsonDecoder().convert(prefs.getString("auth")));
     }
   }

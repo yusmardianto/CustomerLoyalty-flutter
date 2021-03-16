@@ -98,7 +98,7 @@ class MyVoucher{
         STATUS = json['STATUS'],
         COUPON = json["COUPON"],
         PERIOD = json["PERIOD"],
-        CREATED_DATE = json["CREATED_DATE"],
+        CREATED_DATE = DateTime.parse(json["CREATED_DATE"]),
         REWARD_VALUE = json["REWARD_VALUE"]
   ;
 

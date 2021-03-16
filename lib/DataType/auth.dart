@@ -21,10 +21,10 @@ class Auth{
   ;
 
   Map<String, dynamic> toJson()=>{
-    'login_id': login_id,
-    'user_type': user_type,
-    "force_change" : force_change,
-    "corp" :corp,
-    "owner" : owner
+    'LOGIN_ID': login_id,
+    'TIPE_USER': user_type,
+    "FORCE_CHANGE_PASSWD" : force_change,
+    "G_CORP" :corp,
+    "OWNER" : owner
   };
 }

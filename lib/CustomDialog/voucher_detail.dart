@@ -71,7 +71,7 @@ class VoucherDialog{
     Navigator.push(
         context, new HeroDialogRoute(
       builder: (BuildContext context) {
-        final _scrollController = ScrollController();
+        final _scrollController = ScrollController(initialScrollOffset: 0);
         return new Dialog(
           backgroundColor: Colors.transparent,
           insetPadding: EdgeInsets.all(10),

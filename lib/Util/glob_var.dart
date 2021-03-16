@@ -36,10 +36,10 @@ class GlobaVar{
   GlobaVar._internal() {
     initGlobVar();
   }
-  Future initGlobVar() async {
+  initGlobVar() async {
     _isShowNotif = true;
     _isLoading = false;
-    prefs = await SharedPreferences.getInstance();
+    // prefs = await SharedPreferences.getInstance();
     if(prefs.getString("clientCred")==null){
       prefs.setString("clientCred", json.encode({
         "id": "S1BiT8Wwxgypz7B4DdxZsw..",

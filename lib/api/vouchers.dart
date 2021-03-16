@@ -4,7 +4,7 @@ import "../main.dart";
 import '../DataType/voucher.dart';
 
 class Vouchers{
-  getList()async {
+  getAvailableList()async {
     var res = await utils.post(
         // {"cust_id": globVar.user.CUST_ID, "corp": globVar.user.CORP},
         {
