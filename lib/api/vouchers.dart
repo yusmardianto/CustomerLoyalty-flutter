@@ -16,10 +16,9 @@ class Vouchers{
 
   getMyVoucherList()async {
     var res = await utils.post(
-      // {"cust_id": globVar.user.CUST_ID, "corp": globVar.user.CORP},
         {
           "corp": globVar.auth.corp,
-          "cust_id" : 1825
+          "cust_id" : globVar.user.CUST_ID
         },
         globVar.hostRest + "/voucher/redeemed", secure: true, many: true);
     return res;

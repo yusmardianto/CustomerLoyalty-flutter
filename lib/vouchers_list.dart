@@ -79,7 +79,7 @@ class _VouchersListState extends State<VouchersList> {
         //     )
         // );
 
-        await showDialog(
+        bool genBarcode = await showDialog(
             context: context,
             builder: (context)=>SimpleDialog(
           children: [
@@ -126,6 +126,9 @@ class _VouchersListState extends State<VouchersList> {
           contentPadding: EdgeInsets.all(20),
         )
         );
+        if(genBarcode??false){
+          utils.genBarcode(context,e.TRANSACTION_CODE);
+        }
       },
       child: Padding(
         padding: EdgeInsets.only(top:15),

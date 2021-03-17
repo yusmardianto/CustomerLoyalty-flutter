@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:barcode/barcode.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:oauth2/oauth2.dart' as oauth2;
 import '../main.dart';
@@ -9,7 +11,7 @@ import '../DataType/rest.dart';
 import '../DataType/user.dart';
 import '../DataType/auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 
 
 class Util{
@@ -192,5 +194,26 @@ class Util{
     var res = await future;
     Navigator.pop(dialogContext);
     return res;
+  }
+  genBarcode(context,code) {
+    // final svg = Barcode.upcA('Hello World!', width: 200, height: 200);
+    try{
+      showDialog(
+          context: context,
+        builder: (context)=>SimpleDialog(
+          contentPadding: EdgeInsets.all(20) ,
+            children: [
+            Positioned.fill(child: Center(child: Text('Scan barcode berikut')),),
+            SizedBox(height: 25,),
+              (code==null)?Container(height: 75,child: Center(child: Text('Code tidak valid')),):SvgPicture.string(Barcode.code128().toSvg(code, width: 200, height: 75,drawText: false)),
+              SizedBox(height: 15,),
+              (code==null)?Container():Positioned.fill(child: Center(child: Text(code,style: GoogleFonts.robotoCondensed(fontSize: 21),))),
+          ],
+        )
+      );
+    }
+    catch(e){
+      print(e);
+    }
   }
 }

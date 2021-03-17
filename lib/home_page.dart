@@ -12,6 +12,7 @@ import 'api/vouchers.dart';
 import 'DataType/voucher.dart';
 import 'vouchers_list.dart';
 
+
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
@@ -310,7 +311,7 @@ class _HomePageState extends State<HomePage> {
                           child: InkWell(
                             // onTap: ()=>VoucherDialog().showDialog(myVoucherList[index], context),
                             onTap: ()async{
-                              await showDialog(
+                              bool genBarcode = await showDialog(
                                       context: context,
                                       builder: (context)=>SimpleDialog(
                                     children: [
@@ -357,6 +358,10 @@ class _HomePageState extends State<HomePage> {
                                     contentPadding: EdgeInsets.all(20),
                                   )
                               );
+
+                              if(genBarcode??false){
+                                utils.genBarcode(context,myVoucherList[index].TRANSACTION_CODE);
+                              }
                               // showDialog(
                               //     context: context,
                               //     builder:(context)=>AlertDialog(
