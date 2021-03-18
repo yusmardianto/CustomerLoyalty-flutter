@@ -1,6 +1,6 @@
 class Transaction{
   String LOYALTY_TRANSACTION_ID;
-  String DOCUMENT_NUMBER;
+  String DESCRIPTION;
   String DOCUMENT_TYPE;
   String POS_NAME;
   String CUST_NAME;
@@ -10,7 +10,7 @@ class Transaction{
 
   Transaction(
       this.LOYALTY_TRANSACTION_ID,
-      this.DOCUMENT_NUMBER,
+      this.DESCRIPTION,
       this.DOCUMENT_TYPE,
       this.POS_NAME,
       this.CUST_NAME,
@@ -21,7 +21,7 @@ class Transaction{
 
   Transaction.fromJson(Map<String, dynamic> json)
       : LOYALTY_TRANSACTION_ID = json['LOYALTY_TRANSACTION_ID'],
-        DOCUMENT_NUMBER = json['DOCUMENT_NUMBER'],
+        DESCRIPTION = json['DESCRIPTION'],
         DOCUMENT_TYPE = json["DOCUMENT_TYPE"],
         POS_NAME = json["POS_NAME"],
         CUST_NAME = json["CUST_NAME"],
@@ -32,7 +32,7 @@ class Transaction{
 
   Map<String, dynamic> toJson()=>{
     "LOYALTY_TRANSACTION_ID" : LOYALTY_TRANSACTION_ID,
-    "DOCUMENT_NUMBER" : DOCUMENT_NUMBER,
+    "DESCRIPTION" : DESCRIPTION,
     "DOCUMENT_TYPE" : DOCUMENT_TYPE,
     "POS_NAME" : POS_NAME,
     "CUST_NAME" : CUST_NAME,

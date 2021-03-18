@@ -10,7 +10,7 @@ class Vouchers{
         {
           "corp": globVar.auth.corp,
         },
-        globVar.hostRest + "/voucher/", secure: true, many: true);
+        globVar.hostRest + "/vouchers/", secure: true, many: true);
     return res;
   }
 
@@ -20,7 +20,7 @@ class Vouchers{
           "corp": globVar.auth.corp,
           "cust_id" : globVar.user.CUST_ID
         },
-        globVar.hostRest + "/voucher/redeemed", secure: true, many: true);
+        globVar.hostRest + "/vouchers/redeemed", secure: true, many: true);
     return res;
   }
 
@@ -35,6 +35,25 @@ class Vouchers{
         },
         globVar.hostRest + "/voucher/redeem", secure: true);
     return {"STATUS":res["STATUS"]==1,"DATA":res["DATA"]};
+    }
+    catch(e){
+      print(e);
+      return {"STATUS":false,"DATA":"Gagal menghubungi server. ${e}."};
+    }
+  }
+
+  useVoucher(voucher_id)async {
+    try{
+      var res = await utils.post(
+        // {"cust_id": globVar.user.CUST_ID, "corp": globVar.user.CORP},
+          {
+            "corp": globVar.auth.corp,
+            "cust_id": globVar.user.CUST_ID,
+            "voucher_id":voucher_id
+          },
+          globVar.hostRest + "/voucher/use", secure: true);
+
+      return {"STATUS":res["STATUS"]==1,"DATA":res["DATA"]};
     }
     catch(e){
       print(e);

@@ -46,9 +46,18 @@ class Util{
       }
       else{
         final Map data = decoder.convert(response.body);
-        // prin
-        // var res = decoder.convert(data["res"]);
-        return {"STATUS":(response.statusCode != 200)?0:1,"DATA":(many)?data["res"]:decoder.convert(data["res"])};
+        if(data["STATUS"]==200){
+          var res;
+          try{
+            res =  decoder.convert(data["DATA"]);
+          }catch(e){
+            res = data["DATA"];
+          }
+          return {"STATUS":1,"DATA":res};
+        }
+        else{
+          return {"STATUS":0,"DATA":data["ERROR"]};
+        }
       }
     } on TimeoutException catch(e){
       return {"STATUS":0,"DATA":"Request Timeout"};
@@ -82,13 +91,18 @@ class Util{
       }
       else{
         final Map data = decoder.convert(response.body);
-        var res;
-        try{
-          res =  decoder.convert(data["res"]);
-        }catch(e){
-          res = data["res"];
+        if(data["STATUS"]==200){
+          var res;
+          try{
+            res =  decoder.convert(data["DATA"]);
+          }catch(e){
+            res = data["DATA"];
+          }
+          return {"STATUS":1,"DATA":res};
         }
-        return {"STATUS":(response.statusCode != 200)?0:1,"DATA":res};
+        else{
+          return {"STATUS":0,"DATA":data["ERROR"]};
+        }
       }
     }
     on TimeoutException catch(e){

@@ -1,7 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'login_page.dart';
 import 'home_page.dart';
 import 'profile.dart';
@@ -19,6 +18,8 @@ Util utils = new Util();
 SharedPreferences prefs;
 String preLoadState;
 double preLoadPercentage;
+NumberFormat numberFormat = NumberFormat.decimalPattern('id');
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

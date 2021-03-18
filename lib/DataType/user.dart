@@ -62,7 +62,7 @@ class User {
 
   Map<String, dynamic> toJsonDisplay()=>{
     "Nama_Pelanggan":NAME??'-',
-    "GENDER":GENDER,
+    "Gender":GENDER,
     "Tanggal_Lahir":(BIRTH_DATE==null)?'-':DateFormat("dd-MMM-yyyy").format(BIRTH_DATE),
     "EMAIL":EMAIL??'-',
     "PHONE":PHONE??'-',

@@ -16,7 +16,7 @@ class Auths{
         return {"STATUS":json["STATUS"]=="OK","DATA":json["LOGIN_MESSAGE"]};
       }
       else{
-        return {"STATUS":false,"DATA":(res["STATUS"]==1)?res["DATA"]:"Gagal menghubungi server. Silakan mengecek internet anda."};
+        return {"STATUS":false,"DATA":(res["STATUS"]==1)?res["DATA"]["LOGIN_MESSAGE"]:"Gagal menghubungi server. Silakan mengecek internet anda."};
       }
     }
     catch(e){

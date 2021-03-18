@@ -14,8 +14,9 @@ class Users{
   }
   update (Map<String,dynamic> user)async{
     try{
+      print("test $user");
       var res = await utils.put(user, globVar.hostRest+"/customer/update",secure: true);
-      await saveUser(user['cust_id'],globVar.user.CORP);
+      await saveUser(user['cust_id'],globVar.auth.corp);
       return {"STATUS":res["STATUS"]==1,"DATA":res["DATA"]};
     }
     catch(e){

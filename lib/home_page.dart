@@ -360,7 +360,15 @@ class _HomePageState extends State<HomePage> {
                               );
 
                               if(genBarcode??false){
-                                utils.genBarcode(context,myVoucherList[index].TRANSACTION_CODE);
+                                Future future = Vouchers().useVoucher(myVoucherList[index].LOYALTY_CUST_REWARD_ID);
+                                var res = await utils.showLoadingFuture(context,future);
+                                if(res["STATUS"]){
+                                  print(res["DATA"]);
+                                  utils.genBarcode(context,myVoucherList[index].TRANSACTION_CODE);
+                                }
+                                else{
+                                  utils.toast(res["DATA"],type: "ERROR");
+                                }
                               }
                               // showDialog(
                               //     context: context,

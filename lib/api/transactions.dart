@@ -12,7 +12,7 @@ class Trans{
           "start_date":start_date??"01-Jan-2021",
           "end_date":end_date??"31-Jan-2021"
         },
-        globVar.hostRest + "/transaction/", secure: true, many: true);
+        globVar.hostRest + "/transactions/", secure: true, many: true);
     return res;
   }
 }
