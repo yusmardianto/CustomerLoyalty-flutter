@@ -13,7 +13,7 @@ import 'CustomShape/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Images imageHandler = new Images();
-GlobaVar globVar;
+GlobVar globVar;
 Util utils = new Util();
 SharedPreferences prefs;
 String preLoadState;
@@ -35,7 +35,7 @@ Future preload()async{
     // print('test${[globVar==null,prefs==null,prefs.getString("user")]}');
     if(globVar==null){
     preLoadState = "Mengecek penyimpanan";
-    globVar = new GlobaVar();
+    globVar = new GlobVar();
     preLoadPercentage = 1/2;
     await utils.restoreGlobVar();
     preLoadState = "Hampir selesai";

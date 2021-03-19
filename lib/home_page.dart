@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'CustomDialog/voucher_detail.dart';
 import 'CustomShape/diagonal_shaper.dart';
 import 'CustomShape/voucher_shape.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -364,32 +363,12 @@ class _HomePageState extends State<HomePage> {
                                 var res = await utils.showLoadingFuture(context,future);
                                 if(res["STATUS"]){
                                   print(res["DATA"]);
-                                  utils.genBarcode(context,myVoucherList[index].TRANSACTION_CODE);
+                                  utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
                                 }
                                 else{
                                   utils.toast(res["DATA"],type: "ERROR");
                                 }
                               }
-                              // showDialog(
-                              //     context: context,
-                              //     builder:(context)=>AlertDialog(
-                              //       content: Text("Gunakan Voucher ini ?"),
-                              //       actions: [
-                              //         TextButton(
-                              //           onPressed: (){
-                              //             Navigator.pop(context);
-                              //           },
-                              //           child: Text("Batal"),
-                              //         ),
-                              //         TextButton(
-                              //           onPressed: (){
-                              //             Navigator.pop(context);
-                              //           },
-                              //           child: Text("Gunakan"),
-                              //         ),
-                              //       ],
-                              //     )
-                              // );
                             },
                             child: Stack(
                               children: [

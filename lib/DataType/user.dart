@@ -13,6 +13,9 @@ class User {
   String STREET_NAME;
   String POSTAL_CODE;
   String LOYALTY_LEVEL;
+  String IDENTITY_NUMBER;
+  String CITY;
+  String PROVINCE;
 
 
   User(
@@ -27,7 +30,10 @@ class User {
       this.COMPANY_NAME,
       this.STREET_NAME,
       this.POSTAL_CODE,
-      this.LOYALTY_LEVEL
+      this.LOYALTY_LEVEL,
+      this.IDENTITY_NUMBER,
+      this.CITY,
+      this.PROVINCE
   );
 
   User.fromJson(Map<String, dynamic> json)
@@ -43,7 +49,10 @@ class User {
         COMPANY_NAME = json["COMPANY_NAME"],
         STREET_NAME = json["STREET_NAME"],
         POSTAL_CODE = json["POSTAL_CODE"],
-        LOYALTY_LEVEL = json["LOYALTY_LEVEL"];
+        LOYALTY_LEVEL = json["LOYALTY_LEVEL"],
+        IDENTITY_NUMBER = json["IDENTITY_NUMBER"],
+        CITY = json["CITY"],
+        PROVINCE = json["PROVINCE"];
 
   Map<String, dynamic> toJson()=>{
     "CUST_ID":CUST_ID,
@@ -57,17 +66,22 @@ class User {
     "COMPANY_NAME":COMPANY_NAME,
     "STREET_NAME":STREET_NAME,
     "POSTAL_CODE":POSTAL_CODE,
-    "LOYALTY_LEVEL":LOYALTY_LEVEL
+    "LOYALTY_LEVEL":LOYALTY_LEVEL,
+    "IDENTITY_NUMBER" : IDENTITY_NUMBER,
+    "CITY" : CITY,
+    "PROVINCE" : PROVINCE
   };
 
   Map<String, dynamic> toJsonDisplay()=>{
-    "Nama_Pelanggan":NAME??'-',
-    "Gender":GENDER,
-    "Tanggal_Lahir":(BIRTH_DATE==null)?'-':DateFormat("dd-MMM-yyyy").format(BIRTH_DATE),
-    "EMAIL":EMAIL??'-',
-    "PHONE":PHONE??'-',
-    "Perusahaan":COMPANY_NAME??'-',
-    "Alamat":STREET_NAME??'-',
-    "Kode_Pos":POSTAL_CODE??'-',
+    "Nama":NAME??'',
+    "Gender":GENDER??'',
+    "Tanggal_Lahir":(BIRTH_DATE==null)?'':DateFormat("dd-MMM-yyyy").format(BIRTH_DATE),
+    "Email":EMAIL??'',
+    "Phone":PHONE??'',
+    "Alamat":STREET_NAME??'',
+    "Kode_Pos":POSTAL_CODE??'',
+    "No_Ktp" : IDENTITY_NUMBER??'',
+    "Kota" : CITY??'',
+    "Provinsi" : PROVINCE??''
   };
 }

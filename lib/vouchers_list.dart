@@ -6,7 +6,7 @@ import 'CustomShape/voucher_shape.dart';
 import 'main.dart';
 import 'DataType/voucher.dart';
 import 'api/vouchers.dart';
-import 'CustomDialog/voucher_detail.dart';
+import 'CustomWidget/voucher_detail.dart';
 
 class VouchersList extends StatefulWidget {
   // VouchersList({Key key}) : super(key: key);
@@ -127,7 +127,7 @@ class _VouchersListState extends State<VouchersList> {
         )
         );
         if(genBarcode??false){
-          utils.genBarcode(context,e.TRANSACTION_CODE);
+          // utils.genBarcode(context,e.TRANSACTION_CODE);
         }
       },
       child: Padding(

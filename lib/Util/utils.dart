@@ -12,7 +12,7 @@ import '../DataType/user.dart';
 import '../DataType/auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import '../CustomWidget/custom_stateful.dart';
 
 class Util{
   tokenFetch() async {
@@ -209,21 +209,45 @@ class Util{
     Navigator.pop(dialogContext);
     return res;
   }
-  genBarcode(context,code) {
-    // final svg = Barcode.upcA('Hello World!', width: 200, height: 200);
+  leadingZero(num, size){     return ('000000000' + num.toString()).substring(('000000000' + num.toString()).length-size); }
+  genBarcode(context,code,expired) {
+    int countDown = expired;
+    Timer timer_;
     try{
       showDialog(
           context: context,
-        builder: (context)=>SimpleDialog(
-          contentPadding: EdgeInsets.all(20) ,
-            children: [
-            Positioned.fill(child: Center(child: Text('Scan barcode berikut')),),
-            SizedBox(height: 25,),
-              (code==null)?Container(height: 75,child: Center(child: Text('Code tidak valid')),):SvgPicture.string(Barcode.code128().toSvg(code, width: 200, height: 75,drawText: false)),
-              SizedBox(height: 15,),
-              (code==null)?Container():Positioned.fill(child: Center(child: Text(code,style: GoogleFonts.robotoCondensed(fontSize: 21),))),
-          ],
-        )
+        builder: (context){
+            return CustomStatefulBuilder(
+              dispose: (){
+                timer_?.cancel();
+              },
+              builder: (context,setState){
+                if(timer_==null||!timer_.isActive){
+                  timer_ = new Timer.periodic(Duration(seconds: 1),(timer){
+                    setState((){
+                      countDown=countDown-1;
+                    });
+                    if(countDown<=0){
+                      timer.cancel();
+                      Navigator.pop(context);
+                    }
+                  });
+                }
+                return SimpleDialog(
+                  contentPadding: EdgeInsets.all(20) ,
+                  children: [
+                    Center(child: Text('Barcode berikut berlaku dalam')),
+                    SizedBox(height: 25,),
+                    Center(child: Text('${Duration(seconds: countDown).inMinutes}:${leadingZero(Duration(seconds: countDown-(Duration(seconds: countDown).inMinutes*60)).inSeconds,2)}',style: GoogleFonts.robotoMono(fontWeight: FontWeight.w700,fontSize: 18),)),
+                    SizedBox(height: 25,),
+                    (code==null)?Container(height: 75,child: Center(child: Text('Code tidak valid')),):SvgPicture.string(Barcode.code128().toSvg(code, width: 200, height: 75,drawText: false)),
+                    SizedBox(height: 15,),
+                    (code==null)?Container():Center(child: Text(code,style: GoogleFonts.robotoCondensed(fontSize: 21),)),
+                  ],
+                );
+              },
+            );
+        }
       );
     }
     catch(e){

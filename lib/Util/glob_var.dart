@@ -4,7 +4,7 @@ import '../DataType/user.dart';
 import '../DataType/rest.dart';
 import '../DataType/auth.dart';
 import '../main.dart';
-class GlobaVar{
+class GlobVar{
   String hostRest = "https://loyalty.thamrin.xyz/ords/loyalty/loyaltymobile";
 
   //=====================isLoading============================
@@ -29,11 +29,11 @@ class GlobaVar{
   set auth(value) => _auth = value;
   //============================================================
 
-  static final GlobaVar _instance = GlobaVar._internal();
-  factory GlobaVar() => _instance;
+  static final GlobVar _instance = GlobVar._internal();
+  factory GlobVar() => _instance;
 
   //init State
-  GlobaVar._internal() {
+  GlobVar._internal() {
     initGlobVar();
   }
   initGlobVar() async {
@@ -46,5 +46,10 @@ class GlobaVar{
         "secret" : "uxj_dNikz8JcvasOd1l3jA.."
       }).toString());
     }
+  }
+
+  clear(){
+    _user=null;
+    _auth=null;
   }
 }

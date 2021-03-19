@@ -80,7 +80,6 @@ class MyVoucher{
   String STATUS;
   String COUPON;
   String PERIOD;
-  String TRANSACTION_CODE;
   DateTime CREATED_DATE;
   int REWARD_VALUE;
   int LOYALTY_CUST_REWARD_ID;
@@ -91,7 +90,6 @@ class MyVoucher{
       this.STATUS,
       this.COUPON,
       this.PERIOD,
-      this.TRANSACTION_CODE,
       this.CREATED_DATE,
       this.REWARD_VALUE,
       this.LOYALTY_CUST_REWARD_ID
@@ -102,7 +100,6 @@ class MyVoucher{
         STATUS = json['STATUS'],
         COUPON = json["COUPON"],
         PERIOD = json["PERIOD"],
-        TRANSACTION_CODE = json['TRANSACTION_CODE'],
         CREATED_DATE = DateTime.parse(json["CREATED_DATE"]),
         REWARD_VALUE = json["REWARD_VALUE"],
         LOYALTY_CUST_REWARD_ID = json["LOYALTY_CUST_REWARD_ID"]
@@ -113,7 +110,6 @@ class MyVoucher{
     "STATUS" : STATUS,
     "COUPON" : COUPON,
     "PERIOD" : PERIOD,
-    "TRANSACTION_CODE" : TRANSACTION_CODE,
     "CREATED_DATE" : CREATED_DATE,
     "REWARD_VALUE" : REWARD_VALUE,
     "LOYALTY_CUST_REWARD_ID": LOYALTY_CUST_REWARD_ID

@@ -37,7 +37,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -204,6 +204,8 @@ class _ProfileState extends State<Profile> {
                                     )
                                 );
                                 if(logout??false){
+                                  utils.removeBackupGlobVar();
+                                  globVar.clear();
                                   Navigator.pushNamed(context, '/login');
                                 }
                               },
@@ -239,6 +241,7 @@ class _ProfileState extends State<Profile> {
                     onTap: ()async{
                       Map<String,dynamic> passMap;
                       final _formPassKey = GlobalKey<FormBuilderState>();
+                      bool obscure1 = true,obscure2 = true,obscure3 = true;
                       await showDialog(
                           context: context,
                           builder: (context)=>StatefulBuilder(
@@ -252,9 +255,17 @@ class _ProfileState extends State<Profile> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: FormBuilderTextField(
                                                 name:"old",
+                                                obscureText: obscure1??true,
                                                 validator: (value)=>
                                                 value == null || value.isEmpty ? "Masukkan password lama":null,
                                               decoration: InputDecoration(
+                                                  suffixIcon: InkWell(
+                                                      onTap: (){
+                                                        setState(() {
+                                                          obscure1 = !obscure1;
+                                                        });
+                                                      },
+                                                      child: Icon((obscure1)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
                                                   focusedBorder: new OutlineInputBorder(
                                                     borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
                                                     borderRadius: const BorderRadius.all(
@@ -276,9 +287,17 @@ class _ProfileState extends State<Profile> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: FormBuilderTextField(
                                               name:"pass",
+                                              obscureText: obscure2??true,
                                               validator: (value)=>
                                               value == null || value.isEmpty ? "Masukkan password baru":null,
                                               decoration: InputDecoration(
+                                                  suffixIcon: InkWell(
+                                                      onTap: (){
+                                                        setState(() {
+                                                          obscure2 = !obscure2;
+                                                        });
+                                                      },
+                                                      child: Icon((obscure2)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
                                                   focusedBorder: new OutlineInputBorder(
                                                     borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
                                                     borderRadius: const BorderRadius.all(
@@ -300,7 +319,15 @@ class _ProfileState extends State<Profile> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: FormBuilderTextField(
                                               name:"confirm",
+                                              obscureText: obscure3??true,
                                               decoration: InputDecoration(
+                                                  suffixIcon: InkWell(
+                                                      onTap: (){
+                                                        setState(() {
+                                                          obscure3 = !obscure3;
+                                                        });
+                                                      },
+                                                      child: Icon((obscure3)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
                                                   focusedBorder: new OutlineInputBorder(
                                                     borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
                                                     borderRadius: const BorderRadius.all(
@@ -362,7 +389,7 @@ class _ProfileState extends State<Profile> {
                                                     }
                                                 }
                                                 else{
-                                                  utils.toast("Password baru tidak sama");
+                                                  utils.toast("Password baru tidak sama",type: "ERROR");
                                                 }
                                             }
                                           },
@@ -424,6 +451,7 @@ class _ProfileState extends State<Profile> {
                                   decoration: InputDecoration(
                                     suffixIcon: (toggleEdit)?Icon(FontAwesomeIcons.calendarAlt,color: Color.fromRGBO(35, 35, 222, 1),):Text(''),
                                     border: (toggleEdit)?null:InputBorder.none,
+                                    hintText: val==""||val==null?"-":"",
                                   ),
                                   style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6)),
                                   format: DateFormat("dd-MMM-yyyy"),
@@ -462,9 +490,10 @@ class _ProfileState extends State<Profile> {
                                 formWidget = FormBuilderTextField(
                                   name: key,
                                   validator: (value) =>
-                                  value == null || value.isEmpty ? '$key tidak boleh kosong' : null,
+                                  ((key.contains("Nama")||key.contains("Phone")||key.contains("Email"))&&(value == null || value.isEmpty)) ? '$key tidak boleh kosong' : null,
                                   decoration: InputDecoration(
                                     border: (toggleEdit)?null:InputBorder.none,
+                                    hintText: val==""||val==null?"-":"",
                                   ),
                                   style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6)),
                                 );
