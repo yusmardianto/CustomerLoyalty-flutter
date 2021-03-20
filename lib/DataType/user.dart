@@ -16,6 +16,7 @@ class User {
   String IDENTITY_NUMBER;
   String CITY;
   String PROVINCE;
+  int LOYALTY_LEVEL_PHOTO;
 
 
   User(
@@ -33,7 +34,8 @@ class User {
       this.LOYALTY_LEVEL,
       this.IDENTITY_NUMBER,
       this.CITY,
-      this.PROVINCE
+      this.PROVINCE,
+      this.LOYALTY_LEVEL_PHOTO
   );
 
   User.fromJson(Map<String, dynamic> json)
@@ -52,7 +54,8 @@ class User {
         LOYALTY_LEVEL = json["LOYALTY_LEVEL"],
         IDENTITY_NUMBER = json["IDENTITY_NUMBER"],
         CITY = json["CITY"],
-        PROVINCE = json["PROVINCE"];
+        PROVINCE = json["PROVINCE"],
+        LOYALTY_LEVEL_PHOTO = json["LOYALTY_LEVEL_PHOTO"];
 
   Map<String, dynamic> toJson()=>{
     "CUST_ID":CUST_ID,
@@ -69,7 +72,8 @@ class User {
     "LOYALTY_LEVEL":LOYALTY_LEVEL,
     "IDENTITY_NUMBER" : IDENTITY_NUMBER,
     "CITY" : CITY,
-    "PROVINCE" : PROVINCE
+    "PROVINCE" : PROVINCE,
+    "LOYALTY_LEVEL_PHOTO" : LOYALTY_LEVEL_PHOTO
   };
 
   Map<String, dynamic> toJsonDisplay()=>{
