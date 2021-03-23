@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:customer_loyalty/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:intl/intl.dart';
 import 'CustomShape/wave_shaper.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'api/users.dart';
 import 'api/auths.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Profile extends StatefulWidget {
   Profile({Key key}) : super(key: key);
@@ -21,11 +25,14 @@ class _ProfileState extends State<Profile> {
   Map<String,dynamic> userData;
   final _formKey = GlobalKey<FormBuilderState>();
   var gender;
+  Image profileImage;
 
   reloadUser(){
+    imageCache.clear();
     userData = new Map<String,dynamic>.from(globVar.user.toJsonDisplay());
     userData.update("Tanggal_Lahir", (value) => DateFormat("dd-MMM-yyyy").parse(value));
     gender = userData["Gender"];
+    profileImage = Image.network(globVar.hostRest+"/binary/${globVar.user.CUST_DISPLAY_PICTURE}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"});
   }
 
   @override
@@ -60,28 +67,128 @@ class _ProfileState extends State<Profile> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(flex: 1,child: SizedBox()),
-                      Expanded(
-                        flex: 5,
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: 180,
-                              width: 180,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.grey,
+                      InkWell(
+                        onTap: ()async{
+                          // ImagePicker.platform.pickImage(source: ImageSource.gallery,maxWidth: 700, imageQuality: 50);
+                          File image;
+                          await showModalBottomSheet(context: context, isScrollControlled: true, builder: (context){
+                            return ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxHeight: MediaQuery.of(context).size.height*0.5,
+                                minWidth: MediaQuery.of(context).size.width,
                               ),
-                              child: Icon(Icons.person,color: Colors.white,size: 160,),
-                            ),
-                            Container(
-                              width: 180,
-                              height: 180,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(color: Colors.white,width: 3)
+                              child: Container(
+                                color: Colors.white,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    InkWell(
+                                      onTap:()async{
+                                        PickedFile temp = await ImagePicker().getImage(source: ImageSource.gallery);
+                                        if(temp != null){
+                                          image = new File(temp.path);
+                                        }
+                                        Navigator.pop(context);
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.only(top: 20,left: 10,right: 10,bottom: 10),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(FontAwesomeIcons.images),
+                                            SizedBox(width: 25,),
+                                            Text("Ubah foto dari gallery"),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Divider(),
+                                    InkWell(
+                                      onTap: ()async{
+                                        PickedFile temp = await ImagePicker().getImage(source: ImageSource.camera);
+                                        if(temp != null){
+                                          image = new File(temp.path);
+                                        }
+                                        Navigator.pop(context);
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.only(top:10,right: 10,left: 10,bottom: 20),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(FontAwesomeIcons.camera),
+                                            SizedBox(width: 25,),
+                                            Text("Tangkap foto profile baru"),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    // Divider(),
+                                    // Padding(
+                                    //   padding: EdgeInsets.only(top:10,right: 10,left: 10,bottom: 20),
+                                    //   child: Row(
+                                    //     crossAxisAlignment: CrossAxisAlignment.center,
+                                    //     children: [
+                                    //       Icon(FontAwesomeIcons.solidWindowRestore),
+                                    //       SizedBox(width: 25,),
+                                    //       Text("Lihat foto profile layar penuh"),
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
                               ),
+                            );
+                          }).whenComplete(()async{
+                            if(image!=null){
+                              image = await ImageCropper.cropImage(cropStyle: CropStyle.circle,sourcePath: image.path,maxWidth: 700,compressQuality: 70);
+                              var res = await Users().updateDP(image);
+                              if(res["STATUS"]){
+                                Navigator.pushReplacementNamed(context, "/profile");
+                              }
+                              utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
+                            }
+                          });
+                        },
+                        child: Expanded(
+                          flex: 5,
+                          child:
+                          CircleAvatar(
+                            radius: 93,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.grey,
+                              radius: 90,
+                              backgroundImage: (globVar.user.CUST_DISPLAY_PICTURE==null)?Icons.person:profileImage.image,
                             ),
-                          ],
+                          ),
+                          // Stack(
+                          //   children: [
+                          //     Container(
+                          //       height: 180,
+                          //       width: 180,
+                          //       decoration: BoxDecoration(
+                          //         shape: BoxShape.circle,
+                          //         color: Colors.grey,
+                          //       ),
+                          //       child: Image(
+                          //         fit: BoxFit.fill,
+                          //         height: 180,
+                          //         width: 180,
+                          //         errorBuilder: (context,err,stackTrace)=>Icon(Icons.person,color: Colors.white,size: 160,),
+                          //         image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.CUST_DISPLAY_PICTURE}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
+                          //       )
+                          //     ),
+                          //     Container(
+                          //       width: 180,
+                          //       height: 180,
+                          //       decoration: BoxDecoration(
+                          //         shape: BoxShape.circle,
+                          //         border: Border.all(color: Colors.white,width: 3)
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                         ),
                       ),
                       Expanded(

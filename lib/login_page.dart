@@ -527,6 +527,7 @@ class _LoginPageState extends State<LoginPage> {
                                                                    // print(_formKey.currentState.value);
                                                                     final Map<String, dynamic> mapUser = new Map<String, dynamic>.from(_formKey.currentState.value);
                                                                    mapUser.update("tgl_lahir", (value) => DateFormat("dd-MMM-yyyy").format(value));
+                                                                   mapUser["corp"] = globVar.auth.corp;
                                                                    Future future = Auths().register(mapUser);
                                                                    var res = await utils.showLoadingFuture(context,future);
                                                                    utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");

@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 import "../main.dart";
 import '../DataType/user.dart';
 import '../DataType/auth.dart';
@@ -9,7 +11,7 @@ class Auths{
       var json = res["DATA"];
       if(res["STATUS"]==1 && json["STATUS"]=="OK"){
         globVar.auth = Auth.fromJson(json);
-          var fetchUser = await Users().saveUser(json["G_CUST_ID"],json["G_CORP"]);
+          var fetchUser = await Users().refreshUser(json["G_CUST_ID"],json["G_CORP"]);
         if(!fetchUser){
             return {"STATUS":false,"DATA":"Gagal menghubungi server. Silakan mengecek internet anda."};
           }

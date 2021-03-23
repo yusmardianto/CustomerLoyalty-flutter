@@ -186,7 +186,14 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Container(
                                 padding: EdgeInsets.only(left: 5),
-                                child: Icon(FontAwesomeIcons.crown,size: 18,color:Colors.amberAccent),
+                                child: Image(
+                                  height: 18,
+                                  width: 18,
+                                  fit: BoxFit.cover,
+                                  color: Colors.amber,
+                                  errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
+                                  image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
+                                ),
                               ),
                             ],
                           ),

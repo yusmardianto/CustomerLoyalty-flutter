@@ -13,6 +13,7 @@ import '../DataType/auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../CustomWidget/custom_stateful.dart';
+import 'package:mime/mime.dart';
 
 class Util{
   tokenFetch() async {
@@ -24,11 +25,15 @@ class Util{
       await backupGlobVar();
     }
   }
-  post(Map jsonData, String url,{secure:false,timeout:false,second:10,many=false}) async{
+  post(Map jsonData, String url,{secure:false,timeout:false,second:10,many=false,Map customHeader}) async{
     const JsonDecoder decoder = const JsonDecoder();
     try {
       var headers = {'Content-type': 'application/json'};
-
+      if(customHeader!=null){
+        customHeader.keys.forEach((element) {
+          headers[element] = customHeader[element];
+        });
+      }
       if(secure) {
         await tokenFetch();
         headers["Authorization"] =
@@ -37,6 +42,55 @@ class Util{
       Future<http.Response> futureResponse = http.post(
           '$url', headers: headers,
           body: json.encode(jsonData));;
+      if (timeout)
+        futureResponse.timeout(
+            Duration(seconds: second));
+      http.Response response = await Future.sync(() => futureResponse);
+      if(htmlErrorTitle(response.body.toString())!=""){
+        return {"STATUS":(response.statusCode != 200)?0:1,"DATA":htmlErrorTitle(response.body.toString())};
+      }
+      else{
+        final Map data = decoder.convert(response.body);
+        if(data["STATUS"]==200){
+          var res;
+          try{
+            res =  decoder.convert(data["DATA"]);
+          }catch(e){
+            res = data["DATA"];
+          }
+          return {"STATUS":1,"DATA":res};
+        }
+        else{
+          return {"STATUS":0,"DATA":data["ERROR"]};
+        }
+      }
+    } on TimeoutException catch(e){
+      return {"STATUS":0,"DATA":"Request Timeout"};
+    }
+    on Exception catch(exception){
+      print([url,exception]);
+//      Toast("Not Connected to Server", Colors.red);
+      return {"STATUS":0,"DATA":"Not Connected to Server"};
+    }
+  }
+  postImage(File file, String url,{secure:false,timeout:false,second:10,many=false,Map customHeader}) async{
+    const JsonDecoder decoder = const JsonDecoder();
+    String mimeType = lookupMimeType(file.path);
+    try {
+      var headers = {'Content-type': mimeType};
+      if(customHeader!=null){
+        customHeader.keys.forEach((element) {
+          headers[element] = customHeader[element].toString();
+        });
+      }
+      if(secure) {
+        await tokenFetch();
+        headers["Authorization"] =
+        "bearer ${globVar.tokenRest.token}";
+      }
+      Future<http.Response> futureResponse = http.post(
+          '$url', headers: headers,
+          body: file.readAsBytesSync());
       if (timeout)
         futureResponse.timeout(
             Duration(seconds: second));

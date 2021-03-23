@@ -235,7 +235,7 @@ class _VouchersListState extends State<VouchersList> {
                   style: TextStyle(fontWeight: FontWeight.w300,fontStyle: FontStyle.italic,fontSize: 18),
                 ),
               ),
-              Flexible(
+              (myVoucherList.length==0)?Container(height: 250,child: Center(child: Text("Kamu belum punya voucher",style: TextStyle(color: Colors.grey),),),):Flexible(
                 child: Container(
                   child: SingleChildScrollView(
                     child: Column(

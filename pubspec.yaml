@@ -17,12 +17,15 @@ dependencies:
   carousel_slider:
   google_fonts:
   shared_preferences:
-  fluttertoast: 7.1.6
+  fluttertoast: ^7.1.6
   oauth2:
   intl:
-  flutter_form_builder: 5.0.0-alpha.1
+  flutter_form_builder: ^5.0.0-alpha.1
   barcode:
   flutter_svg:
+  image_picker:
+  image_cropper:
+  mime:
   flutter:
     sdk: flutter
 
