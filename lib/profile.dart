@@ -542,7 +542,7 @@ class _ProfileState extends State<Profile> {
                     autovalidateMode: AutovalidateMode.disabled,
                     initialValue: userData,
                     child: ListView.builder(
-                      padding: EdgeInsets.only(left: 33,right: 33,bottom: 33,top: 10),
+                      padding: EdgeInsets.only(left: 25,right: 25,bottom: 25,top: 10),
                       itemCount: globVar.user != null ?globVar.user.toJsonDisplay().keys.length:0,
                         itemBuilder: (context,idx)
                             {
@@ -608,7 +608,7 @@ class _ProfileState extends State<Profile> {
                               return Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(top: 10,left: 30,right: 30,bottom: 10),
+                                    padding: EdgeInsets.only(top: 10,left: 15,right: 15,bottom: 10),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [

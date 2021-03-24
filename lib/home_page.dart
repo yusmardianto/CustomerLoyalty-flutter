@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,8 +11,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'api/vouchers.dart';
+import 'api/news.dart';
 import 'DataType/voucher.dart';
+import 'DataType/news.dart';
 import 'vouchers_list.dart';
+import 'news.dart' as news;
 
 
 class HomePage extends StatefulWidget {
@@ -21,6 +27,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<MyVoucher> myVoucherList = [];
+  List<NewsBanner> BannerList= [];
+  loadNews()async{
+    var res = await News().getNews();
+    if(res["STATUS"]==1){
+      BannerList.clear();
+      for(var i = 0;i<res["DATA"].length;i++){
+        BannerList.add(NewsBanner.fromJson(res["DATA"][i]));
+      }
+      setState(() {
+        globVar.isLoading = false;
+      });
+    }
+  }
   loadVoucher()async {
     setState(() {
       globVar.isLoading = true;
@@ -32,14 +51,11 @@ class _HomePageState extends State<HomePage> {
         myVoucherList.add(MyVoucher.fromJson(res["DATA"][i]));
       }
     }
-    setState(() {
-      globVar.isLoading = false;
-    });
-
   }
   @override
   void initState() {
     loadVoucher();
+    loadNews();
     super.initState();
   }
   @override
@@ -204,23 +220,49 @@ class _HomePageState extends State<HomePage> {
                       padding: EdgeInsets.only(top: 15),
                       child: CarouselSlider(
                         options: CarouselOptions(height: 155.0),
-                        items: [1,2,3,4,5].map((i) {
+                        items: (BannerList.length==0)?[1].map((i){
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 155,
+                            margin: EdgeInsets.symmetric(horizontal: 10.0),
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                      offset: Offset(1.0,1.0),
+                                      color: Colors.grey,
+                                      blurRadius: 3
+                                  )
+                                ],
+                                color: Color.fromRGBO(237, 237, 237, 1),
+                            ),
+                          );
+                        }).toList():BannerList.map((i) {
+                          // print("banner ${i.message_image}");
                           return Builder(
                             builder: (BuildContext context) {
-                              return Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 155,
-                                  margin: EdgeInsets.symmetric(horizontal: 10.0),
-                                  decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          offset: Offset(1.0,1.0),
-                                          color: Colors.grey,
-                                          blurRadius: 3
+                              return InkWell(
+                                onTap: (){
+                                  Navigator.push(context,MaterialPageRoute(builder: (context)=>news.News(i)));
+                                },
+                                child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 155,
+                                    margin: EdgeInsets.symmetric(horizontal: 10.0),
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            offset: Offset(1.0,1.0),
+                                            color: Colors.grey,
+                                            blurRadius: 3
+                                          )
+                                        ],
+                                        color: Color.fromRGBO(237, 237, 237, 1),
+                                        image: DecorationImage(
+                                          fit: BoxFit.fitWidth,
+                                          image: MemoryImage(i.message_image),
                                         )
-                                      ],
-                                      color: Color.fromRGBO(237, 237, 237, 1)
-                                  ),
+                                    ),
+                                ),
                               );
                             },
                           );

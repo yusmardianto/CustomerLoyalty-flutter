@@ -14,8 +14,21 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../CustomWidget/custom_stateful.dart';
 import 'package:mime/mime.dart';
+import 'package:html_unescape/html_unescape.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Util{
+  launchBrowserURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+  htmlEscape(String string){
+    var unescape = new HtmlUnescape();
+    return unescape.convert(string);
+  }
   tokenFetch() async {
     if(globVar.tokenRest==null||globVar.tokenRest.token==null||(globVar.tokenRest.expire != null && DateTime.now().isAfter(globVar.tokenRest.expire))){
       final tokenEndpoint = Uri.parse('https://loyalty.thamrin.xyz/ords/loyalty/oauth/token');

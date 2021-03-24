@@ -192,8 +192,8 @@ class _LoginPageState extends State<LoginPage> {
                                                              ),
                                                            ),
                                                            contentPadding: EdgeInsets.all(23),
-                                                           hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
-                                                           hintText: "Alamat Email"
+                                                           hintStyle: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,fontStyle: FontStyle.italic),
+                                                           hintText: "Email atau Handphone"
                                                        ),
                                                      ),
                                                    ),
@@ -222,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
                                                              ),
                                                            ),
                                                            contentPadding: EdgeInsets.all(23),
-                                                           hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                           hintStyle: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,fontStyle: FontStyle.italic),
                                                            hintText: "Password"
                                                        ),
                                                      ),

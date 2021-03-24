@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'login_page.dart';
 import 'home_page.dart';
 import 'profile.dart';
+import 'news.dart';
 import 'Util/glob_var.dart';
 import 'Util/utils.dart';
 import 'Util/life_cycle_manager.dart';
@@ -74,6 +75,7 @@ class MyApp extends StatelessWidget {
                 '/profile' : (context) => new Profile(),
                 '/transactions' : (context) => new Transactions(),
                 '/vouchers' :(context) => new VouchersList(),
+                // '/news' :(context) => new News(),
               },
             ),
           );
