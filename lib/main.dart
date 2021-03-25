@@ -29,6 +29,7 @@ void main() async{
           runApp(new MyApp());
       });
 }
+final Future _initFuture = preload();
 
 Future preload()async{
     preLoadState = "Mempersiapkan data";
@@ -49,8 +50,41 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    return LifeCycleManager(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Customer Loyalty',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          bottomSheetTheme: BottomSheetThemeData(
+            backgroundColor: Colors.transparent,
+          ),
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: FutureBuilder(
+          future: preload(),
+          builder: (context, AsyncSnapshot snapshot) {
+            // Show splash screen while waiting for app resources to load:
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Splashscreen(preLoadPercentage,preLoadState);
+            } else {
+              // Loading is done, return the app:
+              return (globVar.user!=null)?HomePage():LoginPage();
+            }
+          },
+        ),
+        routes: {
+          '/login': (context) => new LoginPage(),
+          '/home' : (context) => new HomePage(),
+          '/profile' : (context) => new Profile(),
+          '/transactions' : (context) => new Transactions(),
+          '/vouchers' :(context) => new VouchersList(),
+          // '/news' :(context) => new News(),
+        },
+      ),
+    );
     return FutureBuilder(
-      future: preload(),
+      future: _initFuture,
       builder: (context, AsyncSnapshot snapshot) {
         // Show splash screen while waiting for app resources to load:
         if (snapshot.connectionState == ConnectionState.waiting) {
