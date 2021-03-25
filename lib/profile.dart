@@ -32,7 +32,8 @@ class _ProfileState extends State<Profile> {
     userData = new Map<String,dynamic>.from(globVar.user.toJsonDisplay());
     userData.update("Tanggal_Lahir", (value) => DateFormat("dd-MMM-yyyy").parse(value));
     gender = userData["Gender"];
-    profileImage = Image.network(globVar.hostRest+"/binary/${globVar.user.CUST_DISPLAY_PICTURE}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"});
+    if(globVar.user.CUST_PROFILE_IMAGE!=null)profileImage = Image.memory(globVar.user.CUST_PROFILE_IMAGE);
+    // profileImage = Image.network(globVar.hostRest+"/binary/${globVar.user.CUST_DISPLAY_PICTURE}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"});
   }
 
   @override
@@ -159,7 +160,8 @@ class _ProfileState extends State<Profile> {
                             child: CircleAvatar(
                               backgroundColor: Colors.grey,
                               radius: 90,
-                              backgroundImage: (globVar.user.CUST_DISPLAY_PICTURE==null)?Icons.person:profileImage.image,
+                              backgroundImage: (globVar.user.CUST_PROFILE_IMAGE==null)?null:profileImage.image,
+                              child: (globVar.user.CUST_PROFILE_IMAGE==null)?Icon(Icons.person,color: Colors.white,size: 150,):null,
                             ),
                           ),
                           // Stack(
@@ -210,6 +212,9 @@ class _ProfileState extends State<Profile> {
                                     if (_formKey.currentState.validate()) {
                                       // print(_formKey.currentState.value);
                                       final Map<String, dynamic> mapUser = new Map<String, dynamic>.from(_formKey.currentState.value);
+                                      for(var i=0;i<mapUser.keys.length;i++){
+                                        mapUser.update(mapUser.keys.toList()[i], (value) => value.trim());
+                                      }
                                       mapUser["cust_id"] = globVar.user.CUST_ID;
                                       mapUser["corp"] = globVar.auth.corp;
                                       mapUser.update("Tanggal_Lahir", (value) => DateFormat("dd-MMM-yyyy").format(value));
@@ -484,9 +489,12 @@ class _ProfileState extends State<Profile> {
                                           onPressed: ()async {
                                             _formPassKey.currentState.save();
                                             if (_formPassKey.currentState.validate()) {
-                                                if(_formPassKey.currentState.value["pass"] == _formPassKey.currentState.value["confirm"]){
+                                                if(_formPassKey.currentState.value["pass"].trim() == _formPassKey.currentState.value["confirm"].trim()){
                                                   passMap = Map<String,dynamic>.from(_formPassKey.currentState.value);
                                                   passMap.remove("confirm");
+                                                  for(var i=0;i<passMap.keys.length;i++){
+                                                    passMap.update(passMap.keys.toList()[i], (value) => value.trim());
+                                                  }
                                                   passMap["login_id"]= globVar.auth.login_id;
                                                     Future future = Auths().changePass(passMap);
                                                     var res = await utils.showLoadingFuture(context,future);

@@ -137,8 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0)),
                                padding: EdgeInsets.all(12),
                                onPressed: (){
-                                 final userText = new TextEditingController();
-                                 final passText = new TextEditingController();
+                                 final _formKey = GlobalKey<FormBuilderState>();
                                  bool obscure = true;
                                  showModalBottomSheet(
                                    isScrollControlled: true,
@@ -153,109 +152,123 @@ class _LoginPageState extends State<LoginPage> {
                                        ),
                                        child: SingleChildScrollView(
                                          scrollDirection: Axis.vertical,
-                                         child: Column(
-                                           mainAxisSize: MainAxisSize.min,
-                                           children: [
-                                             Container(
-                                               height: MediaQuery.of(context).size.height*0.38,
-                                               padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.10,left: MediaQuery.of(context).size.width*0.24,right: MediaQuery.of(context).size.width*0.24,bottom: MediaQuery.of(context).size.height*0.03),
-                                               child: Container(
-                                                 height: 218,
-                                                 width: 205,
-                                                 decoration: BoxDecoration(
-                                                     image: DecorationImage(
-                                                       image: AssetImage("images/icon.png"),
-                                                       // colorFilter: ColorFilter.mode(Color.fromRGBO(10, 10, 249, 0.5), BlendMode.modulate ),
-                                                       fit: BoxFit.fitHeight,
-                                                     )
+                                         child: FormBuilder(
+                                           key: _formKey,
+                                           autovalidateMode: AutovalidateMode.disabled,
+                                           child: Column(
+                                             mainAxisSize: MainAxisSize.min,
+                                             children: [
+                                               Container(
+                                                 height: MediaQuery.of(context).size.height*0.38,
+                                                 padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.10,left: MediaQuery.of(context).size.width*0.24,right: MediaQuery.of(context).size.width*0.24,bottom: MediaQuery.of(context).size.height*0.03),
+                                                 child: Container(
+                                                   height: 218,
+                                                   width: 205,
+                                                   decoration: BoxDecoration(
+                                                       image: DecorationImage(
+                                                         image: AssetImage("images/icon.png"),
+                                                         // colorFilter: ColorFilter.mode(Color.fromRGBO(10, 10, 249, 0.5), BlendMode.modulate ),
+                                                         fit: BoxFit.fitHeight,
+                                                       )
+                                                   ),
                                                  ),
                                                ),
-                                             ),
-                                             Padding(
-                                               padding: const EdgeInsets.only(left:53,right: 53),
-                                               child: Column(
-                                                 children: [
-                                                   Padding(
-                                                     padding: const EdgeInsets.only(top: 50),
-                                                     child: TextField(
-                                                       controller: userText,
-                                                       decoration: InputDecoration(
-                                                           focusedBorder: new OutlineInputBorder(
-                                                             borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
+                                               Padding(
+                                                 padding: const EdgeInsets.only(left:53,right: 53),
+                                                 child: Column(
+                                                   children: [
+                                                     Padding(
+                                                       padding: const EdgeInsets.only(top: 50),
+                                                       child: FormBuilderTextField(
+                                                         validator: (value) =>
+                                                         value == null || value.isEmpty ? 'Data tidak boleh kosong' : null,
+                                                         name: "user",
+                                                         decoration: InputDecoration(
+                                                             focusedBorder: new OutlineInputBorder(
+                                                               borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                               borderRadius: const BorderRadius.all(
+                                                                 const Radius.circular(15.0),
+                                                               ),
                                                              ),
-                                                           ),
-                                                           border: new OutlineInputBorder(
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
+                                                             border: new OutlineInputBorder(
+                                                               borderRadius: const BorderRadius.all(
+                                                                 const Radius.circular(15.0),
+                                                               ),
                                                              ),
-                                                           ),
-                                                           contentPadding: EdgeInsets.all(23),
-                                                           hintStyle: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,fontStyle: FontStyle.italic),
-                                                           hintText: "Email atau Handphone"
+                                                             contentPadding: EdgeInsets.all(23),
+                                                             hintStyle: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,fontStyle: FontStyle.italic),
+                                                             hintText: "Email atau Handphone"
+                                                         ),
                                                        ),
                                                      ),
-                                                   ),
-                                                   Padding(
-                                                     padding: const EdgeInsets.only(top: 20,),
-                                                     child: TextField(
-                                                       obscureText: obscure,
-                                                       controller: passText,
-                                                       decoration: InputDecoration(
-                                                           suffixIcon: InkWell(
-                                                               onTap: (){
-                                                                 setState(() {
-                                                                   obscure = !obscure;
-                                                                 });
-                                                               },
-                                                               child: Icon((obscure)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
-                                                           focusedBorder: new OutlineInputBorder(
-                                                             borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
+                                                     Padding(
+                                                       padding: const EdgeInsets.only(top: 20,),
+                                                       child: FormBuilderTextField(
+                                                         validator: (value) =>
+                                                         value == null || value.isEmpty ? 'Password tidak boleh kosong' : null,
+                                                         name: "password",
+                                                         obscureText: obscure,
+                                                         decoration: InputDecoration(
+                                                             suffixIcon: InkWell(
+                                                                 onTap: (){
+                                                                   setState(() {
+                                                                     obscure = !obscure;
+                                                                   });
+                                                                 },
+                                                                 child: Icon((obscure)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
+                                                             focusedBorder: new OutlineInputBorder(
+                                                               borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                               borderRadius: const BorderRadius.all(
+                                                                 const Radius.circular(15.0),
+                                                               ),
                                                              ),
-                                                           ),
-                                                           border: new OutlineInputBorder(
-                                                             borderRadius: const BorderRadius.all(
-                                                               const Radius.circular(15.0),
+                                                             border: new OutlineInputBorder(
+                                                               borderRadius: const BorderRadius.all(
+                                                                 const Radius.circular(15.0),
+                                                               ),
                                                              ),
-                                                           ),
-                                                           contentPadding: EdgeInsets.all(23),
-                                                           hintStyle: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,fontStyle: FontStyle.italic),
-                                                           hintText: "Password"
+                                                             contentPadding: EdgeInsets.all(23),
+                                                             hintStyle: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,fontStyle: FontStyle.italic),
+                                                             hintText: "Password"
+                                                         ),
                                                        ),
                                                      ),
-                                                   ),
-                                                   Container(
-                                                     padding: EdgeInsets.only(top:15),
-                                                     alignment: Alignment.centerRight,
-                                                     child: Text("Lupa Password",style: TextStyle(fontWeight: FontWeight.w200,decoration: TextDecoration.underline,color: Color.fromRGBO(5,0,255,1),fontSize: 16,fontStyle: FontStyle.italic,),),
-                                                   ),
-                                                   Container(
-                                                     padding: EdgeInsets.only(top: 25),
-                                                     width: 286,
-                                                     child: FlatButton(
-                                                         color: Color.fromRGBO(64, 64, 222, 1),
-                                                         shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0)),
-                                                         padding: EdgeInsets.all(12),
-                                                         onPressed: ()async {
-                                                           Future future = Auths().login(userText.text, passText.text);
-                                                           var res = await utils.showLoadingFuture(context,future);
-                                                           if(res["STATUS"]){
-                                                             Navigator.pushReplacementNamed(context, "/home");
-                                                           }
-                                                           else{
-                                                             utils.toast(res["DATA"],type: "ERROR");
-                                                           }
-                                                         },
-                                                         child: Text("Login",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.white),)),
-                                                   ),
-                                                 ],
+                                                     Container(
+                                                       padding: EdgeInsets.only(top:15),
+                                                       alignment: Alignment.centerRight,
+                                                       child: Text("Lupa Password",style: TextStyle(fontWeight: FontWeight.w200,decoration: TextDecoration.underline,color: Color.fromRGBO(5,0,255,1),fontSize: 16,fontStyle: FontStyle.italic,),),
+                                                     ),
+                                                     Container(
+                                                       padding: EdgeInsets.only(top: 25),
+                                                       width: 286,
+                                                       child: FlatButton(
+                                                           color: Color.fromRGBO(64, 64, 222, 1),
+                                                           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0)),
+                                                           padding: EdgeInsets.all(12),
+                                                           onPressed: ()async {
+                                                             _formKey.currentState.save();
+                                                             if (_formKey.currentState.validate()) {
+                                                               Future future = Auths().login(_formKey.currentState.value['user'].trim(), _formKey.currentState.value['password'].trim());
+                                                               var res = await utils.showLoadingFuture(context,future);
+                                                               if(res["STATUS"]){
+                                                                 Navigator.pushReplacementNamed(context, "/home");
+                                                               }
+                                                               else{
+                                                                 utils.toast(res["DATA"],type: "ERROR");
+                                                               }
+                                                             }
+                                                             else {
+                                                               utils.toast("Data belum lengkap. Silakan cek kembali",type:"ERROR");
+                                                             }
+                                                           },
+                                                           child: Text("Login",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.white),)),
+                                                     ),
+                                                   ],
+                                                 ),
                                                ),
-                                             ),
 
-                                           ],
+                                             ],
+                                           ),
                                          ),
                                        ),
                                      ),
@@ -526,7 +539,10 @@ class _LoginPageState extends State<LoginPage> {
                                                                  if (_formKey.currentState.validate()) {
                                                                    // print(_formKey.currentState.value);
                                                                     final Map<String, dynamic> mapUser = new Map<String, dynamic>.from(_formKey.currentState.value);
-                                                                   mapUser.update("tgl_lahir", (value) => DateFormat("dd-MMM-yyyy").format(value));
+                                                                    for(var i=0;i<mapUser.keys.length;i++){
+                                                                      mapUser.update(mapUser.keys.toList()[i], (value) => value.trim());
+                                                                    }
+                                                                    mapUser.update("tgl_lahir", (value) => DateFormat("dd-MMM-yyyy").format(value));
                                                                    mapUser["corp"] = globVar.auth.corp;
                                                                    Future future = Auths().register(mapUser);
                                                                    var res = await utils.showLoadingFuture(context,future);

@@ -9,6 +9,7 @@ class Auths{
     try{
       var res = await utils.post({"user":user,"pass":pass}, globVar.hostRest+"/auth/",secure: true);
       var json = res["DATA"];
+      // print("res $json");
       if(res["STATUS"]==1 && json["STATUS"]=="OK"){
         globVar.auth = Auth.fromJson(json);
           var fetchUser = await Users().refreshUser(json["G_CUST_ID"],json["G_CORP"]);

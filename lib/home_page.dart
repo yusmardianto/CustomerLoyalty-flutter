@@ -202,13 +202,13 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Container(
                                 padding: EdgeInsets.only(left: 5),
-                                child: Image(
+                                child: (globVar.user.LOYALTY_LEVEL_IMAGE==null)?Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,):Image(
                                   height: 18,
                                   width: 18,
                                   fit: BoxFit.cover,
-                                  color: Colors.amber,
-                                  errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
-                                  image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
+                                  // errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
+                                  // image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
+                                  image: MemoryImage(globVar.user.LOYALTY_LEVEL_IMAGE),
                                 ),
                               ),
                             ],
@@ -222,6 +222,8 @@ class _HomePageState extends State<HomePage> {
                         options: CarouselOptions(height: 155.0),
                         items: (BannerList.length==0)?[1].map((i){
                           return Container(
+                            alignment: Alignment.center,
+                            child: (globVar.isLoading)?null:Text("Tidak ada News",style: TextStyle(fontWeight: FontWeight.w700,decoration: TextDecoration.underline,color: Colors.grey),),
                             width: MediaQuery.of(context).size.width,
                             height: 155,
                             margin: EdgeInsets.symmetric(horizontal: 10.0),
