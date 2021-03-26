@@ -71,6 +71,7 @@ class Util{
           }catch(e){
             res = data["DATA"];
           }
+          // print("post $data");
           return {"STATUS":1,"DATA":res};
         }
         else{
@@ -221,23 +222,30 @@ class Util{
     }
   }
   backupGlobVar()async{
-    await prefs.setString("token", JsonEncoder().convert(globVar.tokenRest.toJson()));
-    if(globVar.auth!=null) await prefs.setString("auth", JsonEncoder().convert(globVar.auth.toJson()));
-    if(globVar.user!=null) await prefs.setString("user", JsonEncoder().convert(globVar.user.toJson()));
+    if(prefs!=null){
+      print("saved");
+      await prefs.setString("token", JsonEncoder().convert(globVar.tokenRest.toJson()));
+      if(globVar.auth!=null) await prefs.setString("auth", JsonEncoder().convert(globVar.auth.toJson()));
+      if(globVar.user!=null) await prefs.setString("user", JsonEncoder().convert(globVar.user.toJson()));
+    }
+
   }
   restoreGlobVar()async{
-    if(prefs.getString("token")!=null){
-      print("restore token");
-      globVar.tokenRest = Rest.fromJson(JsonDecoder().convert(prefs.getString("token")));
+    if(prefs!=null){
+      if(prefs.getString("token")!=null){
+        print("restore token");
+        globVar.tokenRest = Rest.fromJson(JsonDecoder().convert(prefs.getString("token")));
+      }
+      if(prefs.getString("user")!=null){
+        print("restore user");
+        globVar.user = User.fromJson(JsonDecoder().convert(prefs.getString("user")));
+      }
+      if(prefs.getString("auth")!=null){
+        print("restore auth");
+        globVar.auth = Auth.fromJson(JsonDecoder().convert(prefs.getString("auth")));
+      }
     }
-    if(prefs.getString("user")!=null){
-      print("restore user");
-      globVar.user = User.fromJson(JsonDecoder().convert(prefs.getString("user")));
-    }
-    if(prefs.getString("auth")!=null){
-      print("restore auth");
-      globVar.auth = Auth.fromJson(JsonDecoder().convert(prefs.getString("auth")));
-    }
+
   }
   removeBackupGlobVar()async{
     print("clear prefs");

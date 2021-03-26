@@ -68,93 +68,94 @@ class _ProfileState extends State<Profile> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(flex: 1,child: SizedBox()),
-                      InkWell(
-                        onTap: ()async{
-                          // ImagePicker.platform.pickImage(source: ImageSource.gallery,maxWidth: 700, imageQuality: 50);
-                          File image;
-                          await showModalBottomSheet(context: context, isScrollControlled: true, builder: (context){
-                            return ConstrainedBox(
-                              constraints: BoxConstraints(
-                                maxHeight: MediaQuery.of(context).size.height*0.5,
-                                minWidth: MediaQuery.of(context).size.width,
-                              ),
-                              child: Container(
-                                color: Colors.white,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    InkWell(
-                                      onTap:()async{
-                                        PickedFile temp = await ImagePicker().getImage(source: ImageSource.gallery);
-                                        if(temp != null){
-                                          image = new File(temp.path);
-                                        }
-                                        Navigator.pop(context);
-                                      },
-                                      child: Padding(
-                                        padding: EdgeInsets.only(top: 20,left: 10,right: 10,bottom: 10),
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Icon(FontAwesomeIcons.images),
-                                            SizedBox(width: 25,),
-                                            Text("Ubah foto dari gallery"),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Divider(),
-                                    InkWell(
-                                      onTap: ()async{
-                                        PickedFile temp = await ImagePicker().getImage(source: ImageSource.camera);
-                                        if(temp != null){
-                                          image = new File(temp.path);
-                                        }
-                                        Navigator.pop(context);
-                                      },
-                                      child: Padding(
-                                        padding: EdgeInsets.only(top:10,right: 10,left: 10,bottom: 20),
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Icon(FontAwesomeIcons.camera),
-                                            SizedBox(width: 25,),
-                                            Text("Tangkap foto profile baru"),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    // Divider(),
-                                    // Padding(
-                                    //   padding: EdgeInsets.only(top:10,right: 10,left: 10,bottom: 20),
-                                    //   child: Row(
-                                    //     crossAxisAlignment: CrossAxisAlignment.center,
-                                    //     children: [
-                                    //       Icon(FontAwesomeIcons.solidWindowRestore),
-                                    //       SizedBox(width: 25,),
-                                    //       Text("Lihat foto profile layar penuh"),
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                  ],
+                      Expanded(
+                        flex: 5,
+                        child:
+                        InkWell(
+                          onTap: ()async{
+                            // ImagePicker.platform.pickImage(source: ImageSource.gallery,maxWidth: 700, imageQuality: 50);
+                            File image;
+                            await showModalBottomSheet(context: context, isScrollControlled: true, builder: (context){
+                              return ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  maxHeight: MediaQuery.of(context).size.height*0.5,
+                                  minWidth: MediaQuery.of(context).size.width,
                                 ),
-                              ),
-                            );
-                          }).whenComplete(()async{
-                            if(image!=null){
-                              image = await ImageCropper.cropImage(cropStyle: CropStyle.circle,sourcePath: image.path,maxWidth: 700,compressQuality: 70);
-                              var res = await Users().updateDP(image);
-                              if(res["STATUS"]){
-                                Navigator.pushReplacementNamed(context, "/profile");
+                                child: Container(
+                                  color: Colors.white,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      InkWell(
+                                        onTap:()async{
+                                          PickedFile temp = await ImagePicker().getImage(source: ImageSource.gallery);
+                                          if(temp != null){
+                                            image = new File(temp.path);
+                                          }
+                                          Navigator.pop(context);
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.only(top: 20,left: 10,right: 10,bottom: 10),
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(FontAwesomeIcons.images),
+                                              SizedBox(width: 25,),
+                                              Text("Ubah foto dari gallery"),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Divider(),
+                                      InkWell(
+                                        onTap: ()async{
+                                          PickedFile temp = await ImagePicker().getImage(source: ImageSource.camera);
+                                          if(temp != null){
+                                            image = new File(temp.path);
+                                          }
+                                          Navigator.pop(context);
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.only(top:10,right: 10,left: 10,bottom: 20),
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(FontAwesomeIcons.camera),
+                                              SizedBox(width: 25,),
+                                              Text("Tangkap foto profile baru"),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      // Divider(),
+                                      // Padding(
+                                      //   padding: EdgeInsets.only(top:10,right: 10,left: 10,bottom: 20),
+                                      //   child: Row(
+                                      //     crossAxisAlignment: CrossAxisAlignment.center,
+                                      //     children: [
+                                      //       Icon(FontAwesomeIcons.solidWindowRestore),
+                                      //       SizedBox(width: 25,),
+                                      //       Text("Lihat foto profile layar penuh"),
+                                      //     ],
+                                      //   ),
+                                      // ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }).whenComplete(()async{
+                              if(image!=null){
+                                image = await ImageCropper.cropImage(cropStyle: CropStyle.circle,sourcePath: image.path,maxWidth: 700,compressQuality: 70);
+                                Future future = Users().updateDP(image);
+                                var res = await utils.showLoadingFuture(context,future);
+                                if(res["STATUS"]){
+                                  Navigator.pushReplacementNamed(context, "/profile");
+                                }
+                                utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
                               }
-                              utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
-                            }
-                          });
-                        },
-                        child: Expanded(
-                          flex: 5,
-                          child:
-                          CircleAvatar(
+                            });
+                          },
+                          child: CircleAvatar(
                             radius: 93,
                             backgroundColor: Colors.white,
                             child: CircleAvatar(
@@ -164,34 +165,34 @@ class _ProfileState extends State<Profile> {
                               child: (globVar.user.CUST_PROFILE_IMAGE==null)?Icon(Icons.person,color: Colors.white,size: 150,):null,
                             ),
                           ),
-                          // Stack(
-                          //   children: [
-                          //     Container(
-                          //       height: 180,
-                          //       width: 180,
-                          //       decoration: BoxDecoration(
-                          //         shape: BoxShape.circle,
-                          //         color: Colors.grey,
-                          //       ),
-                          //       child: Image(
-                          //         fit: BoxFit.fill,
-                          //         height: 180,
-                          //         width: 180,
-                          //         errorBuilder: (context,err,stackTrace)=>Icon(Icons.person,color: Colors.white,size: 160,),
-                          //         image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.CUST_DISPLAY_PICTURE}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
-                          //       )
-                          //     ),
-                          //     Container(
-                          //       width: 180,
-                          //       height: 180,
-                          //       decoration: BoxDecoration(
-                          //         shape: BoxShape.circle,
-                          //         border: Border.all(color: Colors.white,width: 3)
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
                         ),
+                        // Stack(
+                        //   children: [
+                        //     Container(
+                        //       height: 180,
+                        //       width: 180,
+                        //       decoration: BoxDecoration(
+                        //         shape: BoxShape.circle,
+                        //         color: Colors.grey,
+                        //       ),
+                        //       child: Image(
+                        //         fit: BoxFit.fill,
+                        //         height: 180,
+                        //         width: 180,
+                        //         errorBuilder: (context,err,stackTrace)=>Icon(Icons.person,color: Colors.white,size: 160,),
+                        //         image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.CUST_DISPLAY_PICTURE}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
+                        //       )
+                        //     ),
+                        //     Container(
+                        //       width: 180,
+                        //       height: 180,
+                        //       decoration: BoxDecoration(
+                        //         shape: BoxShape.circle,
+                        //         border: Border.all(color: Colors.white,width: 3)
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                       ),
                       Expanded(
                         flex: 1,

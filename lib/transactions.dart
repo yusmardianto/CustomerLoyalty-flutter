@@ -75,6 +75,10 @@ class _TransactionsState extends State<Transactions> {
                       ),
                       child: FormBuilderDateRangePicker(
                           controller: search,
+                          name: "filter",
+                          onChanged: (value){
+                            print("filter $value");
+                          },
                           firstDate: DateTime(DateTime.now().year,1,1),
                           lastDate: DateTime(DateTime.now().year,12,1),
                           format: DateFormat('dd-MMM-yyyy'),

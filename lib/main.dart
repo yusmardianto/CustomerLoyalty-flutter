@@ -24,16 +24,21 @@ NumberFormat numberFormat = NumberFormat.decimalPattern('id');
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  // SharedPreferences.setMockInitialValues({});
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_)async {
           runApp(new MyApp());
       });
 }
-final Future _initFuture = preload();
 
-Future preload()async{
+preload()async{
     preLoadState = "Mempersiapkan data";
-    if(prefs==null)prefs = await SharedPreferences.getInstance();
+    try{
+      if(prefs==null)prefs = await SharedPreferences.getInstance();
+    }
+    catch(e){
+      print("error, $e");
+    }
     // print('test${[globVar==null,prefs==null,prefs.getString("user")]}');
     if(globVar==null){
     preLoadState = "Mengecek penyimpanan";
@@ -69,6 +74,7 @@ class MyApp extends StatelessWidget {
               return Splashscreen(preLoadPercentage,preLoadState);
             } else {
               // Loading is done, return the app:
+              // print("user session ${globVar.user}");
               return (globVar.user!=null)?HomePage():LoginPage();
             }
           },
@@ -83,38 +89,38 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
-    return FutureBuilder(
-      future: _initFuture,
-      builder: (context, AsyncSnapshot snapshot) {
-        // Show splash screen while waiting for app resources to load:
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return MaterialApp(home: Splashscreen(preLoadPercentage,preLoadState));
-        } else {
-          // Loading is done, return the app:
-          return LifeCycleManager(
-            child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Customer Loyalty',
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-                bottomSheetTheme: BottomSheetThemeData(
-                  backgroundColor: Colors.transparent,
-                ),
-                visualDensity: VisualDensity.adaptivePlatformDensity,
-              ),
-              home: (globVar.user!=null)?HomePage():LoginPage(),
-              routes: {
-                '/login': (context) => new LoginPage(),
-                '/home' : (context) => new HomePage(),
-                '/profile' : (context) => new Profile(),
-                '/transactions' : (context) => new Transactions(),
-                '/vouchers' :(context) => new VouchersList(),
-                // '/news' :(context) => new News(),
-              },
-            ),
-          );
-        }
-      },
-    );
+    // return FutureBuilder(
+    //   future: _initFuture,
+    //   builder: (context, AsyncSnapshot snapshot) {
+    //     // Show splash screen while waiting for app resources to load:
+    //     if (snapshot.connectionState == ConnectionState.waiting) {
+    //       return MaterialApp(home: Splashscreen(preLoadPercentage,preLoadState));
+    //     } else {
+    //       // Loading is done, return the app:
+    //       return LifeCycleManager(
+    //         child: MaterialApp(
+    //           debugShowCheckedModeBanner: false,
+    //           title: 'Customer Loyalty',
+    //           theme: ThemeData(
+    //             primarySwatch: Colors.blue,
+    //             bottomSheetTheme: BottomSheetThemeData(
+    //               backgroundColor: Colors.transparent,
+    //             ),
+    //             visualDensity: VisualDensity.adaptivePlatformDensity,
+    //           ),
+    //           home: (globVar.user!=null)?HomePage():LoginPage(),
+    //           routes: {
+    //             '/login': (context) => new LoginPage(),
+    //             '/home' : (context) => new HomePage(),
+    //             '/profile' : (context) => new Profile(),
+    //             '/transactions' : (context) => new Transactions(),
+    //             '/vouchers' :(context) => new VouchersList(),
+    //             // '/news' :(context) => new News(),
+    //           },
+    //         ),
+    //       );
+    //     }
+    //   },
+    // );
   }
 }

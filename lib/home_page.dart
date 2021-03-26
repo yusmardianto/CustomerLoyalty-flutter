@@ -14,6 +14,7 @@ import 'api/vouchers.dart';
 import 'api/news.dart';
 import 'DataType/voucher.dart';
 import 'DataType/news.dart';
+import 'main.dart';
 import 'vouchers_list.dart';
 import 'news.dart' as news;
 
@@ -26,7 +27,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<MyVoucher> myVoucherList = [];
   List<NewsBanner> BannerList= [];
   loadNews()async{
     var res = await News().getNews();
@@ -46,10 +46,11 @@ class _HomePageState extends State<HomePage> {
     });
     var res = await Vouchers().getMyVoucherList();
     if(res["STATUS"]==1){
-      myVoucherList.clear();
+      List<MyVoucher> myVoucherList = [];
       for(var i = 0;i<res["DATA"].length;i++){
         myVoucherList.add(MyVoucher.fromJson(res["DATA"][i]));
       }
+      globVar.myVouchers =myVoucherList;
     }
   }
   @override
@@ -286,7 +287,7 @@ class _HomePageState extends State<HomePage> {
                                     color: Colors.black.withOpacity(0.4),
                                   ),
                                 ],color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w300,fontSize: 18),),
-                                (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${myVoucherList.length}",style: TextStyle(shadows: [
+                                (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${globVar.myVouchers.length}",style: TextStyle(shadows: [
                                   Shadow(
                                     offset: Offset(3.0, 3.0),
                                     blurRadius: 0.5,
@@ -304,9 +305,12 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           InkWell(
-                            onTap: (){
+                            onTap: ()async{
                               // Navigator.pushNamed(context, "/vouchers",);
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: true,)));
+                              await Navigator.push(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: true,)));
+                              setState(() {
+
+                              });
                             },
                             child: Container(
                               padding: EdgeInsets.only(right: 15),
@@ -335,9 +339,12 @@ class _HomePageState extends State<HomePage> {
                           )
                       ),
                     ):
-                    (myVoucherList.length==0)?InkWell(
-                      onTap: ()=>
-                        Navigator.pushNamed(context, '/vouchers'),
+                    (globVar.myVouchers.length==0)?InkWell(
+                      onTap: () async {
+                        await Navigator.pushNamed(context, '/vouchers');
+                        setState(() {
+                        });
+                      },
                       child: Padding(
                         padding: EdgeInsets.all(15),
                         child: Container(
@@ -351,15 +358,15 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ):Container(
-                      height: (myVoucherList.length>=2)?(152.0+15)*2:(152.0+15)*myVoucherList.length,
+                      height: (globVar.myVouchers.length>=2)?(152.0+15)*2:(152.0+15)*globVar.myVouchers.length,
                       child: ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.only(right: 18,left: 18),
-                        itemCount: (myVoucherList.length>=2)?2:myVoucherList.length,
+                        itemCount: (globVar.myVouchers.length>=2)?2:globVar.myVouchers.length,
                         itemBuilder: (context,index)=>Padding(
                           padding: EdgeInsets.only(top:15),
                           child: InkWell(
-                            // onTap: ()=>VoucherDialog().showDialog(myVoucherList[index], context),
+                            // onTap: ()=>VoucherDialog().showDialog(globVar.myVouchers[index], context),
                             onTap: ()async{
                               bool genBarcode = await showDialog(
                                       context: context,
@@ -410,11 +417,14 @@ class _HomePageState extends State<HomePage> {
                               );
 
                               if(genBarcode??false){
-                                Future future = Vouchers().useVoucher(myVoucherList[index].LOYALTY_CUST_REWARD_ID);
+                                Future future = Vouchers().useVoucher(globVar.myVouchers[index].LOYALTY_CUST_REWARD_ID);
                                 var res = await utils.showLoadingFuture(context,future);
                                 if(res["STATUS"]){
                                   print(res["DATA"]);
-                                  utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
+                                  await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
+                                  setState(() {
+
+                                  });
                                 }
                                 else{
                                   utils.toast(res["DATA"],type: "ERROR");
@@ -431,7 +441,7 @@ class _HomePageState extends State<HomePage> {
                                       color: Colors.white,
                                   ),
                                   child: CustomPaint(
-                                    painter: VoucherPainter(myVoucherList[index].DESCRIPTION),
+                                    painter: VoucherPainter(globVar.myVouchers[index].DESCRIPTION),
                                   ),
                                 ),
                                 Container(
@@ -450,7 +460,7 @@ class _HomePageState extends State<HomePage> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 34, fontStyle: FontStyle.italic),),),
-                                              Text(myVoucherList[index].COUPON??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
+                                              Text(globVar.myVouchers[index].COUPON??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
                                             ],
                                           ),
                                           Column(
@@ -462,7 +472,7 @@ class _HomePageState extends State<HomePage> {
                                                 padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
                                                 child: Row(
                                                   children: [
-                                                    Text("${myVoucherList[index].REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
+                                                    Text("${globVar.myVouchers[index].REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
                                                     Container(
                                                       padding: EdgeInsets.only(left: 5),
                                                       child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
@@ -474,7 +484,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ],
                                       ),
-                                      Text(myVoucherList[index].PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 15, fontStyle: FontStyle.italic),),),
+                                      Text(globVar.myVouchers[index].PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 15, fontStyle: FontStyle.italic),),),
 
                                     ],
                                   ),

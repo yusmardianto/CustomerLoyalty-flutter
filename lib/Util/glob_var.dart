@@ -3,6 +3,7 @@ import 'dart:convert';
 import '../DataType/user.dart';
 import '../DataType/rest.dart';
 import '../DataType/auth.dart';
+import '../DataType/voucher.dart';
 import '../main.dart';
 class GlobVar{
   String hostRest = "https://loyalty.thamrin.xyz/ords/loyalty/loyaltymobile";
@@ -27,7 +28,11 @@ class GlobVar{
   Auth _auth;
   Auth get auth => _auth;
   set auth(value) => _auth = value;
-  //============================================================
+  //=====================MyVoucher==============================
+  List<MyVoucher> _myVouchers = [];
+  List<MyVoucher> get myVouchers => _myVouchers;
+  set myVouchers(value) => _myVouchers = value;
+  //=============================================================
 
   static final GlobVar _instance = GlobVar._internal();
   factory GlobVar() => _instance;
@@ -40,12 +45,15 @@ class GlobVar{
     _isShowNotif = true;
     _isLoading = false;
     // prefs = await SharedPreferences.getInstance();
-    if(prefs.getString("clientCred")==null){
-      prefs.setString("clientCred", json.encode({
-        "id": "S1BiT8Wwxgypz7B4DdxZsw..",
-        "secret" : "uxj_dNikz8JcvasOd1l3jA.."
-      }).toString());
+    if(prefs!=null){
+      if(prefs.getString("clientCred")==null){
+        prefs.setString("clientCred", json.encode({
+          "id": "S1BiT8Wwxgypz7B4DdxZsw..",
+          "secret" : "uxj_dNikz8JcvasOd1l3jA.."
+        }).toString());
+      }
     }
+
   }
 
   clear(){

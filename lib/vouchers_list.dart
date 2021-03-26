@@ -20,7 +20,7 @@ class VouchersList extends StatefulWidget {
 class _VouchersListState extends State<VouchersList> {
   final search = new TextEditingController();
   List<Voucher> voucherList = [];
-  List<MyVoucher> myVoucherList = [];
+
 
   loadAvailableVoucher()async {
     setState(() {
@@ -43,10 +43,11 @@ class _VouchersListState extends State<VouchersList> {
     });
     var res = await Vouchers().getMyVoucherList();
     if(res["STATUS"]==1){
-      myVoucherList.clear();
+      List<MyVoucher> myVoucherList = [];
       for(var i = 0;i<res["DATA"].length;i++){
         myVoucherList.add(MyVoucher.fromJson(res["DATA"][i]));
       }
+      globVar.myVouchers = myVoucherList;
     }
     setState(() {
       globVar.isLoading = false;
@@ -56,7 +57,7 @@ class _VouchersListState extends State<VouchersList> {
 
   showMyVoucher(){
     List<Widget> myVoucher = [];
-    myVoucher.addAll(myVoucherList.map((e) => InkWell(
+    myVoucher.addAll(globVar.myVouchers.map((e) => InkWell(
       onTap: ()async {
         // showDialog(
         //     context: context,
@@ -235,7 +236,7 @@ class _VouchersListState extends State<VouchersList> {
                   style: TextStyle(fontWeight: FontWeight.w300,fontStyle: FontStyle.italic,fontSize: 18),
                 ),
               ),
-              (myVoucherList.length==0)?Container(height: 250,child: Center(child: Text("Kamu belum punya voucher",style: TextStyle(color: Colors.grey),),),):Flexible(
+              (globVar.myVouchers.length==0)?Container(height: 250,child: Center(child: Text("Kamu belum punya voucher",style: TextStyle(color: Colors.grey),),),):Flexible(
                 child: Container(
                   child: SingleChildScrollView(
                     child: Column(
@@ -318,7 +319,10 @@ class _VouchersListState extends State<VouchersList> {
                     :ListView.builder(
                       itemCount: voucherList.length,
                       itemBuilder: (context,index)=>InkWell(
-                        onTap: ()=>VoucherDialog().showDialog(voucherList[index], context),
+                        onTap: ()async{
+                          await VoucherDialog().showDialog(voucherList[index], context);
+                          loadMyVoucher();
+                        },
                         child: Hero(
                           tag: "details",
                           child: Padding(

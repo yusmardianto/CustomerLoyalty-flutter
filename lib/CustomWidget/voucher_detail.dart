@@ -68,7 +68,7 @@ class VoucherDialog{
 
     });
 
-    Navigator.push(
+    return Navigator.push(
         context, new HeroDialogRoute(
       builder: (BuildContext context) {
         final _scrollController = ScrollController(initialScrollOffset: 0);
