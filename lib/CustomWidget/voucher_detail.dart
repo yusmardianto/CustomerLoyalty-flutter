@@ -1,5 +1,5 @@
-import 'package:customer_loyalty/CustomShape/voucher_shape.dart';
-import 'package:customer_loyalty/main.dart';
+import '../CustomShape/voucher_shape.dart';
+import '../main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

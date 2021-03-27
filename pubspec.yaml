@@ -1,4 +1,4 @@
-name: customer_loyalty
+name: Customer_loyalty
 description: App for Thamrin Groups Loyal Customers
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -7,7 +7,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+8
+version: 1.0.0+9
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -44,7 +44,8 @@ dev_dependencies:
     sdk: flutter
 
 dependency_overrides:
-  image: ^2.1.14
+  image: ^2.0.14
+#  comment image pas nak ganti icon
   xml: ^5.0.2
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
