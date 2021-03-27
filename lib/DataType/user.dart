@@ -50,7 +50,7 @@ class User {
     this.NAME = json[jsonKeys[3]];
     this.GENDER = json[jsonKeys[4]];
     this.IDENTITY_NUMBER = json[jsonKeys[5]];
-    this.BIRTH_DATE =  (json[jsonKeys[6]]==null)?null:DateTime.parse(json[jsonKeys[6]]);
+    this.BIRTH_DATE =  (json[jsonKeys[6]]==null)?null:DateTime.parse(json[jsonKeys[6]]).toLocal();
     this.EMAIL = json[jsonKeys[7]];
     this.PHONE = json[jsonKeys[8]];
     this.COMPANY_NAME = json[jsonKeys[9]];

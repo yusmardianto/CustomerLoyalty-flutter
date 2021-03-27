@@ -8,7 +8,7 @@ class Rest{
 
   Rest.fromJson(Map<String, dynamic> json)
       : token = json['token'],
-        expire = DateTime.parse(json['expire'])
+        expire = DateTime.parse(json['expire']).toLocal()
   ;
 
   Map<String, dynamic> toJson()=>{

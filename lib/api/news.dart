@@ -7,6 +7,7 @@ class News{
           "corp": globVar.auth.corp,
         },
         globVar.hostRest + "/news/", secure: true, many: true);
+    // print("res $res");
     return res;
   }
 }

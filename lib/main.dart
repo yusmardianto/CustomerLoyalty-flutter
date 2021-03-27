@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'login_page.dart';
 import 'home_page.dart';
 import 'profile.dart';
-import 'news.dart';
 import 'Util/glob_var.dart';
 import 'Util/utils.dart';
 import 'Util/life_cycle_manager.dart';

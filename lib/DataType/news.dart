@@ -18,7 +18,7 @@ class NewsBanner{
     this.msg_id = json[jsonKeys[2]];
     this.message_body = json[jsonKeys[3]];
     this.message_image = Base64Decoder().convert(json[jsonKeys[4]]);
-    this.date = DateTime.parse(json[jsonKeys[5]]);
+    this.date = DateTime.parse(json[jsonKeys[5]]).toLocal();
   }
 
 

@@ -25,7 +25,7 @@ class Transaction{
         DOCUMENT_TYPE = json["DOCUMENT_TYPE"],
         POS_NAME = json["POS_NAME"],
         CUST_NAME = json["CUST_NAME"],
-        TRANSACTION_DATE = DateTime.parse(json["TRANSACTION_DATE"]),
+        TRANSACTION_DATE = DateTime.parse(json["TRANSACTION_DATE"]).toLocal(),
         POINT_EARN = json["POINT_EARN"],
         GRAND_TOTAL = json["GRAND_TOTAL"]
   ;
