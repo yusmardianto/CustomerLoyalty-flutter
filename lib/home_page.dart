@@ -220,7 +220,7 @@ class _HomePageState extends State<HomePage> {
                     Container(
                       padding: EdgeInsets.only(top: 15),
                       child: CarouselSlider(
-                        options: CarouselOptions(height: 155.0),
+                        options: CarouselOptions(height: 155.0,enableInfiniteScroll: false,autoPlay: true,autoPlayAnimationDuration: Duration(seconds: 3)),
                         items: (BannerList.length==0)?[1].map((i){
                           return Container(
                             alignment: Alignment.center,
