@@ -187,6 +187,10 @@ class _LoginPageState extends State<LoginPage> {
                                                          value == null || value.isEmpty ? 'Data tidak boleh kosong' : null,
                                                          name: "user",
                                                          controller: userText,
+                                                         onChanged: (value){
+                                                           if(checked)prefs.setString("username",value);
+                                                           else prefs.remove("username");
+                                                         },
                                                          decoration: InputDecoration(
                                                              focusedBorder: new OutlineInputBorder(
                                                                borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
