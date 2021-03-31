@@ -9,6 +9,7 @@ class Vouchers{
         // {"cust_id": globVar.user.CUST_ID, "corp": globVar.user.CORP},
         {
           "corp": globVar.auth.corp,
+          "cust_id" : globVar.user.CUST_ID,
         },
         globVar.hostRest + "/vouchers/", secure: true, many: true);
     return res;
