@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 
 import "../main.dart";
+import 'users.dart';
 import '../DataType/voucher.dart';
 
 class Vouchers{
@@ -35,6 +36,7 @@ class Vouchers{
           "voucher_id":voucher_id
         },
         globVar.hostRest + "/voucher/redeem", secure: true);
+    if(res["STATUS"]==1)await Users().refreshUser(globVar.user.CUST_ID,globVar.auth.corp);
     return {"STATUS":res["STATUS"]==1,"DATA":res["DATA"]};
     }
     catch(e){

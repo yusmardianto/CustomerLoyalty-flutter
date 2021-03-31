@@ -99,8 +99,8 @@ class User {
     "LOYALTY_LEVEL":LOYALTY_LEVEL,
     "CITY" : CITY,
     "PROVINCE" : PROVINCE,
-    "LOYALTY_LEVEL_IMAGE":Base64Encoder().convert(LOYALTY_LEVEL_IMAGE),
-    "CUST_PROFILE_IMAGE" : Base64Encoder().convert(CUST_PROFILE_IMAGE),
+    "LOYALTY_LEVEL_IMAGE":LOYALTY_LEVEL_IMAGE==null?null:Base64Encoder().convert(LOYALTY_LEVEL_IMAGE),
+    "CUST_PROFILE_IMAGE" :CUST_PROFILE_IMAGE==null?null: Base64Encoder().convert(CUST_PROFILE_IMAGE),
   };
 
   Map<String, dynamic> toJsonDisplay()=>{

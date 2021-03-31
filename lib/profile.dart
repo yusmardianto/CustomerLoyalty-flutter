@@ -68,7 +68,7 @@ class _ProfileState extends State<Profile> {
                     children: [
                       Expanded(flex: 1,child: SizedBox()),
                       Expanded(
-                        flex: 5,
+                        flex: 7,
                         child:
                         InkWell(
                           onTap: ()async{
@@ -200,7 +200,7 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       Expanded(
-                        flex: 1,
+                        flex: 2,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -213,7 +213,7 @@ class _ProfileState extends State<Profile> {
                                       // print(_formKey.currentState.value);
                                       final Map<String, dynamic> mapUser = new Map<String, dynamic>.from(_formKey.currentState.value);
                                       for(var i=0;i<mapUser.keys.length;i++){
-                                        mapUser.update(mapUser.keys.toList()[i], (value) => value.trim());
+                                        mapUser.update(mapUser.keys.toList()[i], (value) => (value is String)?value.trim():value);
                                       }
                                       mapUser["cust_id"] = globVar.user.CUST_ID;
                                       mapUser["corp"] = globVar.auth.corp;

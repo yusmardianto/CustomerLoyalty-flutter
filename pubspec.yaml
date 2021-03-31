@@ -29,6 +29,7 @@ dependencies:
   flutter_widget_from_html:
   html_unescape:
   url_launcher:
+  pull_to_refresh:
   flutter:
     sdk: flutter
 

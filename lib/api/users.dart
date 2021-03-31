@@ -9,7 +9,7 @@ class Users{
     if(res["STATUS"]!=1){
       return false;
     }
-    // print("test $res");
+    print("test $res");
     globVar.user = User.fromJson(res["DATA"][0]);
     utils.backupGlobVar();
     return true;

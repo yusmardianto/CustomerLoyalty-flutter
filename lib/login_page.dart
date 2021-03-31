@@ -540,10 +540,10 @@ class _LoginPageState extends State<LoginPage> {
                                                                    // print(_formKey.currentState.value);
                                                                     final Map<String, dynamic> mapUser = new Map<String, dynamic>.from(_formKey.currentState.value);
                                                                     for(var i=0;i<mapUser.keys.length;i++){
-                                                                      mapUser.update(mapUser.keys.toList()[i], (value) => value.trim());
+                                                                      mapUser.update(mapUser.keys.toList()[i], (value) => (value is String)?value.trim():value);
                                                                     }
                                                                     mapUser.update("tgl_lahir", (value) => DateFormat("dd-MMM-yyyy").format(value));
-                                                                   mapUser["corp"] = globVar.auth.corp;
+                                                                   mapUser["corp"] = "TBG";
                                                                    Future future = Auths().register(mapUser);
                                                                    var res = await utils.showLoadingFuture(context,future);
                                                                    utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
