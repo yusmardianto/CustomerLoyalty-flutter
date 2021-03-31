@@ -160,8 +160,8 @@ class _ProfileState extends State<Profile> {
                             child: CircleAvatar(
                               backgroundColor: Colors.grey,
                               radius: 90,
-                              backgroundImage: (globVar.user.CUST_PROFILE_IMAGE==null)?null:profileImage.image,
-                              child: (globVar.user.CUST_PROFILE_IMAGE==null)?Icon(Icons.person,color: Colors.white,size: 150,):null,
+                              backgroundImage: (globVar.user!=null &&globVar.user.CUST_PROFILE_IMAGE==null)?null:profileImage.image,
+                              child: (globVar.user!=null &&globVar.user.CUST_PROFILE_IMAGE==null)?Icon(Icons.person,color: Colors.white,size: 150,):null,
                             ),
                           ),
                         ),

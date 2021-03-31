@@ -139,6 +139,9 @@ class _LoginPageState extends State<LoginPage> {
                                onPressed: (){
                                  final _formKey = GlobalKey<FormBuilderState>();
                                  bool obscure = true;
+                                 bool checked = prefs.getBool("saveUsername")??false;
+                                 final userText = TextEditingController();
+                                 userText.text = prefs.getString("username")??"";
                                  showModalBottomSheet(
                                    isScrollControlled: true,
                                    context: context,
@@ -183,6 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                                                          validator: (value) =>
                                                          value == null || value.isEmpty ? 'Data tidak boleh kosong' : null,
                                                          name: "user",
+                                                         controller: userText,
                                                          decoration: InputDecoration(
                                                              focusedBorder: new OutlineInputBorder(
                                                                borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
@@ -231,6 +235,28 @@ class _LoginPageState extends State<LoginPage> {
                                                              hintStyle: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,fontStyle: FontStyle.italic),
                                                              hintText: "Password"
                                                          ),
+                                                       ),
+                                                     ),
+                                                     Container(
+                                                       alignment: Alignment.centerLeft,
+                                                       child: Row(
+                                                         mainAxisAlignment: MainAxisAlignment.start,
+                                                         mainAxisSize: MainAxisSize.min,
+                                                         children: [
+                                                           Checkbox(
+                                                             value: checked,
+                                                             onChanged: (value){
+                                                               setState((){
+                                                                 checked = value;
+                                                               });
+                                                               prefs.setBool("saveUsername", value);
+                                                               _formKey.currentState.save();
+                                                               if(value)prefs.setString("username",_formKey.currentState.value['user']);
+                                                               else prefs.remove("username");
+                                                             },
+                                                           ),
+                                                           Text("Save Username",style: TextStyle(fontSize: 16,color: Colors.black54),),
+                                                         ],
                                                        ),
                                                      ),
                                                      Container(
