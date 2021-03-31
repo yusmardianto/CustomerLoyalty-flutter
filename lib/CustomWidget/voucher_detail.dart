@@ -123,6 +123,7 @@ class VoucherDialog{
                                       Future future = Vouchers().redeem(voucher.LOYALTY_CAMPAIGN_ID);
                                       var res = await utils.showLoadingFuture(context,future);
                                       utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
+                                      Navigator.pop(context,true);
                                     },),
                                 ),
                               ],

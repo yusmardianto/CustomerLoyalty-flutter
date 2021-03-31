@@ -27,6 +27,7 @@ class Vouchers{
   }
 
   redeem(voucher_id)async {
+    // print("id $voucher_id");
     try{
     var res = await utils.put(
       // {"cust_id": globVar.user.CUST_ID, "corp": globVar.user.CORP},
@@ -40,7 +41,7 @@ class Vouchers{
     return {"STATUS":res["STATUS"]==1,"DATA":res["DATA"]};
     }
     catch(e){
-      print(e);
+      print("$e");
       return {"STATUS":false,"DATA":"Gagal menghubungi server. ${e}."};
     }
   }

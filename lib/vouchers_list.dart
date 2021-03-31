@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'CustomShape/multi_shaper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'CustomShape/voucher_shape.dart';
+import 'api/users.dart';
 import 'main.dart';
 import 'DataType/voucher.dart';
 import 'api/vouchers.dart';
@@ -83,52 +84,65 @@ class _VouchersListState extends State<VouchersList> {
         bool genBarcode = await showDialog(
             context: context,
             builder: (context)=>SimpleDialog(
-          children: [
-            Icon(FontAwesomeIcons.gifts,size: 60,),
-            SizedBox(height: 15),
-            Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 16,fontWeight: FontWeight.w400),)),
-            SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FlatButton(
-                    minWidth: 120,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                Icon(FontAwesomeIcons.gifts,size: 60,),
+                SizedBox(height: 15),
+                Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 16,fontWeight: FontWeight.w400),)),
+                SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FlatButton(
+                        minWidth: 120,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                        ),
+                        padding: EdgeInsets.all(10),
+                        onPressed: (){
+                          Navigator.pop(context,false);
+                        },
+                        child: Text("Batal",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
                     ),
-                    padding: EdgeInsets.all(10),
-                    onPressed: (){
-                      Navigator.pop(context,false);
-                    },
-                    child: Text("Batal",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
-                ),
-                SizedBox(width: 15),
-                FlatButton(
-                    minWidth: 120,
-                    color: Colors.green,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0)
+                    SizedBox(width: 15),
+                    FlatButton(
+                        minWidth: 120,
+                        color: Colors.green,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0)
+                        ),
+                        padding: EdgeInsets.all(10),
+                        onPressed: (){
+                          Navigator.pop(context,true);
+                        },
+                        child: Text("Gunakan",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
                     ),
-                    padding: EdgeInsets.all(10),
-                    onPressed: (){
-                      Navigator.pop(context,true);
-                    },
-                    child: Text("Gunakan",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                  ],
                 ),
               ],
-            ),
-          ],
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
-              side: BorderSide(color: Colors.transparent)
-          ),
-          contentPadding: EdgeInsets.all(20),
-        )
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                  side: BorderSide(color: Colors.transparent)
+              ),
+              contentPadding: EdgeInsets.all(20),
+            )
         );
+
         if(genBarcode??false){
-          // utils.genBarcode(context,e.TRANSACTION_CODE);
+          Future future = Vouchers().useVoucher(e.LOYALTY_CUST_REWARD_ID);
+          var res = await utils.showLoadingFuture(context,future);
+          if(res["STATUS"]){
+            print(res["DATA"]);
+            await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
+            await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+            setState(() {
+
+            });
+          }
+          else{
+            utils.toast(res["DATA"],type: "ERROR");
+          }
         }
       },
       child: Padding(
@@ -320,8 +334,9 @@ class _VouchersListState extends State<VouchersList> {
                       itemCount: voucherList.length,
                       itemBuilder: (context,index)=>InkWell(
                         onTap: ()async{
-                          await VoucherDialog().showDialog(voucherList[index], context);
-                          loadMyVoucher();
+                          var refresh = await VoucherDialog().showDialog(voucherList[index], context);
+                          print("test $bool");
+                          if(refresh??false)loadMyVoucher();
                         },
                         child: Hero(
                           tag: "details",

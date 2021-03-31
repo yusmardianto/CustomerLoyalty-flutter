@@ -153,7 +153,7 @@ class Util{
         futureResponse.timeout(
             Duration(seconds: second));
       http.Response response = await Future.sync(() => futureResponse);
-      print(response.body.toString());
+      // print(response.body.toString());
       if(htmlErrorTitle(response.body.toString())!=""){
         return {"STATUS":(response.statusCode != 200)?0:1,"DATA":htmlErrorTitle(response.body.toString())};
       }
