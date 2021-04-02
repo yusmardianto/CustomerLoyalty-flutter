@@ -62,11 +62,15 @@ class _HomePageState extends State<HomePage> {
     await loadNews();
     _refreshController.refreshCompleted();
   }
-
+  void initialization()async{
+    await loadVoucher();
+    print("test ${globVar.user.CUST_ID} ${globVar.auth.corp}");
+    await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+    await loadNews();
+  }
   @override
   void initState() {
-    loadVoucher();
-    loadNews();
+    initialization();
     super.initState();
   }
   @override
@@ -262,8 +266,12 @@ class _HomePageState extends State<HomePage> {
                                     return Builder(
                                       builder: (BuildContext context) {
                                         return InkWell(
-                                          onTap: (){
-                                            Navigator.push(context,MaterialPageRoute(builder: (context)=>news.News(i)));
+                                          onTap: ()async{
+                                            await Navigator.push(context,MaterialPageRoute(builder: (context)=>news.News(i)));
+                                            await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                                            setState((){
+
+                                            });
                                           },
                                           child: Container(
                                             width: MediaQuery.of(context).size.width,
@@ -326,6 +334,7 @@ class _HomePageState extends State<HomePage> {
                                     onTap: ()async{
                                       // Navigator.pushNamed(context, "/vouchers",);
                                       await Navigator.push(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: true,)));
+                                      await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                                       setState(() {
 
                                       });
@@ -360,6 +369,7 @@ class _HomePageState extends State<HomePage> {
                             (globVar.myVouchers.length==0)?InkWell(
                               onTap: () async {
                                 await Navigator.pushNamed(context, '/vouchers');
+                                await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                                 setState(() {
                                 });
                               },
@@ -585,11 +595,11 @@ class _HomePageState extends State<HomePage> {
         onTap: (idx)async{
           switch(idx){
             case 0 : {
-              Navigator.pushReplacementNamed(context, "/home");
+              // Navigator.pushReplacementNamed(context, "/home");
+              _onRefresh();
             }break;
             case 1 : {
-              Navigator.pushNamed(context, "/transactions");
-
+              await Navigator.pushNamed(context, "/transactions");
             }break;
             // case 2 : {
 
@@ -653,11 +663,17 @@ class _HomePageState extends State<HomePage> {
               // );
             // }break;
             case 2 : {
-              Navigator.pushNamed(context, "/vouchers");
+              await Navigator.pushNamed(context, "/vouchers");
             }break;
             case 3 : {
-              Navigator.pushNamed(context, "/profile");
+              await Navigator.pushNamed(context, "/profile");
             }break;
+          }
+          if(idx!=0){
+            await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+            setState(() {
+
+            });
           }
         },
         items: [

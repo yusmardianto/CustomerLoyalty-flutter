@@ -1,3 +1,4 @@
+import 'package:Customer_loyalty/api/users.dart';
 import 'package:flutter/widgets.dart';
 import '../main.dart';
 class LifeCycleManager extends StatefulWidget {
@@ -28,6 +29,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     }
     else if(state == AppLifecycleState.resumed){
       // await utils.removeBackupGlobVar();
+      if(globVar!=null && globVar.user!=null) await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
     }
   }
   @override

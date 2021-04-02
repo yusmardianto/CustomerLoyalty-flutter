@@ -317,7 +317,7 @@ class Util{
                     SizedBox(height: 25,),
                     (code==null)?Container(height: 75,child: Center(child: Text('Code tidak valid')),):SvgPicture.string(Barcode.code128().toSvg(code, width: 200, height: 75,drawText: false)),
                     SizedBox(height: 15,),
-                    (code==null)?Container():Center(child: Text(code,style: GoogleFonts.robotoCondensed(fontSize: 21),)),
+                    (code==null)?Container():Center(child: Text(code,style: GoogleFonts.robotoSlab(fontSize: 21),)),
                   ],
                 );
               },

@@ -135,7 +135,7 @@ class _VouchersListState extends State<VouchersList> {
           if(res["STATUS"]){
             print(res["DATA"]);
             await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
-            await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+            // await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
             setState(() {
 
             });
@@ -336,7 +336,7 @@ class _VouchersListState extends State<VouchersList> {
                         onTap: ()async{
                           var refresh = await VoucherDialog().showDialog(voucherList[index], context);
                           print("test $bool");
-                          if(refresh??false)loadMyVoucher();
+                          if(refresh??false) await loadMyVoucher();
                         },
                         child: Hero(
                           tag: "details",
