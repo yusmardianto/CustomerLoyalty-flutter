@@ -7,6 +7,7 @@ import '../DataType/voucher.dart';
 import '../main.dart';
 class GlobVar{
   String hostRest = "https://loyalty.thamrin.xyz/ords/loyalty/loyaltymobile";
+  String playStore = "https://play.google.com/store/apps/details?id=com.thamringroup.customerloyalty";
 
   //=====================isLoading============================
   bool _isLoading;

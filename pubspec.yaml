@@ -30,6 +30,8 @@ dependencies:
   html_unescape:
   url_launcher:
   pull_to_refresh:
+  in_app_update:
+  package_info_plus:
   flutter:
     sdk: flutter
 

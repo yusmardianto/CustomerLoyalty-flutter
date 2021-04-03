@@ -11,6 +11,8 @@ import 'transactions.dart';
 import 'vouchers_list.dart';
 import 'CustomShape/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:in_app_update/in_app_update.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 // Images imageHandler = new Images();
 GlobVar globVar;
@@ -30,6 +32,60 @@ void main() async{
       });
 }
 
+_check_Update()async{
+  try{
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    // setState(() {
+    //   curentVers = info.version;
+    // });
+    AppUpdateInfo _updateInfo;
+    _updateInfo = await InAppUpdate.checkForUpdate();
+    if(_updateInfo?.updateAvailability == 2){
+      // String currentVersion = info.version.trim();
+      // String latestversion = '0.0.0';
+      // var result = await util.getSettingParams('MOBILE_APP_VERSION');
+      // if(result['STATUS']=='SUCCESS'){
+      //   latestversion = result['DATA'];
+      // }
+//       print([currentVersion,latestversion]);
+//       var current = currentVersion.split('.');
+//       var latest = latestversion.split('.');
+//       if(int.parse(current[0])==int.parse(latest[0])){
+//         if(int.parse(current[1])==int.parse(latest[1])){
+//           if(int.parse(current[2])<int.parse(latest[2])) {
+//             await util.updateDialog(context);
+// //              await InAppUpdate.performImmediateUpdate();
+//           }
+//           else{
+//             await InAppUpdate.startFlexibleUpdate();
+//             await InAppUpdate.completeFlexibleUpdate();
+//           }
+//         }
+//         else if(int.parse(current[1])<int.parse(latest[1])) {
+//           await util.updateDialog(context);
+// //            await InAppUpdate.performImmediateUpdate();
+//         }
+//         else{
+//           await InAppUpdate.startFlexibleUpdate();
+//           await InAppUpdate.completeFlexibleUpdate();
+//         }
+//       }
+//       else if(int.parse(current[0])<int.parse(latest[0])) {
+//         await util.updateDialog(context);
+// //          await InAppUpdate.performImmediateUpdate();
+//       }
+//       else{
+        await InAppUpdate.startFlexibleUpdate();
+        await InAppUpdate.completeFlexibleUpdate();
+      // }
+    }
+  }
+  catch(e){
+    await Future.delayed(Duration(milliseconds: 500));
+    await utils.launchBrowserURL(globVar.playStore);
+//      util.showFlushbar(context, "Failed checking updates. $e.");
+  }
+}
 preload()async{
     preLoadState = "Mempersiapkan data";
     try{
@@ -48,6 +104,7 @@ preload()async{
     preLoadPercentage = 2/2-0.02;
     await Future.delayed(Duration(seconds: 2));
     }
+    await _check_Update();
 }
 
 class MyApp extends StatelessWidget {
