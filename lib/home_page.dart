@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                 )
             );
             if(exit??false){
-              SystemNavigator.pop();
+                SystemNavigator.pop();
             }
             return false;
         },

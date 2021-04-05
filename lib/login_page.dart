@@ -69,7 +69,12 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           padding: EdgeInsets.all(10),
                           onPressed: ()async {
-                            await utils.backupGlobVar();
+                            try{
+                              await utils.backupGlobVar();
+                            }
+                            catch(e){
+                              utils.toast(e);
+                            }
                             Navigator.pop(context,true);
                           },
                           child: Text("Keluar",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
@@ -86,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
               )
           );
           if(exit??false){
-            SystemNavigator.pop();
+              SystemNavigator.pop();
           }
           return false;
         },

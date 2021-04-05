@@ -30,7 +30,7 @@ class _SplashscreenState extends State<Splashscreen> {
         });
       }
       else{
-        if (percentage<=preLoadPercentage){
+        if (percentage!=null&&percentage<=preLoadPercentage){
           percentage = preLoadPercentage;
           state = preLoadState;
         }

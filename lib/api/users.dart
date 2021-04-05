@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
+
 import "../main.dart";
 import '../DataType/user.dart';
 
@@ -12,6 +14,7 @@ class Users{
     // print("test $res");
     globVar.user = User.fromJson(res["DATA"][0]);
     utils.backupGlobVar();
+    // print("current ${ModalRoute.of(navKey.currentContext).settings.name}");
     return true;
   }
   update (Map<String,dynamic> user)async{

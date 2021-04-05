@@ -224,7 +224,7 @@ class Util{
   backupGlobVar()async{
     if(prefs!=null){
       print("saved");
-      await prefs.setString("token", JsonEncoder().convert(globVar.tokenRest.toJson()));
+      if(globVar.tokenRest!=null)await prefs.setString("token", JsonEncoder().convert(globVar.tokenRest.toJson()));
       if(globVar.auth!=null) await prefs.setString("auth", JsonEncoder().convert(globVar.auth.toJson()));
       if(globVar.user!=null) await prefs.setString("user", JsonEncoder().convert(globVar.user.toJson()));
     }

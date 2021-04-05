@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -12,7 +13,7 @@ import 'vouchers_list.dart';
 import 'CustomShape/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:in_app_update/in_app_update.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+// import 'package:package_info_plus/package_info_plus.dart';
 
 // Images imageHandler = new Images();
 GlobVar globVar;
@@ -21,7 +22,7 @@ SharedPreferences prefs;
 String preLoadState;
 double preLoadPercentage;
 NumberFormat numberFormat = NumberFormat.decimalPattern('id');
-
+GlobalKey<NavigatorState> navKey = new GlobalKey<NavigatorState>();
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,14 +33,21 @@ void main() async{
       });
 }
 
-_check_Update()async{
+_check_Update(context)async{
   try{
-    final PackageInfo info = await PackageInfo.fromPlatform();
+    print("checking update");
+    installUpdate()async{
+      utils.toast("Installing");
+      await InAppUpdate.completeFlexibleUpdate();
+    }
+    // final PackageInfo info = await PackageInfo.fromPlatform();
     // setState(() {
     //   curentVers = info.version;
     // });
     AppUpdateInfo _updateInfo;
     _updateInfo = await InAppUpdate.checkForUpdate();
+    // print("update  ${_updateInfo.updateAvailability}");
+    // utils.toast("test ${_updateInfo.updateAvailability}");
     if(_updateInfo?.updateAvailability == 2){
       // String currentVersion = info.version.trim();
       // String latestversion = '0.0.0';
@@ -75,12 +83,14 @@ _check_Update()async{
 // //          await InAppUpdate.performImmediateUpdate();
 //       }
 //       else{
-        await InAppUpdate.startFlexibleUpdate();
-        await InAppUpdate.completeFlexibleUpdate();
-      // }
+      utils.toast("Mendownload Aplikasi terbaru");
+      await utils.showLoadingFuture(context,InAppUpdate.startFlexibleUpdate());
+      await installUpdate();      // }
     }
   }
   catch(e){
+    print(e);
+    utils.toast("Error, $e");
     await Future.delayed(Duration(milliseconds: 500));
     await utils.launchBrowserURL(globVar.playStore);
 //      util.showFlushbar(context, "Failed checking updates. $e.");
@@ -104,7 +114,6 @@ preload()async{
     preLoadPercentage = 2/2-0.02;
     await Future.delayed(Duration(seconds: 2));
     }
-    await _check_Update();
 }
 
 class MyApp extends StatelessWidget {
@@ -113,6 +122,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return LifeCycleManager(
       child: MaterialApp(
+        navigatorKey: navKey,
         debugShowCheckedModeBanner: false,
         title: 'Customer Loyalty',
         theme: ThemeData(
@@ -131,7 +141,8 @@ class MyApp extends StatelessWidget {
             } else {
               // Loading is done, return the app:
               // print("user session ${globVar.user}");
-              return (globVar.user!=null)?HomePage():LoginPage();
+              _check_Update(context);
+                  return (globVar.user!=null)?HomePage():LoginPage();
             }
           },
         ),
