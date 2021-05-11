@@ -24,7 +24,7 @@ class Auths{
     }
     catch(e){
       print(e);
-      return {"STATUS":false,"DATA":"Gagal menghubungi server. ${e}."};
+      return {"STATUS":false,"DATA":"${e}."};
     }
   }
   register (Map<String,dynamic> user)async{
