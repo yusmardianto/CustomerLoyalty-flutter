@@ -87,7 +87,7 @@ class _VouchersListState extends State<VouchersList> {
               children: [
                 Icon(FontAwesomeIcons.gifts,size: 60,),
                 SizedBox(height: 15),
-                Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 16,fontWeight: FontWeight.w400),)),
+                Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 16,fontWeight: FontWeight.w400),)),
                 SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -102,7 +102,7 @@ class _VouchersListState extends State<VouchersList> {
                         onPressed: (){
                           Navigator.pop(context,false);
                         },
-                        child: Text("Batal",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                        child: Text("Batal",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
                     ),
                     SizedBox(width: 15),
                     FlatButton(
@@ -115,7 +115,7 @@ class _VouchersListState extends State<VouchersList> {
                         onPressed: (){
                           Navigator.pop(context,true);
                         },
-                        child: Text("Gunakan",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                        child: Text("Gunakan",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
                     ),
                   ],
                 ),
@@ -183,20 +183,20 @@ class _VouchersListState extends State<VouchersList> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 34, fontStyle: FontStyle.italic),),),
-                          Text(e.COUPON??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
+                          Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 34, fontStyle: FontStyle.normal),),),
+                          Text(e.COUPON??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
                         ],
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
+                          Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
                           Padding(
                             padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
                             child: Row(
                               children: [
-                                Text("${e.REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
+                                Text("${e.REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
                                 Container(
                                   padding: EdgeInsets.only(left: 5),
                                   child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
@@ -208,7 +208,7 @@ class _VouchersListState extends State<VouchersList> {
                       ),
                     ],
                   ),
-                  Text(e.PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 16, fontStyle: FontStyle.italic),),),
+                  Text(e.PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 16, fontStyle: FontStyle.normal),),),
                 ],
               ),
             ),
@@ -245,9 +245,9 @@ class _VouchersListState extends State<VouchersList> {
                         borderRadius: BorderRadius.circular(15),
                         borderSide: BorderSide(color: Colors.transparent)
                     ),
-                    hintStyle: TextStyle(fontWeight: FontWeight.w300,fontStyle: FontStyle.italic,fontSize: 18),
+                    hintStyle: TextStyle(fontWeight: FontWeight.w300,fontStyle: FontStyle.normal,fontSize: 18),
                   ),
-                  style: TextStyle(fontWeight: FontWeight.w300,fontStyle: FontStyle.italic,fontSize: 18),
+                  style: TextStyle(fontWeight: FontWeight.w300,fontStyle: FontStyle.normal,fontSize: 18),
                 ),
               ),
               (globVar.myVouchers.length==0)?Container(height: 250,child: Center(child: Text("Kamu belum punya voucher",style: TextStyle(color: Colors.grey),),),):Flexible(
@@ -311,9 +311,9 @@ class _VouchersListState extends State<VouchersList> {
                             borderRadius: BorderRadius.circular(15),
                             borderSide: BorderSide(color: Colors.transparent)
                         ),
-                        hintStyle: TextStyle(fontWeight: FontWeight.w300,fontStyle: FontStyle.italic,fontSize: 18),
+                        hintStyle: TextStyle(fontWeight: FontWeight.w300,fontStyle: FontStyle.normal,fontSize: 18),
                       ),
-                      style: TextStyle(fontWeight: FontWeight.w300,fontStyle: FontStyle.italic,fontSize: 18),
+                      style: TextStyle(fontWeight: FontWeight.w300,fontStyle: FontStyle.normal,fontSize: 18),
                     ),
                   ),
                   Expanded(
@@ -365,20 +365,20 @@ class _VouchersListState extends State<VouchersList> {
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 34, fontStyle: FontStyle.italic),),),
-                                          Text(voucherList[index].CAMPAIGN_TYPE??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
+                                          Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 34, fontStyle: FontStyle.normal),),),
+                                          Text(voucherList[index].CAMPAIGN_TYPE??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
                                         ],
                                       ),
                                       Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         crossAxisAlignment: CrossAxisAlignment.end,
                                         children: [
-                                          Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
+                                          Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
                                           Padding(
                                             padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
                                             child: Row(
                                               children: [
-                                                Text("${voucherList[index].REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
+                                                Text("${voucherList[index].REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
                                                 Container(
                                                   padding: EdgeInsets.only(left: 5),
                                                   child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
@@ -386,7 +386,7 @@ class _VouchersListState extends State<VouchersList> {
                                               ],
                                             ),
                                           ),
-                                          Text(voucherList[index].NAME,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 16, fontStyle: FontStyle.italic),),),
+                                          Text(voucherList[index].NAME,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 16, fontStyle: FontStyle.normal),),),
                                         ],
                                       ),
                                     ],

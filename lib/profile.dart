@@ -196,7 +196,7 @@ class _ProfileState extends State<Profile> {
                       Expanded(
                         flex: 1,
                         child: Container(
-                          child: Text(globVar.user!=null?globVar.user.NAME:"#NAME#",style: TextStyle(color: Colors.white,fontSize: 16,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700),),
+                          child: Text(globVar.user!=null?globVar.user.NAME:"#NAME#",style: TextStyle(color: Colors.white,fontSize: 16,fontStyle: FontStyle.normal,fontWeight: FontWeight.w700),),
                         ),
                       ),
                       Expanded(
@@ -253,7 +253,7 @@ class _ProfileState extends State<Profile> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(FontAwesomeIcons.check,color: Colors.white,size: 18,),
-                                      Text(" Save Profil",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w700),),
+                                      Text(" Save Profil",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w700),),
                                     ],
                                   )
                                   :Row(
@@ -261,7 +261,7 @@ class _ProfileState extends State<Profile> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Icon(FontAwesomeIcons.pencilAlt,color: Colors.white,size: 18,),
-                                        Text(" Edit Profil",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w700),),
+                                        Text(" Edit Profil",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w700),),
                                       ],
                                     ),
                             ),
@@ -272,7 +272,7 @@ class _ProfileState extends State<Profile> {
                                     builder: (context)=>SimpleDialog(
                                       children: [
                                         Icon(FontAwesomeIcons.signOutAlt,size: 85,),
-                                        Center(child: Text("Logout dari akun ini?",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 16,fontWeight: FontWeight.w400),)),
+                                        Center(child: Text("Logout dari akun ini?",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 16,fontWeight: FontWeight.w400),)),
                                         SizedBox(height: 15),
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
@@ -287,7 +287,7 @@ class _ProfileState extends State<Profile> {
                                                 onPressed: (){
                                                   Navigator.pop(context,false);
                                                 },
-                                                child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                                                child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
                                             ),
                                             SizedBox(width: 15),
                                             FlatButton(
@@ -302,7 +302,7 @@ class _ProfileState extends State<Profile> {
                                                   prefs.remove("user");
                                                   Navigator.pop(context,true);
                                                 },
-                                                child: Text("Logout",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                                                child: Text("Logout",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
                                             ),
                                           ],
                                         ),
@@ -332,7 +332,7 @@ class _ProfileState extends State<Profile> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(FontAwesomeIcons.signOutAlt,color: Colors.white,size: 20,),
-                                  Text("  Logout",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w700),),
+                                  Text("  Logout",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w700),),
                                 ],
                               ),
                             ),
@@ -390,7 +390,7 @@ class _ProfileState extends State<Profile> {
                                                     ),
                                                   ),
                                                   contentPadding: EdgeInsets.all(23),
-                                                  hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                  hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
                                                   hintText: "Password lama"
                                               ),
                                             ),
@@ -422,7 +422,7 @@ class _ProfileState extends State<Profile> {
                                                     ),
                                                   ),
                                                   contentPadding: EdgeInsets.all(23),
-                                                  hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                  hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
                                                   hintText: "Password baru"
                                               ),
                                             ),
@@ -452,7 +452,7 @@ class _ProfileState extends State<Profile> {
                                                     ),
                                                   ),
                                                   contentPadding: EdgeInsets.all(23),
-                                                  hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                  hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
                                                   hintText: "Konfirmasi password"
                                               ),
                                               validator: (value)=>
@@ -476,7 +476,7 @@ class _ProfileState extends State<Profile> {
                                           onPressed: (){
                                             Navigator.pop(context,false);
                                           },
-                                          child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                                          child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
                                       ),
                                       SizedBox(width: 15),
                                       FlatButton(
@@ -508,7 +508,7 @@ class _ProfileState extends State<Profile> {
                                                 }
                                             }
                                           },
-                                          child: Text("Change",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                                          child: Text("Change",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
                                       ),
                                     ],
                                   ),
@@ -534,7 +534,7 @@ class _ProfileState extends State<Profile> {
                         children: [
                           Icon(FontAwesomeIcons.key,size: 15 ,),
                           SizedBox(width: 10,),
-                          Text("Baru",style: TextStyle(fontWeight: FontWeight.w400, color: Colors.black,fontSize: 16,fontStyle: FontStyle.italic,),),
+                          Text("Baru",style: TextStyle(fontWeight: FontWeight.w400, color: Colors.black,fontSize: 16,fontStyle: FontStyle.normal,),),
                         ],
                       ),
                     ),
@@ -568,7 +568,7 @@ class _ProfileState extends State<Profile> {
                                     border: (toggleEdit)?null:InputBorder.none,
                                     hintText: val==""||val==null?"-":"",
                                   ),
-                                  style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6)),
+                                  style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.normal,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6)),
                                   format: DateFormat("dd-MMM-yyyy"),
                                   inputType: InputType.date,
                                 );
@@ -610,7 +610,7 @@ class _ProfileState extends State<Profile> {
                                     border: (toggleEdit)?null:InputBorder.none,
                                     hintText: val==""||val==null?"-":"",
                                   ),
-                                  style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6)),
+                                  style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.normal,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6)),
                                 );
                               }
                               return Column(
@@ -620,10 +620,10 @@ class _ProfileState extends State<Profile> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Flexible(flex:1,child: Text(key.replaceAll("_", " "),style: TextStyle(fontSize: 14,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Color.fromRGBO(146, 146, 146, 1)),)),
+                                        Flexible(flex:1,child: Text(key.replaceAll("_", " "),style: TextStyle(fontSize: 14,fontStyle: FontStyle.normal,fontWeight: FontWeight.w700,color: Color.fromRGBO(146, 146, 146, 1)),)),
                                         Flexible(flex:1,child: Align(alignment: Alignment.centerRight,
                                             child:formWidget
-                                            // Text(val,textAlign: TextAlign.right,style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6)))
+                                            // Text(val,textAlign: TextAlign.right,style: TextStyle(fontSize: (val.length>=20)?12:15,fontStyle: FontStyle.normal,fontWeight: FontWeight.w700,color: Colors.black.withOpacity(0.6)))
                                         )),
                                       ],
                                     ),

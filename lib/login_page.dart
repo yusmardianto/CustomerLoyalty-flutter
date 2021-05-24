@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context)=>SimpleDialog(
                 children: [
                   Icon(Icons.meeting_room,size: 85,),
-                  Center(child: Text("Sudah ingin keluar ?",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 14,fontWeight: FontWeight.w300),)),
+                  Center(child: Text("Sudah ingin keluar ?",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 14,fontWeight: FontWeight.w300),)),
                   SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: (){
                             Navigator.pop(context,false);
                           },
-                          child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                          child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
                       ),
                       SizedBox(width: 15),
                       FlatButton(
@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                             }
                             Navigator.pop(context,true);
                           },
-                          child: Text("Keluar",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                          child: Text("Keluar",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
                       ),
                     ],
                   ),
@@ -126,9 +126,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   Container(
-                    child: Text("Customer Loyalty",style: TextStyle(color: Colors.black.withOpacity(0.75),fontSize: 28,fontWeight: FontWeight.w700, fontFamily: "Roboto",fontStyle: FontStyle.italic),),),
+                    child: Text("Customer Loyalty",style: TextStyle(color: Colors.black.withOpacity(0.75),fontSize: 28,fontWeight: FontWeight.w700, fontFamily: "Roboto",fontStyle: FontStyle.normal),),),
                   Container(
-                    child: Text("You don't earn loyalty in a day",style: TextStyle(color: Colors.black.withOpacity(0.75),fontSize: 16,fontWeight: FontWeight.w300, fontFamily: "Roboto",fontStyle: FontStyle.italic),),),
+                    child: Text("You don't earn loyalty in a day",style: TextStyle(color: Colors.black.withOpacity(0.75),fontSize: 16,fontWeight: FontWeight.w300, fontFamily: "Roboto",fontStyle: FontStyle.normal),),),
                   Expanded(
                    child: Padding(
                      padding: EdgeInsets.only(bottom: 115),
@@ -209,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                                                                ),
                                                              ),
                                                              contentPadding: EdgeInsets.all(23),
-                                                             hintStyle: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,fontStyle: FontStyle.italic),
+                                                             hintStyle: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,fontStyle: FontStyle.normal),
                                                              hintText: "Email atau Handphone"
                                                          ),
                                                        ),
@@ -241,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
                                                                ),
                                                              ),
                                                              contentPadding: EdgeInsets.all(23),
-                                                             hintStyle: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,fontStyle: FontStyle.italic),
+                                                             hintStyle: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,fontStyle: FontStyle.normal),
                                                              hintText: "Password"
                                                          ),
                                                        ),
@@ -271,7 +271,7 @@ class _LoginPageState extends State<LoginPage> {
                                                      Container(
                                                        padding: EdgeInsets.only(top:15),
                                                        alignment: Alignment.centerRight,
-                                                       child: Text("Lupa Password",style: TextStyle(fontWeight: FontWeight.w200,decoration: TextDecoration.underline,color: Color.fromRGBO(5,0,255,1),fontSize: 16,fontStyle: FontStyle.italic,),),
+                                                       child: Text("Lupa Password",style: TextStyle(fontWeight: FontWeight.w200,decoration: TextDecoration.underline,color: Color.fromRGBO(5,0,255,1),fontSize: 16,fontStyle: FontStyle.normal,),),
                                                      ),
                                                      Container(
                                                        padding: EdgeInsets.only(top: 25),
@@ -296,7 +296,7 @@ class _LoginPageState extends State<LoginPage> {
                                                                utils.toast("Data belum lengkap. Silakan cek kembali",type:"ERROR");
                                                              }
                                                            },
-                                                           child: Text("Login",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.white),)),
+                                                           child: Text("Login",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.normal,fontSize: 24,color: Colors.white),)),
                                                      ),
                                                    ],
                                                  ),
@@ -310,7 +310,7 @@ class _LoginPageState extends State<LoginPage> {
                                    )
                                  );
                                },
-                               child: Text("Login",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.white),)),
+                               child: Text("Login",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.normal,fontSize: 24,color: Colors.white),)),
                          ),
                          Container(
                            padding: const EdgeInsets.only(top: 15),
@@ -373,7 +373,7 @@ class _LoginPageState extends State<LoginPage> {
                                                                        ),
                                                                      ),
                                                                      contentPadding: EdgeInsets.all(23),
-                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
                                                                      hintText: "Nama"
                                                                  ),
                                                                ),
@@ -400,7 +400,7 @@ class _LoginPageState extends State<LoginPage> {
                                                                        ),
                                                                      ),
                                                                      contentPadding: EdgeInsets.all(23),
-                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
                                                                      hintText: "Tgl    /    Bln   /    Tahun"
                                                                  ),
                                                                ),
@@ -461,7 +461,7 @@ class _LoginPageState extends State<LoginPage> {
                                                                        ),
                                                                      ),
                                                                      contentPadding: EdgeInsets.all(23),
-                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
                                                                      hintText: "No Handphone"
                                                                  ),
                                                                ),
@@ -485,7 +485,7 @@ class _LoginPageState extends State<LoginPage> {
                                                                        ),
                                                                      ),
                                                                      contentPadding: EdgeInsets.all(23),
-                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
                                                                      hintText: "Alamat Email"
                                                                  ),
                                                                ),
@@ -519,7 +519,7 @@ class _LoginPageState extends State<LoginPage> {
                                                                        ),
                                                                      ),
                                                                      contentPadding: EdgeInsets.all(23),
-                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
                                                                      hintText: "Password"
                                                                  ),
                                                                ),
@@ -552,7 +552,7 @@ class _LoginPageState extends State<LoginPage> {
                                                                        ),
                                                                      ),
                                                                      contentPadding: EdgeInsets.all(23),
-                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.italic),
+                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
                                                                      hintText: "Ulangi Password"
                                                                  ),
                                                                ),
@@ -599,7 +599,7 @@ class _LoginPageState extends State<LoginPage> {
                                                                  utils.toast("Password tidak sama. Silakan cek kembali",type:"ERROR");
                                                                }
                                                            },
-                                                           child: Text("Daftar",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.white),)),
+                                                           child: Text("Daftar",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.normal,fontSize: 24,color: Colors.white),)),
                                                      ),
                                                    ],
                                                  ),
@@ -614,7 +614,7 @@ class _LoginPageState extends State<LoginPage> {
                                },
                                child: Container(
                                  alignment: Alignment.center,
-                                 child: Text("Daftar",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,fontSize: 24,color: Colors.black),),
+                                 child: Text("Daftar",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.normal,fontSize: 24,color: Colors.black),),
                                )),
                          ),
                        ],

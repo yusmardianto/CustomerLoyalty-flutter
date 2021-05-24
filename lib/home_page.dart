@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   List<NewsBanner> BannerList= [];
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
+  int bannerFocus,myVoucherFocus;
 
   loadNews()async{
     var res = await News().getNews();
@@ -37,6 +38,8 @@ class _HomePageState extends State<HomePage> {
         BannerList.add(NewsBanner.fromJson(res["DATA"][i]));
       }
       setState(() {
+        myVoucherFocus = 0;
+        bannerFocus = 0;
         globVar.isLoading = false;
       });
     }
@@ -56,17 +59,32 @@ class _HomePageState extends State<HomePage> {
   }
   void _onRefresh() async{
     print("refreshing");
-    await Future.delayed(Duration(milliseconds: 1000));
-    await loadVoucher();
-    await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-    await loadNews();
-    _refreshController.refreshCompleted();
+    try{
+      await Future.delayed(Duration(milliseconds: 1000));
+      await loadVoucher();
+      await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+      await loadNews();
+      _refreshController.refreshCompleted();
+    }
+    catch(e){
+      setState(() {
+        globVar.isLoading = false;
+      });
+    }
+
   }
   void initialization()async{
-    await loadVoucher();
-    print("test ${globVar.user.CUST_ID} ${globVar.auth.corp}");
-    await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-    await loadNews();
+    try{
+      await loadVoucher();
+      // print("test ${globVar.user.CUST_ID} ${globVar.auth.corp}");
+      await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+      await loadNews();
+    }catch(e){
+      setState(() {
+        globVar.isLoading = false;
+      });
+    }
+
   }
   @override
   void initState() {
@@ -84,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (context)=>SimpleDialog(
                   children: [
                     Icon(Icons.meeting_room,size: 85,),
-                    Center(child: Text("Sudah ingin keluar ?",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 16,fontWeight: FontWeight.w400),)),
+                    Center(child: Text("Sudah ingin keluar ?",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
                     SizedBox(height: 15),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -99,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                             onPressed: (){
                               Navigator.pop(context,false);
                             },
-                            child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                            child: Text("Tutup",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),)
                         ),
                         SizedBox(width: 15),
                         FlatButton(
@@ -113,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                               await utils.backupGlobVar();
                               Navigator.pop(context,true);
                             },
-                            child: Text("Keluar",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
+                            child: Text("Keluar",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),)
                         ),
                       ],
                     ),
@@ -137,17 +155,18 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
           child: Stack(
             children: [
-              Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: CustomPaint(
-                  painter: DiagonalPainter(),
-                ),
-              ),
+              // Container(
+              //   height: MediaQuery.of(context).size.height,
+              //   width: MediaQuery.of(context).size.width,
+              //   child: CustomPaint(
+              //     painter: DiagonalPainter(),
+              //   ),
+              // ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: MediaQuery.of(context).size.height*0.04,),
+                  SizedBox(height: MediaQuery.of(context).size.height*0.04,
+                  child: Container(color:Colors.blue),),
                   Expanded(
                     child: SmartRefresher(
                       // header: WaterDropHeader(),
@@ -158,426 +177,799 @@ class _HomePageState extends State<HomePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    child: Text("Beranda",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 24),),
-                                  ),
-                                  // InkWell(
-                                  //   onTap: (){
-                                  //     setState(() {
-                                  //       globVar.isShowNotif = !globVar.isShowNotif;
-                                  //     });
-                                  //   },
-                                  //   child: Container(
-                                  //     child: Icon(globVar.isShowNotif ? FontAwesomeIcons.solidBell: FontAwesomeIcons.bellSlash,color: Colors.white,size: 24,),
-                                  //   ),
-                                  // )
-                                ],
-                              ),
-                            ),
-                            Padding(
-                                padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                                child: Row(
-                                  children: [
-                                    Text("Hi ",style: TextStyle(fontSize:18,color: Colors.white,fontWeight: FontWeight.w300),),
-                                    Text("${globVar.user!=null?globVar.user.NAME:""},",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,color: Colors.white,fontWeight: FontWeight.w500),)
-                                  ],
-                                )
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                              child: Container(
-                                child: Text("Kamu punya \t:",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 16),),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 15,right: 18,left: 45),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        child: Text("Points : ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 14),),
-                                      ),
-                                      Container(
-                                        child: Text("${globVar.user.CUST_POINT??''}",style: GoogleFonts.ptMono(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 18, ),)),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(left: 5),
-                                        child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        child: Text("Level \t: ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 14),),
-                                      ),
-                                      Container(
-                                        child: Text("${globVar.user.LOYALTY_LEVEL??''}",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 16, fontFamily: "PT_Mono"),),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(left: 5),
-                                        child: (globVar.user.LOYALTY_LEVEL_IMAGE==null)?Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,):Image(
-                                          height: 18,
-                                          width: 18,
-                                          fit: BoxFit.cover,
-                                          // errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
-                                          // image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
-                                          image: MemoryImage(globVar.user.LOYALTY_LEVEL_IMAGE),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                            //Header
                             Container(
-                                padding: EdgeInsets.only(top: 15),
-                                child: CarouselSlider(
-                                  options: CarouselOptions(height: 155.0,enableInfiniteScroll: BannerList.length!=1 && BannerList.length!=0,enlargeCenterPage: true,autoPlay: true,autoPlayAnimationDuration: Duration(seconds: 3)),
-                                  items: (BannerList.length==0)?[1].map((i){
-                                    return Container(
-                                      alignment: Alignment.center,
-                                      child: (globVar.isLoading)?null:Text("Tidak ada News",style: TextStyle(fontWeight: FontWeight.w700,decoration: TextDecoration.underline,color: Colors.grey),),
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 155,
-                                      margin: EdgeInsets.symmetric(horizontal: 10.0),
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                              offset: Offset(1.0,1.0),
-                                              color: Colors.grey,
-                                              blurRadius: 3
-                                          )
-                                        ],
-                                        color: Color.fromRGBO(237, 237, 237, 1),
-                                      ),
-                                    );
-                                  }).toList():BannerList.map((i) {
-                                    // print("banner ${i.message_image}");
-                                    return Builder(
-                                      builder: (BuildContext context) {
-                                        return InkWell(
-                                          onTap: ()async{
-                                            await Navigator.push(context,MaterialPageRoute(builder: (context)=>news.News(i)));
-                                            await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                                            setState((){
-
-                                            });
+                              padding: EdgeInsets.only(bottom:15),
+                              color:Colors.blue,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          child: Text("Yamaha Thamrin Club",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 18),),
+                                        ),
+                                        InkWell(
+                                          onTap: (){
+                                            // setState(() {
+                                            //   globVar.isShowNotif = !globVar.isShowNotif;
+                                            // });
                                           },
                                           child: Container(
-                                            width: MediaQuery.of(context).size.width,
-                                            height: 155,
-                                            margin: EdgeInsets.symmetric(horizontal: 10.0),
-                                            decoration: BoxDecoration(
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      offset: Offset(1.0,1.0),
-                                                      color: Colors.grey,
-                                                      blurRadius: 3
-                                                  )
-                                                ],
-                                                color: Color.fromRGBO(237, 237, 237, 1),
-                                                image: (i.message_image==null)?null:DecorationImage(
-                                                  fit: BoxFit.fitWidth,
-                                                  image: MemoryImage(i.message_image),
-                                                )
-                                            ),
+                                            child: Icon(Icons.qr_code_scanner_sharp,color: Colors.white,size: 24,),
                                           ),
-                                        );
-                                      },
-                                    );
-                                  }).toList(),
-                                )
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    child: Row(
-                                      children: [
-                                        Text("Kamu punya ",style: TextStyle(shadows: [
-                                          Shadow(
-                                            offset: Offset(3.0, 3.0),
-                                            blurRadius: 0.5,
-                                            color: Colors.black.withOpacity(0.4),
-                                          ),
-                                        ],color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w300,fontSize: 18),),
-                                        (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${globVar.myVouchers.length}",style: TextStyle(shadows: [
-                                          Shadow(
-                                            offset: Offset(3.0, 3.0),
-                                            blurRadius: 0.5,
-                                            color: Colors.black.withOpacity(0.4),
-                                          ),
-                                        ],color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w500,fontSize: 18),),
-                                        Text(" voucher",style: TextStyle(shadows: [
-                                          Shadow(
-                                            offset: Offset(3.0, 3.0),
-                                            blurRadius: 0.5,
-                                            color: Colors.black.withOpacity(0.4),
-                                          ),
-                                        ],color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w500,fontSize: 18),),
+                                        )
                                       ],
                                     ),
                                   ),
-                                  InkWell(
-                                    onTap: ()async{
-                                      // Navigator.pushNamed(context, "/vouchers",);
-                                      await Navigator.push(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: true,)));
-                                      await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                                      setState(() {
-
-                                      });
-                                    },
+                                  Padding(
+                                      padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                      child: Row(
+                                        children: [
+                                          Text("Hi ",style: TextStyle(fontSize:18,color: Colors.white,fontWeight: FontWeight.w300),),
+                                          Text("${globVar.user!=null?globVar.user.NAME:""},",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.w500),)
+                                        ],
+                                      )
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
                                     child: Container(
-                                      padding: EdgeInsets.only(right: 15),
-                                      child: Text("Lihat Semua",style: TextStyle(
-                                          shadows: [
-                                            Shadow(
-                                              offset: Offset(3.0, 3.0),
-                                              blurRadius: 0.5,
-                                              color: Colors.black.withOpacity(0.4),
-                                            ),
-                                          ],
-                                          decoration: TextDecoration.underline,
-                                          color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,fontSize: 14),),
+                                      child: Text("Kamu punya \t:",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 16),),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            (globVar.isLoading==null||globVar.isLoading)?Padding(
-                              padding: EdgeInsets.all(15),
-                              child: Container(
-                                  height: 152,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Color.fromRGBO(237, 237, 237, 1)
-                                  )
-                              ),
-                            ):
-                            (globVar.myVouchers.length==0)?InkWell(
-                              onTap: () async {
-                                await Navigator.pushNamed(context, '/vouchers');
-                                await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                                setState(() {
-                                });
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.all(15),
-                                child: Container(
-                                  height: 152,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Color.fromRGBO(237, 237, 237, 1)
-                                  ),
-                                  child: Text("Klaim voucher kamu di sini",style: TextStyle(fontWeight: FontWeight.w700,decoration: TextDecoration.underline,color: Colors.grey),),
-                                  alignment: Alignment.center,
-                                ),
-                              ),
-                            ):Container(
-                              height: (globVar.myVouchers.length>=2)?(152.0+15)*2:(152.0+15)*globVar.myVouchers.length,
-                              child: ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: const EdgeInsets.only(right: 18,left: 18),
-                                itemCount: (globVar.myVouchers.length>=2)?2:globVar.myVouchers.length,
-                                itemBuilder: (context,index)=>Padding(
-                                  padding: EdgeInsets.only(top:15),
-                                  child: InkWell(
-                                    // onTap: ()=>VoucherDialog().showDialog(globVar.myVouchers[index], context),
-                                    onTap: ()async{
-                                      bool genBarcode = await showDialog(
-                                          context: context,
-                                          builder: (context)=>SimpleDialog(
-                                            children: [
-                                              Icon(FontAwesomeIcons.gifts,size: 60,),
-                                              SizedBox(height: 15),
-                                              Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 16,fontWeight: FontWeight.w400),)),
-                                              SizedBox(height: 15),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  FlatButton(
-                                                      minWidth: 120,
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(15.0),
-                                                          side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
-                                                      ),
-                                                      padding: EdgeInsets.all(10),
-                                                      onPressed: (){
-                                                        Navigator.pop(context,false);
-                                                      },
-                                                      child: Text("Batal",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
-                                                  ),
-                                                  SizedBox(width: 15),
-                                                  FlatButton(
-                                                      minWidth: 120,
-                                                      color: Colors.green,
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(15.0)
-                                                      ),
-                                                      padding: EdgeInsets.all(10),
-                                                      onPressed: (){
-                                                        Navigator.pop(context,true);
-                                                      },
-                                                      child: Text("Gunakan",style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 18,fontWeight: FontWeight.w500),)
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                            backgroundColor: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(25.0),
-                                                side: BorderSide(color: Colors.transparent)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 15,right: 18,left: 45),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              child: Text("Points : ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 14),),
                                             ),
-                                            contentPadding: EdgeInsets.all(20),
-                                          )
-                                      );
+                                            Container(
+                                              child: Text("${globVar.user.CUST_POINT??''}",style: GoogleFonts.ptMono(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 18, ),)),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.only(left: 5),
+                                              child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              child: Text("Level \t: ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 14),),
+                                            ),
+                                            Container(
+                                              child: Text("${globVar.user.LOYALTY_LEVEL??''}",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 16, fontFamily: "PT_Mono"),),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.only(left: 5),
+                                              child: (globVar.user.LOYALTY_LEVEL_IMAGE==null)?Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,):Image(
+                                                height: 18,
+                                                width: 18,
+                                                fit: BoxFit.cover,
+                                                // errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
+                                                // image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
+                                                image: MemoryImage(globVar.user.LOYALTY_LEVEL_IMAGE),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ]
+                              )
+                            ),
+                            //Banners
+                            Container(
+                                child: Column(
+                                  children: [
+                                    CarouselSlider(
+                                      options: CarouselOptions(height: 114.0,
+                                          onPageChanged: (indx,reason){
+                                              setState(() {
+                                                bannerFocus = indx;
+                                              });
+                                          },
+                                          enableInfiniteScroll: BannerList.length!=1 && BannerList.length!=0,disableCenter: true,viewportFraction: 1.0 ,enlargeCenterPage: false,autoPlay: true,autoPlayAnimationDuration: Duration(seconds: 3)),
+                                      items: (BannerList.length==0)?[1].map((i){
+                                        return Container(
+                                          alignment: Alignment.center,
+                                          child: (globVar.isLoading)?null:Text("No Banners",style: TextStyle(fontWeight: FontWeight.w700,decoration: TextDecoration.underline,color: Colors.grey),),
+                                          width: MediaQuery.of(context).size.width,
+                                          height: 114,
+                                          decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  offset: Offset(1.0,1.0),
+                                                  color: Colors.grey,
+                                                  blurRadius: 3
+                                              )
+                                            ],
+                                            color: Color.fromRGBO(237, 237, 237, 1),
+                                          ),
+                                        );
+                                      }).toList():BannerList.map((i) {
+                                        // print("banner ${i.message_image}");
+                                        return Builder(
+                                          builder: (BuildContext context) {
+                                            return InkWell(
+                                              onTap: ()async{
+                                                await Navigator.push(context,MaterialPageRoute(builder: (context)=>news.News(i)));
+                                                await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                                                setState((){
 
-                                      if(genBarcode??false){
-                                        Future future = Vouchers().useVoucher(globVar.myVouchers[index].LOYALTY_CUST_REWARD_ID);
-                                        var res = await utils.showLoadingFuture(context,future);
-                                        if(res["STATUS"]){
-                                          print(res["DATA"]);
-                                          await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
+                                                });
+                                              },
+                                              child: Container(
+                                                width: MediaQuery.of(context).size.width,
+                                                height: 114,
+                                                // margin: EdgeInsets.symmetric(horizontal: 10.0),
+                                                decoration: BoxDecoration(
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                          offset: Offset(1.0,1.0),
+                                                          color: Colors.grey,
+                                                          blurRadius: 3
+                                                      )
+                                                    ],
+                                                    color: Color.fromRGBO(237, 237, 237, 1),
+                                                    image: (i.message_image==null)?null:DecorationImage(
+                                                      fit: BoxFit.fitWidth,
+                                                      image: MemoryImage(i.message_image),
+                                                    )
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      }).toList(),
+                                    ),
+                                    Container(
+                                      height:28,
+                                      padding: EdgeInsets.only(top:10,bottom:10),
+                                      child: (BannerList.length==0)?Container(padding: EdgeInsets.all(2),width: 20,child: LinearProgressIndicator(backgroundColor: Colors.grey,valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                                      )):ListView.builder(shrinkWrap: true,scrollDirection: Axis.horizontal,itemCount: BannerList.length,itemBuilder: (context,index)=>Padding(
+                                          padding: EdgeInsets.only(left:2,right:2),
+                                          child: Container(height: (bannerFocus==index)?8:4,width: (bannerFocus==index)?8:4,decoration: BoxDecoration(
+                                              color: (bannerFocus==index)?Colors.redAccent:Colors.grey,
+                                              shape: BoxShape.circle
+                                          ),),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )
+                            ),
+                            //MyVouchers
+                            (globVar.isLoading==null||globVar.isLoading)
+                            ?Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(15),
+                                  child: Container(
+                                      height: 96,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(6),
+                                          color: Color.fromRGBO(237, 237, 237, 1)
+                                      )
+                                  ),
+                                ),
+                                Container(padding: EdgeInsets.all(2),width: 20,child: LinearProgressIndicator(backgroundColor: Colors.grey,valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                                ))
+                              ],
+                            )
+                            :(globVar.myVouchers.length==0)
+                                ?Container()
+                                :Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        child: Row(
+                                          children: [
+                                            Text("Redeem Yamaha Thamrin Point",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
+                                          ],
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: ()async{
+                                          await Navigator.push(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: true,)));
                                           await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                                           setState(() {
 
                                           });
-                                        }
-                                        else{
-                                          utils.toast(res["DATA"],type: "ERROR");
-                                        }
-                                      }
-                                    },
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          height: 152,
-                                          width: MediaQuery.of(context).size.width,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(20),
-                                            color: Colors.white,
-                                          ),
-                                          child: CustomPaint(
-                                            painter: VoucherPainter(globVar.myVouchers[index].DESCRIPTION),
-                                          ),
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(right: 15),
+                                          child: Text("Lihat Semua",style: TextStyle(
+
+                                              decoration: TextDecoration.underline,
+                                              fontWeight: FontWeight.w300,fontSize: 14),),
                                         ),
-                                        Container(
-                                          padding: EdgeInsets.all(15),
-                                          height: 152,
-                                          alignment: Alignment.centerRight,
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment: CrossAxisAlignment.end,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Column(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 34, fontStyle: FontStyle.italic),),),
-                                                      Text(globVar.myVouchers[index].COUPON??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                                    children: [
-                                                      Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
-                                                        child: Row(
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top:15.0),
+                                      child: CarouselSlider(
+                                        options: CarouselOptions(
+                                            viewportFraction:1-(62/MediaQuery.of(context).size.width),
+                                            height: 96,
+                                            enableInfiniteScroll: false,
+                                            autoPlay: true,
+                                            autoPlayAnimationDuration: Duration(seconds: 3)
+                                        ),
+                                        items:
+                                        globVar.myVouchers.map((item)=>
+                                            InkWell(
+                                              // onTap: ()=>VoucherDialog().showDialog(globVar.myVouchers[index], context),
+                                              onTap: ()async{
+                                                bool genBarcode = await showDialog(
+                                                    context: context,
+                                                    builder: (context)=>SimpleDialog(
+                                                      children: [
+                                                        Icon(FontAwesomeIcons.gifts,size: 60,),
+                                                        SizedBox(height: 15),
+                                                        Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
+                                                        SizedBox(height: 15),
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
                                                           children: [
-                                                            Text("${globVar.myVouchers[index].REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.italic),),),
-                                                            Container(
-                                                              padding: EdgeInsets.only(left: 5),
-                                                              child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
+                                                            FlatButton(
+                                                                minWidth: 120,
+                                                                shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.circular(15.0),
+                                                                    side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                                                                ),
+                                                                padding: EdgeInsets.all(10),
+                                                                onPressed: (){
+                                                                  Navigator.pop(context,false);
+                                                                },
+                                                                child: Text("Batal",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),)
+                                                            ),
+                                                            SizedBox(width: 15),
+                                                            FlatButton(
+                                                                minWidth: 120,
+                                                                color: Colors.green,
+                                                                shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.circular(15.0)
+                                                                ),
+                                                                padding: EdgeInsets.all(10),
+                                                                onPressed: (){
+                                                                  Navigator.pop(context,true);
+                                                                },
+                                                                child: Text("Gunakan",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),)
                                                             ),
                                                           ],
                                                         ),
+                                                      ],
+                                                      backgroundColor: Colors.white,
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(25.0),
+                                                          side: BorderSide(color: Colors.transparent)
                                                       ),
-                                                    ],
+                                                      contentPadding: EdgeInsets.all(20),
+                                                    )
+                                                );
+
+                                                if(genBarcode??false){
+                                                  Future future = Vouchers().useVoucher(item.LOYALTY_CUST_REWARD_ID);
+                                                  var res = await utils.showLoadingFuture(context,future);
+                                                  if(res["STATUS"]){
+                                                    print(res["DATA"]);
+                                                    await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
+                                                    await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                                                    setState(() {
+
+                                                    });
+                                                  }
+                                                  else{
+                                                    utils.toast(res["DATA"],type: "ERROR");
+                                                  }
+                                                }
+                                              },
+                                              child: Stack(
+                                                children: [
+                                                  Container(
+                                                    height: 152,
+                                                    width: MediaQuery.of(context).size.width,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(20),
+                                                      color: Colors.white,
+                                                    ),
+                                                    child: CustomPaint(
+                                                      painter: VoucherPainter(item.DESCRIPTION),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.all(15),
+                                                    height: 152,
+                                                    alignment: Alignment.centerRight,
+                                                    child: Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Column(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 34, ),),),
+                                                                Text(item.COUPON??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, ),),),
+                                                              ],
+                                                            ),
+                                                            Column(
+                                                              mainAxisAlignment: MainAxisAlignment.end,
+                                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                                              children: [
+                                                                Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 20, ),),),
+                                                                Padding(
+                                                                  padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Text("${item.REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, ),),),
+                                                                      Container(
+                                                                        padding: EdgeInsets.only(left: 5),
+                                                                        child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Text(item.PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 15, ),),),
+
+                                                      ],
+                                                    ),
+
                                                   ),
                                                 ],
                                               ),
-                                              Text(globVar.myVouchers[index].PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 15, fontStyle: FontStyle.italic),),),
-
-                                            ],
-                                          ),
-
-                                        ),
-                                      ],
+                                            )).toList()
+                                        ,
+                                      ),
                                     ),
+                                    Container(
+                                      height:28,
+                                      padding: EdgeInsets.only(top:10,bottom:10),
+                                      child: ListView.builder(shrinkWrap: true,scrollDirection: Axis.horizontal,itemCount: globVar.myVouchers.length,itemBuilder: (context,index)=>Padding(
+                                        padding: EdgeInsets.only(left:2,right:2),
+                                        child: Container(height: (myVoucherFocus==index)?8:4,width: (myVoucherFocus==index)?8:4,decoration: BoxDecoration(
+                                            color: (myVoucherFocus==index)?Colors.redAccent:Colors.grey,
+                                            shape: BoxShape.circle
+                                        ),),
+                                      ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                            //News
+                            (globVar.isLoading==null||globVar.isLoading)
+                            ?Padding(
+                              padding: const EdgeInsets.only(top:15.0),
+                              child: Container(
+                                height:90,
+                                child: ListView.builder(scrollDirection: Axis.horizontal,shrinkWrap:true,itemCount: 2,itemBuilder: (context,indx)=>Container(
+                                  width:MediaQuery.of(context).size.width,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Container(
+                                        color:Color.fromRGBO(237, 237, 237, 1),
+                                        width:175,
+                                        height:89,
+                                      ),
+                                      Container(
+                                        color: Color.fromRGBO(237, 237, 237, 1),
+                                        width:175,
+                                        height:89,
+                                      )
+                                    ],
+                                  ),
+                                )),
+                              ),
+                            )
+                            :(globVar.myVouchers.length==0)
+                                ?Container()
+                                :Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        child: Row(
+                                          children: [
+                                            Text("Latest from Yamaha Thamrin ",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
+                                            // (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${globVar.myVouchers.length}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18),),
+                                            // Text(" voucher",style: TextStyle(
+                                            // fontWeight: FontWeight.w500,fontSize: 18),),
+                                          ],
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: ()async{
+                                          // Navigator.pushNamed(context, "/vouchers",);
+                                          await Navigator.push(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: true,)));
+                                          await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                                          setState(() {
+
+                                          });
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(right: 15),
+                                          child: Text("Lihat Semua",style: TextStyle(
+
+                                              decoration: TextDecoration.underline,
+                                              fontWeight: FontWeight.w300,fontSize: 14),),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top:15.0),
+                                      child: Container(
+                                        height:90,
+                                        child: ListView.builder(scrollDirection: Axis.horizontal,shrinkWrap:true,itemCount: 2,itemBuilder: (context,indx)=>Container(
+                                          width:MediaQuery.of(context).size.width,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Container(
+                                                color:Color.fromRGBO(237, 237, 237, 1),
+                                                width:175,
+                                                height:89,
+                                              ),
+                                              Container(
+                                                color: Color.fromRGBO(237, 237, 237, 1),
+                                                width:175,
+                                                height:89,
+                                              )
+                                            ],
+                                          ),
+                                        )),
+                                      ),
+                                    ),
+                                    Container(
+                                      height:28,
+                                      padding: EdgeInsets.only(top:10,bottom:10),
+                                      child: ListView.builder(shrinkWrap: true,scrollDirection: Axis.horizontal,itemCount: globVar.myVouchers.length,itemBuilder: (context,index)=>Padding(
+                                        padding: EdgeInsets.only(left:2,right:2),
+                                        child: Container(height: (myVoucherFocus==index)?8:4,width: (myVoucherFocus==index)?8:4,decoration: BoxDecoration(
+                                            color: (myVoucherFocus==index)?Colors.redAccent:Colors.grey,
+                                            shape: BoxShape.circle
+                                        ),),
+                                      ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
                             ),
-                            // Padding(
-                            //   padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                            //   child: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //     children: [
-                            //       Container(
-                            //         child: Text("Product dalam diskon :",style: TextStyle(shadows: [
-                            //           Shadow(
-                            //             offset: Offset(3.0, 3.0),
-                            //             blurRadius: 0.5,
-                            //             color: Colors.black.withOpacity(0.4),
-                            //           ),
-                            //         ],color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w500,fontSize: 18),),
-                            //       ),
-                            //       Container(
-                            //         padding: EdgeInsets.only(right: 15),
-                            //         child: Text("Semua",style: TextStyle(
-                            //             shadows: [
-                            //               Shadow(
-                            //                 offset: Offset(3.0, 3.0),
-                            //                 blurRadius: 0.5,
-                            //                 color: Colors.black.withOpacity(0.4),
-                            //               ),
-                            //             ],
-                            //             decoration: TextDecoration.underline,
-                            //             color: Colors.white,fontStyle: FontStyle.italic,fontWeight: FontWeight.w700,fontSize: 14),),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
-                            // Container(
-                            //   height: 200.0*2,
-                            //   child: GridView.builder(
-                            //     physics: NeverScrollableScrollPhysics(),
-                            //     padding: EdgeInsets.only(left: 8,right: 8),
-                            //     itemCount: 4,
-                            //       shrinkWrap: true,
-                            //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                            //       itemBuilder: (context,indx)=>Padding(
-                            //         padding: const EdgeInsets.all(8.0),
-                            //         child: Container(
-                            //           height: 175,
-                            //           width: 175,
-                            //           child: Card(
-                            //             color: Color.fromRGBO(237, 237, 237, 1),
-                            //             child: new GridTile(
-                            //               footer: new Text(""),
-                            //               child: new Text(""), //just for testing, will fill with image later
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       )),
-                            // )
+                            //Available Voucher
+                            (globVar.isLoading==null||globVar.isLoading)
+                                ?Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(15),
+                                  child: Container(
+                                      height: 96,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(6),
+                                          color: Color.fromRGBO(237, 237, 237, 1)
+                                      )
+                                  ),
+                                ),
+                                Container(padding: EdgeInsets.all(2),width: 20,child: LinearProgressIndicator(backgroundColor: Colors.grey,valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                                ))
+                              ],
+                            )
+                                :(globVar.myVouchers.length==0)
+                                ?Container()
+                                :Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        child: Row(
+                                          children: [
+                                            Text("My Vouchers ",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
+                                            // (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${globVar.myVouchers.length}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18),),
+                                            // Text(" voucher",style: TextStyle(
+                                            // fontWeight: FontWeight.w500,fontSize: 18),),
+                                          ],
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: ()async{
+                                          // Navigator.pushNamed(context, "/vouchers",);
+                                          await Navigator.push(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: true,)));
+                                          await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                                          setState(() {
+
+                                          });
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(right: 15),
+                                          child: Text("Lihat Semua",style: TextStyle(
+
+                                              decoration: TextDecoration.underline,
+                                              fontWeight: FontWeight.w300,fontSize: 14),),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top:15.0),
+                                      child: CarouselSlider(
+                                        options: CarouselOptions(
+                                            viewportFraction:1-(62/MediaQuery.of(context).size.width),
+                                            height: 96,
+                                            enableInfiniteScroll: false,
+                                            autoPlay: true,
+                                            autoPlayAnimationDuration: Duration(seconds: 3)
+                                        ),
+                                        items:
+                                        globVar.myVouchers.map((item)=>
+                                            InkWell(
+                                              // onTap: ()=>VoucherDialog().showDialog(globVar.myVouchers[index], context),
+                                              onTap: ()async{
+                                                bool genBarcode = await showDialog(
+                                                    context: context,
+                                                    builder: (context)=>SimpleDialog(
+                                                      children: [
+                                                        Icon(FontAwesomeIcons.gifts,size: 60,),
+                                                        SizedBox(height: 15),
+                                                        Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
+                                                        SizedBox(height: 15),
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: [
+                                                            FlatButton(
+                                                                minWidth: 120,
+                                                                shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.circular(15.0),
+                                                                    side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                                                                ),
+                                                                padding: EdgeInsets.all(10),
+                                                                onPressed: (){
+                                                                  Navigator.pop(context,false);
+                                                                },
+                                                                child: Text("Batal",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),)
+                                                            ),
+                                                            SizedBox(width: 15),
+                                                            FlatButton(
+                                                                minWidth: 120,
+                                                                color: Colors.green,
+                                                                shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.circular(15.0)
+                                                                ),
+                                                                padding: EdgeInsets.all(10),
+                                                                onPressed: (){
+                                                                  Navigator.pop(context,true);
+                                                                },
+                                                                child: Text("Gunakan",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),)
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                      backgroundColor: Colors.white,
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(25.0),
+                                                          side: BorderSide(color: Colors.transparent)
+                                                      ),
+                                                      contentPadding: EdgeInsets.all(20),
+                                                    )
+                                                );
+
+                                                if(genBarcode??false){
+                                                  Future future = Vouchers().useVoucher(item.LOYALTY_CUST_REWARD_ID);
+                                                  var res = await utils.showLoadingFuture(context,future);
+                                                  if(res["STATUS"]){
+                                                    print(res["DATA"]);
+                                                    await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
+                                                    await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                                                    setState(() {
+
+                                                    });
+                                                  }
+                                                  else{
+                                                    utils.toast(res["DATA"],type: "ERROR");
+                                                  }
+                                                }
+                                              },
+                                              child: Stack(
+                                                children: [
+                                                  Container(
+                                                    height: 152,
+                                                    width: MediaQuery.of(context).size.width,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(20),
+                                                      color: Colors.white,
+                                                    ),
+                                                    child: CustomPaint(
+                                                      painter: VoucherPainter(item.DESCRIPTION),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.all(15),
+                                                    height: 152,
+                                                    alignment: Alignment.centerRight,
+                                                    child: Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Column(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 34, ),),),
+                                                                Text(item.COUPON??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, ),),),
+                                                              ],
+                                                            ),
+                                                            Column(
+                                                              mainAxisAlignment: MainAxisAlignment.end,
+                                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                                              children: [
+                                                                Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 20, ),),),
+                                                                Padding(
+                                                                  padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Text("${item.REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, ),),),
+                                                                      Container(
+                                                                        padding: EdgeInsets.only(left: 5),
+                                                                        child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Text(item.PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 15, ),),),
+
+                                                      ],
+                                                    ),
+
+                                                  ),
+                                                ],
+                                              ),
+                                            )).toList()
+                                        ,
+                                      ),
+                                    ),
+                                    Container(
+                                      height:28,
+                                      padding: EdgeInsets.only(top:10,bottom:10),
+                                      child: ListView.builder(shrinkWrap: true,scrollDirection: Axis.horizontal,itemCount: globVar.myVouchers.length,itemBuilder: (context,index)=>Padding(
+                                        padding: EdgeInsets.only(left:2,right:2),
+                                        child: Container(height: (myVoucherFocus==index)?8:4,width: (myVoucherFocus==index)?8:4,decoration: BoxDecoration(
+                                            color: (myVoucherFocus==index)?Colors.redAccent:Colors.grey,
+                                            shape: BoxShape.circle
+                                        ),),
+                                      ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                            //Supports
+                            (globVar.isLoading==null||globVar.isLoading)
+                                ?Padding(
+                              padding: const EdgeInsets.only(top:15.0),
+                              child: Container(
+                                height:90,
+                                child: ListView.builder(scrollDirection: Axis.horizontal,shrinkWrap:true,itemCount: 2,itemBuilder: (context,indx)=>Container(
+                                  width:MediaQuery.of(context).size.width,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Container(
+                                        color:Color.fromRGBO(237, 237, 237, 1),
+                                        width:175,
+                                        height:89,
+                                      ),
+                                      Container(
+                                        color: Color.fromRGBO(237, 237, 237, 1),
+                                        width:175,
+                                        height:89,
+                                      )
+                                    ],
+                                  ),
+                                )),
+                              ),
+                            )
+                                :(globVar.myVouchers.length==0)
+                                ?Container()
+                                :Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        child: Row(
+                                          children: [
+                                            Text("Supports",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top:15.0),
+                                      child: Container(
+                                        height:90,
+                                        child: Container(
+                                          width:MediaQuery.of(context).size.width,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              //No Telp WA INSTA DLL
+                                              Container(
+                                                color:Color.fromRGBO(237, 237, 237, 1),
+                                                width:175,
+                                                height:89,
+                                              ),
+                                              //FAQ
+                                              Container(
+                                                color: Color.fromRGBO(237, 237, 237, 1),
+                                                width:175,
+                                                height:89,
+                                              )
+                                            ],
+                                          ),
+                                        )),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -589,101 +981,144 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color.fromRGBO(61,61, 206, 1),
-        type : BottomNavigationBarType.fixed,
-        onTap: (idx)async{
-          switch(idx){
-            case 0 : {
-              // Navigator.pushReplacementNamed(context, "/home");
-              _onRefresh();
-            }break;
-            case 1 : {
-              await Navigator.pushNamed(context, "/transactions");
-            }break;
-            // case 2 : {
-
-              // showModalBottomSheet(
-              //     isScrollControlled: true,
-              //     context: context,
-              //     builder: (context) => Container(
-              //       // padding: EdgeInsets.all(22),
-              //       height: MediaQuery.of(context).size.height*0.4,
-              //       decoration: BoxDecoration(
-              //         color: Colors.white,
-              //         borderRadius: BorderRadius.only(topLeft: Radius.circular(25),topRight: Radius.circular(25)),
-              //       ),
-              //       child: SingleChildScrollView(
-              //         scrollDirection: Axis.vertical,
-              //         child: Column(
-              //           crossAxisAlignment: CrossAxisAlignment.start,
-              //           mainAxisSize: MainAxisSize.min,
-              //           children: [
-              //               SizedBox(height: 20,),
-              //               Container(padding: EdgeInsets.all(22),child: Text("Apa yang mau dilakukan hari ini ?",style: TextStyle(fontSize: 18,fontStyle: FontStyle.italic,fontWeight: FontWeight.w300,color: Colors.black),)),
-              //             Container(
-              //               height: 106.0*2,
-              //               child: GridView.builder(
-              //                   physics: NeverScrollableScrollPhysics(),
-              //                   padding: EdgeInsets.only(top: 22,right: 10,left: 10),
-              //                   itemCount: 8,
-              //                   shrinkWrap: true,
-              //                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-              //                   itemBuilder: (context,indx)=>Padding(
-              //                     padding: const EdgeInsets.all(10.0),
-              //                     child: Container(
-              //                       height: 74,
-              //                       width: 74,
-              //                       child: Card(
-              //                         color: (indx==0)?Colors.white:Color.fromRGBO(237, 237, 237, 1),
-              //                         elevation: 5,
-              //                         // color: Color.fromRGBO(237, 237, 237, 1),
-              //                         child: InkWell(
-              //                           onTap: (){},
-              //                           child: new GridTile(
-              //                             footer: Center(child: new Text((indx==0)?"Transfer":"",style: TextStyle(fontStyle: FontStyle.italic,fontWeight: FontWeight.w500,fontSize: 14,color: Color.fromRGBO(148, 148, 148, 0.9)),)),
-              //                             child: (indx==0)?Padding(
-              //                               padding: const EdgeInsets.only(top: 6,left: 6,right: 6,bottom: 14),
-              //                               child: Image(
-              //                                 image: AssetImage("images/transfer.png"),
-              //                                 alignment: Alignment.topCenter,
-              //                                 fit: BoxFit.cover,
-              //                               ),
-              //                             ):Container(), //just for testing, will fill with image later
-              //                           ),
-              //                         ),
-              //                       ),
-              //                     ),
-              //                   )),
-              //             )
-              //           ],
-              //         ),
-              //       ),
-              //     )
-              // );
-            // }break;
-            case 2 : {
-              await Navigator.pushNamed(context, "/vouchers");
-            }break;
-            case 3 : {
-              await Navigator.pushNamed(context, "/profile");
-            }break;
-          }
-          if(idx!=0){
-            await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-            setState(() {
-
-            });
-          }
-        },
-        items: [
-          BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.home,color: Colors.white,)),
-          BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.receipt,color: Colors.white,)),
-          // BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.dollarSign,color: Colors.white,)),
-          BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.gift,color: Colors.white,)),
-          BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.addressCard,color: Colors.white,)),
-        ],
-      ),
+        bottomNavigationBar:
+        BottomAppBar(
+            child: Container(
+              height: 63,
+              child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () {},
+                      child: Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Icon(Icons.home,size: 26,),
+                      ),
+                    ),
+                    Container(color: Colors.grey.withOpacity(0.2), width: 1,),
+                    InkWell(
+                      onTap: () {},
+                      child: Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Icon(FontAwesomeIcons.receipt,size:26),
+                      ),
+                    ),
+                    Container(color: Colors.grey.withOpacity(0.2), width: 1,),
+                    InkWell(
+                      onTap: () {},
+                      child: Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Icon(FontAwesomeIcons.gift,size:26),
+                      ),
+                    ),
+                    Container(color: Colors.grey.withOpacity(0.2), width: 1,),
+                    InkWell(
+                      onTap: () {},
+                      child: Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Icon(FontAwesomeIcons.addressCard,size:24),
+                      ),
+                    ),
+                  ]
+              ),
+            )
+        ),
+      //  BottomNavigationBar(
+      //   backgroundColor: Colors.transparent,
+      //   type : BottomNavigationBarType.fixed,
+      //   onTap: (idx)async{
+      //     switch(idx){
+      //       case 0 : {
+      //         // Navigator.pushReplacementNamed(context, "/home");
+      //         _onRefresh();
+      //       }break;
+      //       case 1 : {
+      //         await Navigator.pushNamed(context, "/transactions");
+      //       }break;
+      //       // case 2 : {
+      //
+      //         // showModalBottomSheet(
+      //         //     isScrollControlled: true,
+      //         //     context: context,
+      //         //     builder: (context) => Container(
+      //         //       // padding: EdgeInsets.all(22),
+      //         //       height: MediaQuery.of(context).size.height*0.4,
+      //         //       decoration: BoxDecoration(
+      //         //         color: Colors.white,
+      //         //         borderRadius: BorderRadius.only(topLeft: Radius.circular(25),topRight: Radius.circular(25)),
+      //         //       ),
+      //         //       child: SingleChildScrollView(
+      //         //         scrollDirection: Axis.vertical,
+      //         //         child: Column(
+      //         //           crossAxisAlignment: CrossAxisAlignment.start,
+      //         //           mainAxisSize: MainAxisSize.min,
+      //         //           children: [
+      //         //               SizedBox(height: 20,),
+      //         //               Container(padding: EdgeInsets.all(22),child: Text("Apa yang mau dilakukan hari ini ?",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w300,color: Colors.black),)),
+      //         //             Container(
+      //         //               height: 106.0*2,
+      //         //               child: GridView.builder(
+      //         //                   physics: NeverScrollableScrollPhysics(),
+      //         //                   padding: EdgeInsets.only(top: 22,right: 10,left: 10),
+      //         //                   itemCount: 8,
+      //         //                   shrinkWrap: true,
+      //         //                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+      //         //                   itemBuilder: (context,indx)=>Padding(
+      //         //                     padding: const EdgeInsets.all(10.0),
+      //         //                     child: Container(
+      //         //                       height: 74,
+      //         //                       width: 74,
+      //         //                       child: Card(
+      //         //                         color: (indx==0)?Colors.white:Color.fromRGBO(237, 237, 237, 1),
+      //         //                         elevation: 5,
+      //         //                         // color: Color.fromRGBO(237, 237, 237, 1),
+      //         //                         child: InkWell(
+      //         //                           onTap: (){},
+      //         //                           child: new GridTile(
+      //         //                             footer: Center(child: new Text((indx==0)?"Transfer":"",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 14,color: Color.fromRGBO(148, 148, 148, 0.9)),)),
+      //         //                             child: (indx==0)?Padding(
+      //         //                               padding: const EdgeInsets.only(top: 6,left: 6,right: 6,bottom: 14),
+      //         //                               child: Image(
+      //         //                                 image: AssetImage("images/transfer.png"),
+      //         //                                 alignment: Alignment.topCenter,
+      //         //                                 fit: BoxFit.cover,
+      //         //                               ),
+      //         //                             ):Container(), //just for testing, will fill with image later
+      //         //                           ),
+      //         //                         ),
+      //         //                       ),
+      //         //                     ),
+      //         //                   )),
+      //         //             )
+      //         //           ],
+      //         //         ),
+      //         //       ),
+      //         //     )
+      //         // );
+      //       // }break;
+      //       case 2 : {
+      //         await Navigator.pushNamed(context, "/vouchers");
+      //       }break;
+      //       case 3 : {
+      //         await Navigator.pushNamed(context, "/profile");
+      //       }break;
+      //     }
+      //     if(idx!=0){
+      //       await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+      //       setState(() {
+      //
+      //       });
+      //     }
+      //   },
+      //   items: [
+      //     BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.home,color: Colors.black,)),
+      //     BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.receipt,color: Colors.black,)),
+      //     // BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.dollarSign,color: Colors.white,)),
+      //     BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.gift,color: Colors.black,)),
+      //     BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.addressCard,color: Colors.black,)),
+      //   ],
+      // ),
     );
   }
 }

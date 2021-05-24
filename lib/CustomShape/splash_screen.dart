@@ -76,9 +76,9 @@ class _SplashscreenState extends State<Splashscreen> {
                   ),
                 ),
                 Container(
-                  child: Text("Customer Loyalty",style: TextStyle(color: Colors.black.withOpacity(0.75),fontSize: 28,fontWeight: FontWeight.w700, fontFamily: "Roboto",fontStyle: FontStyle.italic),),),
+                  child: Text("Customer Loyalty",style: TextStyle(color: Colors.black.withOpacity(0.75),fontSize: 28,fontWeight: FontWeight.w700, fontFamily: "Roboto",fontStyle: FontStyle.normal),),),
                 Container(
-                  child: Text("You don't earn loyalty in a day",style: TextStyle(color: Colors.black.withOpacity(0.75),fontSize: 16,fontWeight: FontWeight.w300, fontFamily: "Roboto",fontStyle: FontStyle.italic),),),
+                  child: Text("You don't earn loyalty in a day",style: TextStyle(color: Colors.black.withOpacity(0.75),fontSize: 16,fontWeight: FontWeight.w300, fontFamily: "Roboto",fontStyle: FontStyle.normal),),),
                 Expanded(
                   child: Center(
                     child: Column(

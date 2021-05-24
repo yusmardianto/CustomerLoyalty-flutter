@@ -103,9 +103,9 @@ class _TransactionsState extends State<Transactions> {
                                 borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide(color: Colors.transparent)
                               ),
-                              hintStyle: TextStyle(fontWeight: FontWeight.w300,fontStyle: FontStyle.italic,fontSize: 18),
+                              hintStyle: TextStyle(fontWeight: FontWeight.w300,fontStyle: FontStyle.normal,fontSize: 18),
                           ),
-                          style: TextStyle(fontWeight: FontWeight.w300,fontStyle: FontStyle.italic,fontSize: 18),
+                          style: TextStyle(fontWeight: FontWeight.w300,fontStyle: FontStyle.normal,fontSize: 18),
                       ),
                     ),
                   ),
@@ -131,12 +131,12 @@ class _TransactionsState extends State<Transactions> {
                             //   child: Row(
                             //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             //     children: [
-                            //       Text("Total Pembelian",style: TextStyle(fontSize: 18,fontStyle: FontStyle.italic,fontWeight: FontWeight.w400),),
+                            //       Text("Total Pembelian",style: TextStyle(fontSize: 18,fontStyle: FontStyle.normal,fontWeight: FontWeight.w400),),
                             //       Row(
                             //         mainAxisSize: MainAxisSize.min,
                             //         children: [
-                            //           Text("45.000.000",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black54,fontSize: 18,fontWeight: FontWeight.w300,fontStyle: FontStyle.italic)),),
-                            //           Text(" IDR",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,fontStyle: FontStyle.italic))
+                            //           Text("45.000.000",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black54,fontSize: 18,fontWeight: FontWeight.w300,fontStyle: FontStyle.normal)),),
+                            //           Text(" IDR",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,fontStyle: FontStyle.normal))
                             //         ],
                             //       ),
                             //     ],
@@ -176,7 +176,7 @@ class _TransactionsState extends State<Transactions> {
                                                     i.POINT_EARN>=0
                                                         ?Icon(FontAwesomeIcons.angleDoubleUp,size: 17,color: Color.fromRGBO(34, 168, 56, 1),)
                                                         :Icon(FontAwesomeIcons.angleDoubleDown,size: 17,color: Colors.redAccent,),
-                                                    Text(numberFormat.format(i.POINT_EARN??0),style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.w300,fontSize: 14,fontStyle: FontStyle.italic)),),
+                                                    Text(numberFormat.format(i.POINT_EARN??0),style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.w300,fontSize: 14,fontStyle: FontStyle.normal)),),
                                                     SizedBox(width: 2,),
                                                     Icon(FontAwesomeIcons.coins,size: 17,color: Colors.amber,),
                                                   ],
