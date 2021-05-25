@@ -335,7 +335,6 @@ class _VouchersListState extends State<VouchersList> {
                       itemBuilder: (context,index)=>InkWell(
                         onTap: ()async{
                           var refresh = await VoucherDialog().showDialog(voucherList[index], context);
-                          print("test $bool");
                           if(refresh??false) await loadMyVoucher();
                         },
                         child: Hero(
@@ -404,6 +403,57 @@ class _VouchersListState extends State<VouchersList> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar:
+      BottomAppBar(
+          child: Container(
+            height: 63,
+            child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  InkWell(
+                    onTap:  ()async{
+                      Navigator.pushNamed(context, '/home');
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Icon(Icons.home,size: 26,),
+                    ),
+                  ),
+                  Container(color: Colors.grey.withOpacity(0.2), width: 1,),
+                  InkWell(
+                    onTap: ()async{
+                      await Navigator.pushNamed(context, "/transactions");
+
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Icon(FontAwesomeIcons.receipt,size:26),
+                    ),
+                  ),
+                  Container(color: Colors.grey.withOpacity(0.2), width: 1,),
+                  InkWell(
+                    onTap: loadAvailableVoucher,
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Icon(FontAwesomeIcons.gift,size:26),
+                    ),
+                  ),
+                  Container(color: Colors.grey.withOpacity(0.2), width: 1,),
+                  InkWell(
+                    onTap: () async {
+                      await Navigator.pushNamed(context, "/profile");
+
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Icon(FontAwesomeIcons.addressCard,size:24),
+                    ),
+                  ),
+                ]
+            ),
+          )
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (){

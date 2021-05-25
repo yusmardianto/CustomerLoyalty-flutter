@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../DataType/voucher.dart';
 import '../api/vouchers.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class HeroDialogRoute<T> extends PageRoute<T> {
   HeroDialogRoute({ this.builder }) : super();
@@ -55,11 +56,15 @@ class VoucherDialog{
     voucherDetails.keys.forEach((element) {
       if(voucherDetails[element]!=null){
         details.add(Container(
+          alignment: Alignment.centerLeft,
           padding: EdgeInsets.only(left: 33,right: 33,bottom: 33,top: 33),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('$element \t:\t'),
-              Text("\t${voucherDetails[element]??'-'}"),
+              Expanded(flex: 1,child: Text('$element')),
+              Expanded(child: (voucherDetails[element] is String)?HtmlWidget(utils.htmlEscape(voucherDetails[element]??''),)
+                  :Text("\t${utils.thousandSeperator(voucherDetails[element])??'-'}")),
             ],
           ),
         ));
@@ -114,7 +119,7 @@ class VoucherDialog{
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text("Klaim"),
-                                        Text("(${voucher.COST_IN_POINT??''}",style: GoogleFonts.robotoMono(),),
+                                        Text("(${utils.thousandSeperator(voucher.COST_IN_POINT)??''}",style: GoogleFonts.robotoMono(),),
                                         Icon(FontAwesomeIcons.coins,color: Colors.amber,),
                                         Text(")",style: GoogleFonts.robotoMono(),),
                                       ],
@@ -181,7 +186,7 @@ class VoucherDialog{
                                     padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
                                     child: Row(
                                       children: [
-                                        Text("${voucher.REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
+                                        Text("${utils.thousandSeperator(voucher.REWARD_VALUE)??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
                                         Container(
                                           padding: EdgeInsets.only(left: 5),
                                           child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),

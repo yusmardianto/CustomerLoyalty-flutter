@@ -176,7 +176,8 @@ class _TransactionsState extends State<Transactions> {
                                                     i.POINT_EARN>=0
                                                         ?Icon(FontAwesomeIcons.angleDoubleUp,size: 17,color: Color.fromRGBO(34, 168, 56, 1),)
                                                         :Icon(FontAwesomeIcons.angleDoubleDown,size: 17,color: Colors.redAccent,),
-                                                    Text(numberFormat.format(i.POINT_EARN??0),style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.w300,fontSize: 14,fontStyle: FontStyle.normal)),),
+                                                    Text(
+                                                       "${utils.thousandSeperator(i.POINT_EARN) ?? 0}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.w300,fontSize: 14,fontStyle: FontStyle.normal)),),
                                                     SizedBox(width: 2,),
                                                     Icon(FontAwesomeIcons.coins,size: 17,color: Colors.amber,),
                                                   ],
@@ -213,6 +214,57 @@ class _TransactionsState extends State<Transactions> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar:
+      BottomAppBar(
+          child: Container(
+            height: 63,
+            child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  InkWell(
+                    onTap:  ()async{
+                      Navigator.pushNamed(context, '/home');
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Icon(Icons.home,size: 26,),
+                    ),
+                  ),
+                  Container(color: Colors.grey.withOpacity(0.2), width: 1,),
+                  InkWell(
+                    onTap: _onRefresh,
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Icon(FontAwesomeIcons.receipt,size:26),
+                    ),
+                  ),
+                  Container(color: Colors.grey.withOpacity(0.2), width: 1,),
+                  InkWell(
+                    onTap: ()async{
+                      await Navigator.pushNamed(context, "/vouchers");
+
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Icon(FontAwesomeIcons.gift,size:26),
+                    ),
+                  ),
+                  Container(color: Colors.grey.withOpacity(0.2), width: 1,),
+                  InkWell(
+                    onTap: () async {
+                      await Navigator.pushNamed(context, "/profile");
+
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Icon(FontAwesomeIcons.addressCard,size:24),
+                    ),
+                  ),
+                ]
+            ),
+          )
       ),
     );
   }

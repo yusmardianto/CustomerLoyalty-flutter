@@ -32,6 +32,9 @@ class _ProfileState extends State<Profile> {
     userData.update("Tanggal_Lahir", (value) => DateFormat("dd-MMM-yyyy").parse(value));
     gender = userData["Gender"];
     if(globVar.user.CUST_PROFILE_IMAGE!=null)profileImage = Image.memory(globVar.user.CUST_PROFILE_IMAGE);
+    setState(() {
+
+    });
     // profileImage = Image.network(globVar.hostRest+"/binary/${globVar.user.CUST_DISPLAY_PICTURE}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"});
   }
 
@@ -347,7 +350,7 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(top:10,left: 10,right: 10),
+                  padding: EdgeInsets.only(left: 10,right: 10),
                   alignment: Alignment.centerRight,
                   child: InkWell(
                     onTap: ()async{
@@ -628,7 +631,7 @@ class _ProfileState extends State<Profile> {
                                       ],
                                     ),
                                   ),
-                                  Divider(),
+                                  // Divider(),
                                 ],
                                 );
                             }),
@@ -638,6 +641,63 @@ class _ProfileState extends State<Profile> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar:
+      BottomAppBar(
+          child: Container(
+            height: 63,
+            child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  InkWell(
+                    onTap:  ()async{
+                      Navigator.pushNamed(context, '/home');
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Icon(Icons.home,size: 26,),
+                    ),
+                  ),
+                  Container(color: Colors.grey.withOpacity(0.2), width: 1,),
+                  InkWell(
+                    onTap: ()async{
+                      await Navigator.pushNamed(context, "/transactions");
+
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Icon(FontAwesomeIcons.receipt,size:26),
+                    ),
+                  ),
+                  Container(color: Colors.grey.withOpacity(0.2), width: 1,),
+                  InkWell(
+                    onTap: ()async{
+                      await Navigator.pushNamed(context, "/vouchers");
+
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Icon(FontAwesomeIcons.gift,size:26),
+                    ),
+                  ),
+                  Container(color: Colors.grey.withOpacity(0.2), width: 1,),
+                  InkWell(
+                    onTap: reloadUser,
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Icon(FontAwesomeIcons.addressCard,size:24),
+                    ),
+                  ),
+                ]
+            ),
+          )
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(FontAwesomeIcons.qrcode),
+        onPressed: ()async{
+          await utils.genQRcode(context,globVar.user.CUST_ID.toString());
+        },
       ),
     );
   }

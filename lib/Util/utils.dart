@@ -5,6 +5,7 @@ import 'package:barcode/barcode.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 import '../main.dart';
 import '../DataType/rest.dart';
@@ -253,6 +254,21 @@ class Util{
     await prefs.remove("user");
     await prefs.remove("auth");
   }
+  thousandSeperator(input){
+    var number;
+    try{
+      if(input is int){
+        number = input;
+      }
+      else{
+        number = int.parse(input);
+      }
+      return NumberFormat.currency(locale: "id",decimalDigits: 0,symbol: '').format(number);
+    }
+    catch(e){
+      return input;
+    }
+  }
   toast(text,{type:"REGULAR"})async{
     await Fluttertoast.cancel();
     Fluttertoast.showToast(
@@ -285,6 +301,27 @@ class Util{
     return res;
   }
   leadingZero(num, size){     return ('000000000' + num.toString()).substring(('000000000' + num.toString()).length-size); }
+
+  genQRcode(context,code) {
+    try{
+      showDialog(
+          context: context,
+          builder: (context){
+                return SimpleDialog(
+                  contentPadding: EdgeInsets.all(20) ,
+                  children: [
+                    (code==null)?Container(height: 75,child: Center(child: Text('Code tidak valid')),):SvgPicture.string(Barcode.qrCode().toSvg(code, width: 200, height: 200,drawText: false)),
+                    SizedBox(height: 15,),
+                    (code==null)?Container():Center(child: Text("Scan this QrCode to show customer details",textAlign: TextAlign.center,style: GoogleFonts.robotoSlab(fontSize: 14),)),
+                  ],
+                );
+          }
+      );
+    }
+    catch(e){
+      print(e);
+    }
+  }
   genBarcode(context,code,expired) {
     int countDown = expired;
     Timer timer_;
