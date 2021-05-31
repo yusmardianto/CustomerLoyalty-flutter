@@ -72,7 +72,6 @@ class Util{
           }catch(e){
             res = data["DATA"];
           }
-          // print("post $data");
           return {"STATUS":1,"DATA":res};
         }
         else{
@@ -215,8 +214,11 @@ class Util{
   }
   htmlErrorTitle(String html){
     try{
-      String titleElement = html.substring(html.indexOf("<title>"),html.indexOf("<\/title>"));
-      return titleElement;
+      if(html.contains('<title>')) {
+        String titleElement = html.substring(html.indexOf("<title>")+7,html.indexOf("<\/title>"));
+        return titleElement;
+      }
+      else return '';
     }
     catch(e){
       return '';

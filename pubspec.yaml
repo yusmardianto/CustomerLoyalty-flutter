@@ -1,4 +1,4 @@
-name: Customer_loyalty
+name: customer_loyalty
 description: App for Thamrin Groups Loyal Customers
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -77,6 +77,10 @@ flutter:
     - images/fb.png
     - images/ig.png
     - images/wa.png
+    - images/faq.png
+    - images/cs.png
+    - images/header.jpg
+    - images/splash.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'DataType/news.dart';
+import 'DataType/contents.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'main.dart';
 

@@ -10,9 +10,9 @@ import 'CustomWidget/voucher_detail.dart';
 import 'main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'api/vouchers.dart';
-import 'api/news.dart';
+import 'api/contents.dart';
 import 'DataType/voucher.dart';
-import 'DataType/news.dart';
+import 'DataType/contents.dart';
 import 'vouchers_list.dart';
 import 'news.dart' as news;
 import 'api/users.dart';
@@ -27,13 +27,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<NewsBanner> BannerList= [];
+  List<NewsBanner> NewsList = [];
   List<Voucher> voucherList = [];
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   int bannerFocus,myVoucherFocus,availVoucherFocus;
 
   loadBanners()async{
-    var res = await News().getNews();
+    var res = await News().getNews("PROMOTIONS");
     if(res["STATUS"]==1){
       BannerList.clear();
       for(var i = 0;i<res["DATA"].length;i++){
@@ -45,6 +46,18 @@ class _HomePageState extends State<HomePage> {
         bannerFocus = 0;
         globVar.isLoading = false;
       });
+    }
+    else{
+      throw('Error fetching banners!');
+    }
+  }
+  loadNews()async{
+    var res = await News().getNews("NEWS");
+    if(res["STATUS"]==1){
+      NewsList.clear();
+      for(var i = 0;i<res["DATA"].length;i++){
+        NewsList.add(NewsBanner.fromJson(res["DATA"][i]));
+      }
     }
     else{
       throw('Error fetching banners!');
@@ -74,6 +87,7 @@ class _HomePageState extends State<HomePage> {
       var isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
       if(!isFinish) throw ("Failed refreshing user data");
       await loadAvailableVoucher();
+      await loadNews();
       await loadBanners();
       _refreshController.refreshCompleted();
     }
@@ -107,6 +121,7 @@ class _HomePageState extends State<HomePage> {
       var isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
       if(!isFinish) throw ("Failed refreshing user data");
       await loadAvailableVoucher();
+      await loadNews();
       await loadBanners();
     }catch(e){
       utils.toast(e,type:'ERROR');
@@ -196,7 +211,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.height*0.04,
-                  child: Container(color:Colors.blue),),
+                  child: Container(color:Color.fromRGBO(0, 0, 46, 1)),),
                   Expanded(
                     child: SmartRefresher(
                       // header: WaterDropHeader(),
@@ -209,91 +224,104 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             //Header
                             Container(
-                              padding: EdgeInsets.only(bottom:15),
-                              color:Colors.blue,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              // padding: EdgeInsets.only(bottom:15),
+                              child: Stack(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                          child: Text("Yamaha Thamrin Club",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 18),),
-                                        ),
-                                        InkWell(
-                                          onTap: ()async {
-                                            await utils.genQRcode(context,globVar.user.CUST_ID.toString());
-                                          },
-                                          child: Container(
-                                            child: Icon(Icons.qr_code_scanner_sharp,color: Colors.white,size: 24,),
-                                          ),
-                                        )
-                                      ],
+                                  Positioned.fill(child: FittedBox(
+                                    child:Image.asset("images/header.jpg",
+                                      filterQuality: FilterQuality.high,
+                                      colorBlendMode: BlendMode.clear,
                                     ),
-                                  ),
+                                    fit:BoxFit.fill,
+                                  )),
                                   Padding(
-                                      padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                                      child: Row(
-                                        children: [
-                                          Text("Hi ",style: TextStyle(fontSize:18,color: Colors.white,fontWeight: FontWeight.w300),),
-                                          Text("${globVar.user!=null?globVar.user.NAME:""},",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.w500),)
-                                        ],
-                                      )
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                                    child: Container(
-                                      child: Text("Kamu punya \t:",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 16),),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 15,right: 18,left: 45),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    padding: const EdgeInsets.only(bottom:18.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Container(
-                                              child: Text("Points : ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 14),),
-                                            ),
-                                            Container(
-                                              child: Text("${utils.thousandSeperator(globVar.user.CUST_POINT??'')}",style: GoogleFonts.ptMono(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 18, ),)),
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.only(left: 5),
-                                              child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Container(
-                                              child: Text("Level \t: ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 14),),
-                                            ),
-                                            Container(
-                                              child: Text("${globVar.user.LOYALTY_LEVEL??''}",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 16, fontFamily: "PT_Mono"),),
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.only(left: 5),
-                                              child: (globVar.user.LOYALTY_LEVEL_IMAGE==null)?Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,):Image(
-                                                height: 18,
-                                                width: 18,
-                                                fit: BoxFit.cover,
-                                                // errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
-                                                // image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
-                                                image: MemoryImage(globVar.user.LOYALTY_LEVEL_IMAGE),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                child: Text("Yamaha Thamrin Club",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 18),),
                                               ),
-                                            ),
-                                          ],
+                                              InkWell(
+                                                onTap: ()async {
+                                                  await utils.genQRcode(context,globVar.user.CUST_ID.toString());
+                                                },
+                                                child: Container(
+                                                  child: Icon(Icons.qr_code_scanner_sharp,color: Colors.white,size: 24,),
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                      ],
+                                        Padding(
+                                            padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                            child: Row(
+                                              children: [
+                                                Text("Hi ",style: TextStyle(fontSize:18,color: Colors.white,fontWeight: FontWeight.w300),),
+                                                Text("${globVar.user!=null?globVar.user.NAME:""},",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.w500),)
+                                              ],
+                                            )
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                          child: Container(
+                                            child: Text("Kamu punya \t:",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 16),),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 15,right: 18,left: 45),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Container(
+                                                    child: Text("Points : ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 14),),
+                                                  ),
+                                                  Container(
+                                                    child: Text("${utils.thousandSeperator(globVar.user.CUST_POINT??'')}",style: GoogleFonts.ptMono(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 18, ),)),
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.only(left: 5),
+                                                    child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Container(
+                                                    child: Text("Level \t: ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 14),),
+                                                  ),
+                                                  Container(
+                                                    child: Text("${globVar.user.LOYALTY_LEVEL??''}",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 16, fontFamily: "PT_Mono"),),
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.only(left: 5),
+                                                    child: (globVar.user.LOYALTY_LEVEL_IMAGE==null)?Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,):Image(
+                                                      height: 18,
+                                                      width: 18,
+                                                      fit: BoxFit.cover,
+                                                      // errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
+                                                      // image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
+                                                      image: MemoryImage(globVar.user.LOYALTY_LEVEL_IMAGE),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ]
                                     ),
                                   ),
-                                ]
+                                ],
                               )
                             ),
                             //Banners
@@ -351,7 +379,7 @@ class _HomePageState extends State<HomePage> {
                                                     ],
                                                     color: Color.fromRGBO(237, 237, 237, 1),
                                                     image: (i.message_image==null)?null:DecorationImage(
-                                                      fit: BoxFit.fitWidth,
+                                                      fit: BoxFit.fitHeight,
                                                       image: MemoryImage(i.message_image),
                                                     )
                                                 ),
@@ -566,7 +594,7 @@ class _HomePageState extends State<HomePage> {
                                 )),
                               ),
                             )
-                            :(globVar.myVouchers.length==0)
+                            :(NewsList.length==0)
                                 ?Container()
                                 :Column(
                               children: [
@@ -588,8 +616,8 @@ class _HomePageState extends State<HomePage> {
                                       InkWell(
                                         onTap: ()async{
                                           // Navigator.pushNamed(context, "/vouchers",);
-                                          await Navigator.push(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: true,)));
-                                          await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                                          // await Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsList()));
+                                          // await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                                           setState(() {
 
                                           });
@@ -611,39 +639,58 @@ class _HomePageState extends State<HomePage> {
                                       padding: const EdgeInsets.only(top:15.0),
                                       child: Container(
                                         height:90,
-                                        child: ListView.builder(scrollDirection: Axis.horizontal,shrinkWrap:true,itemCount: 2,itemBuilder: (context,indx)=>Container(
-                                          width:MediaQuery.of(context).size.width,
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:MainAxisAlignment.spaceEvenly,
-                                            children: [
+                                        child: ListView.builder(scrollDirection: Axis.horizontal,shrinkWrap:true,itemCount: (NewsList.length/2).ceil(),itemBuilder: (context,indx)
+                                          {
+                                            return Container(
+                                            width:MediaQuery.of(context).size.width,
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:MainAxisAlignment.spaceEvenly,
+                                              children: [
                                               Container(
-                                                color:Color.fromRGBO(237, 237, 237, 1),
+                                                decoration: (NewsList[indx*2].message_image!=null)?BoxDecoration(
+                                                image: DecorationImage(
+                                                image: MemoryImage(NewsList[indx*2].message_image),
+                                                fit: BoxFit.fitWidth
+                                                )
+                                                ):null,
+                                                width:175,
+                                                height:89,
+                                                child: (NewsList[indx*2].message_image==null)?Center(child: Text("No Image"),):null,
+                                              ),
+                                          ((indx*2+1)<=(NewsList.length-1))?Container(
+                                                width:175,
+                                                height:89,
+                                                decoration: (NewsList[indx*2+1].message_image!=null)?BoxDecoration(
+                                                image: DecorationImage(
+                                                image: MemoryImage(NewsList[indx*2+1].message_image),
+                                                fit: BoxFit.fitWidth
+                                                )
+                                                ):null,
+                                                child: (NewsList[indx*2+1].message_image==null)?Center(child: Text("No Image"),):null,
+                                              ):Container(
                                                 width:175,
                                                 height:89,
                                               ),
-                                              Container(
-                                                color: Color.fromRGBO(237, 237, 237, 1),
-                                                width:175,
-                                                height:89,
-                                              )
                                             ],
-                                          ),
-                                        )),
+                                            ),
+                                          );
+                                          },
+                                        ),
                                       ),
                                     ),
-                                    Container(
-                                      height:28,
-                                      padding: EdgeInsets.only(top:10,bottom:10),
-                                      child: ListView.builder(shrinkWrap: true,scrollDirection: Axis.horizontal,itemCount: globVar.myVouchers.length,itemBuilder: (context,index)=>Padding(
-                                        padding: EdgeInsets.only(left:2,right:2),
-                                        child: Container(height: (myVoucherFocus==index)?8:4,width: (myVoucherFocus==index)?8:4,decoration: BoxDecoration(
-                                            color: (myVoucherFocus==index)?Colors.redAccent:Colors.grey,
-                                            shape: BoxShape.circle
-                                        ),),
-                                      ),
-                                      ),
-                                    )
+                                    // Container(
+                                    //   height:28,
+                                    //   padding: EdgeInsets.only(top:10,bottom:10),
+                                    //   child: ListView.builder(shrinkWrap: true,scrollDirection: Axis.horizontal,itemCount: globVar.myVouchers.length,itemBuilder: (context,index)=>Padding(
+                                    //     padding: EdgeInsets.only(left:2,right:2),
+                                    //     child: Container(height: (myVoucherFocus==index)?8:4,width: (myVoucherFocus==index)?8:4,decoration: BoxDecoration(
+                                    //         color: (myVoucherFocus==index)?Colors.redAccent:Colors.grey,
+                                    //         shape: BoxShape.circle
+                                    //     ),),
+                                    //   ),
+                                    //   ),
+                                    // )
                                   ],
                                 ),
                               ],
@@ -982,10 +1029,12 @@ class _HomePageState extends State<HomePage> {
                                                   );
                                                 },
                                                 child: Container(
-                                                  color:Color.fromRGBO(237, 237, 237, 1),
                                                   width:175,
                                                   height:89,
-                                                  child:Text('CONTACT LIST IMAGE')
+                                                  decoration: BoxDecoration(image: DecorationImage(
+                                                  image: AssetImage('images/cs.png'),
+                                                  fit: BoxFit.fitHeight,
+                                                  )),
                                                 ),
                                               ),
                                               //FAQ
@@ -1024,10 +1073,12 @@ class _HomePageState extends State<HomePage> {
                                                   );
                                                 },
                                                 child: Container(
-                                                  color: Color.fromRGBO(237, 237, 237, 1),
                                                   width:175,
                                                   height:89,
-                                                    child:Text('FAQ IMAGE')
+                                                  decoration: BoxDecoration(image: DecorationImage(
+                                                  image: AssetImage('images/faq.png'),
+                                                  fit: BoxFit.cover,
+                                                  )),
                                                 ),
                                               )
                                             ],
