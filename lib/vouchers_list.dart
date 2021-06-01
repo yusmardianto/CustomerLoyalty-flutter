@@ -284,12 +284,17 @@ class _VouchersListState extends State<VouchersList> {
         child: Stack(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height,
+              color: Color.fromRGBO(0, 0, 46, 1),
+              height: MediaQuery.of(context).size.height*0.18,
               width: MediaQuery.of(context).size.width,
-              child: CustomPaint(
-                painter: MulltiPainter(),
-              ),
             ),
+            // Container(
+            //   height: MediaQuery.of(context).size.height,
+            //   width: MediaQuery.of(context).size.width,
+              // child: CustomPaint(
+              //   painter: MulltiPainter(),
+              // ),
+            // ),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -460,8 +465,8 @@ class _VouchersListState extends State<VouchersList> {
           showMyVoucher();
         },
           isExtended: true,
-          label: const Text('Voucher Saya'),
-          backgroundColor: Color.fromRGBO(207,79,79,1),
+          label: const Text('My Voucher'),
+          backgroundColor: Color.fromRGBO(0, 0, 46, 1),//Color.fromRGBO(207,79,79,1),
           icon: Icon(FontAwesomeIcons.shoppingBag),
       ),
     );

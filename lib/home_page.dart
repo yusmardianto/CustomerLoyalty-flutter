@@ -499,7 +499,7 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                     ),
                                                     Container(
-                                                      padding: EdgeInsets.all(15),
+                                                      padding: EdgeInsets.all(12),
                                                       height: 152,
                                                       alignment: Alignment.centerRight,
                                                       child: Column(
@@ -647,28 +647,38 @@ class _HomePageState extends State<HomePage> {
                                               mainAxisSize: MainAxisSize.max,
                                               mainAxisAlignment:MainAxisAlignment.spaceEvenly,
                                               children: [
-                                              Container(
-                                                decoration: (NewsList[indx*2].message_image!=null)?BoxDecoration(
-                                                image: DecorationImage(
-                                                image: MemoryImage(NewsList[indx*2].message_image),
-                                                fit: BoxFit.fitWidth
-                                                )
-                                                ):null,
-                                                width:175,
-                                                height:89,
-                                                child: (NewsList[indx*2].message_image==null)?Center(child: Text("No Image"),):null,
+                                              InkWell(
+                                                onTap:()async{
+                                                  await Navigator.push(context,MaterialPageRoute(builder: (context)=>news.News(NewsList[indx*2])));
+                                                },
+                                                child: Container(
+                                                  decoration: (NewsList[indx*2].message_image!=null)?BoxDecoration(
+                                                  image: DecorationImage(
+                                                  image: MemoryImage(NewsList[indx*2].message_image),
+                                                  fit: BoxFit.fitWidth
+                                                  )
+                                                  ):null,
+                                                  width:175,
+                                                  height:89,
+                                                  child: (NewsList[indx*2].message_image==null)?Center(child: Text("No Image"),):null,
+                                                ),
                                               ),
-                                          ((indx*2+1)<=(NewsList.length-1))?Container(
-                                                width:175,
-                                                height:89,
-                                                decoration: (NewsList[indx*2+1].message_image!=null)?BoxDecoration(
-                                                image: DecorationImage(
-                                                image: MemoryImage(NewsList[indx*2+1].message_image),
-                                                fit: BoxFit.fitWidth
-                                                )
-                                                ):null,
-                                                child: (NewsList[indx*2+1].message_image==null)?Center(child: Text("No Image"),):null,
-                                              ):Container(
+                                          ((indx*2+1)<=(NewsList.length-1))?InkWell(
+                                            onTap: ()async{
+                                              await Navigator.push(context,MaterialPageRoute(builder: (context)=>news.News(NewsList[indx*2+1])));
+                                            },
+                                            child: Container(
+                                                  width:175,
+                                                  height:89,
+                                                  decoration: (NewsList[indx*2+1].message_image!=null)?BoxDecoration(
+                                                  image: DecorationImage(
+                                                  image: MemoryImage(NewsList[indx*2+1].message_image),
+                                                  fit: BoxFit.fitWidth
+                                                  )
+                                                  ):null,
+                                                  child: (NewsList[indx*2+1].message_image==null)?Center(child: Text("No Image"),):null,
+                                                ),
+                                          ):Container(
                                                 width:175,
                                                 height:89,
                                               ),
@@ -839,6 +849,7 @@ class _HomePageState extends State<HomePage> {
                                                     height: 152,
                                                     width: MediaQuery.of(context).size.width,
                                                     decoration: BoxDecoration(
+                                                      border: Border.all(color: Colors.grey,width: 0.3),
                                                       borderRadius: BorderRadius.circular(20),
                                                       color: Colors.white,
                                                     ),
@@ -847,7 +858,7 @@ class _HomePageState extends State<HomePage> {
                                                     ),
                                                   ),
                                                   Container(
-                                                    padding: EdgeInsets.all(15),
+                                                    padding: EdgeInsets.all(12),
                                                     height: 152,
                                                     alignment: Alignment.centerRight,
                                                     child: Column(
@@ -861,20 +872,20 @@ class _HomePageState extends State<HomePage> {
                                                               mainAxisAlignment: MainAxisAlignment.start,
                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
-                                                                Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 34, ),),),
-                                                                Text(item.COUPON??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, ),),),
+                                                                Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 20, ),),),
+                                                                Text(item.COUPON??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 16, ),),),
                                                               ],
                                                             ),
                                                             Column(
                                                               mainAxisAlignment: MainAxisAlignment.end,
                                                               crossAxisAlignment: CrossAxisAlignment.end,
                                                               children: [
-                                                                Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 20, ),),),
+                                                                Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 16, ),),),
                                                                 Padding(
                                                                   padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
                                                                   child: Row(
                                                                     children: [
-                                                                      Text("${item.REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, ),),),
+                                                                      Text("${item.REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 14, ),),),
                                                                       Container(
                                                                         padding: EdgeInsets.only(left: 5),
                                                                         child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
@@ -886,7 +897,7 @@ class _HomePageState extends State<HomePage> {
                                                             ),
                                                           ],
                                                         ),
-                                                        Text(item.PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 15, ),),),
+                                                        // Text(item.PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 15, ),),),
 
                                                       ],
                                                     ),

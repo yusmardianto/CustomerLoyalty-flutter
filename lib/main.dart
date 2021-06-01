@@ -90,28 +90,27 @@ _check_Update(context)async{
   }
   catch(e){
     print(e);
-    utils.toast("Error, $e");
-    await Future.delayed(Duration(milliseconds: 500));
-    await utils.launchBrowserURL(globVar.playStore);
+    // utils.toast("Error, $e");
+    // await Future.delayed(Duration(milliseconds: 500));
+    // await utils.launchBrowserURL(globVar.playStore);
 //      util.showFlushbar(context, "Failed checking updates. $e.");
   }
 }
 preload()async{
-    preLoadState = "Mempersiapkan data";
+    // preLoadState = "Mempersiapkan data";
     try{
       if(prefs==null)prefs = await SharedPreferences.getInstance();
     }
     catch(e){
       print("error, $e");
     }
-    // print('test${[globVar==null,prefs==null,prefs.getString("user")]}');
     if(globVar==null){
-    preLoadState = "Mengecek penyimpanan";
+    // preLoadState = "Mengecek penyimpanan";
     globVar = new GlobVar();
-    preLoadPercentage = 1/2;
+    // preLoadPercentage = 1/2;
     await utils.restoreGlobVar();
-    preLoadState = "Hampir selesai";
-    preLoadPercentage = 2/2-0.02;
+/*    preLoadState = "Hampir selesai";
+    preLoadPercentage = 2/2-0.02;*/
     await Future.delayed(Duration(seconds: 2));
     }
 }
@@ -137,7 +136,8 @@ class MyApp extends StatelessWidget {
           builder: (context, AsyncSnapshot snapshot) {
             // Show splash screen while waiting for app resources to load:
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Splashscreen(preLoadPercentage,preLoadState);
+              // return Splashscreen(preLoadPercentage,preLoadState);
+              return Splashscreen();
             } else {
               // Loading is done, return the app:
               // print("user session ${globVar.user}");

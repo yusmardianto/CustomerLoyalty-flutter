@@ -4,9 +4,11 @@
     <item android:drawable="@color/splash_color"/>
     <item>
         <bitmap
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:src="@drawable/splash" />
+            android:src="@drawable/splash"
+        />
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center"-->
+
     </item>
 </layer-list>

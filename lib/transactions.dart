@@ -64,12 +64,17 @@ class _TransactionsState extends State<Transactions> {
         color: Colors.white,
         child: Stack(
           children: [
+            // Container(
+            //   height: MediaQuery.of(context).size.height,
+            //   width: MediaQuery.of(context).size.width,
+            //   child: CustomPaint(
+            //     painter: WavePainter(),
+            //   ),
+            // ),
             Container(
-              height: MediaQuery.of(context).size.height,
+              color: Color.fromRGBO(0, 0, 46, 1),
+              height: MediaQuery.of(context).size.height*0.43,
               width: MediaQuery.of(context).size.width,
-              child: CustomPaint(
-                painter: WavePainter(),
-              ),
             ),
             Padding(
               padding: const EdgeInsets.only(top:20.0),

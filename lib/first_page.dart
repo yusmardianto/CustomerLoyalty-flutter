@@ -50,7 +50,8 @@ class _FirstPageState extends State<FirstPage> {
           if (snapshot.hasData) {
             return (globVar.user!=null)?HomePage():LoginPage();
           } else {
-            return Splashscreen(preLoadPercentage,preLoadState);
+            return Splashscreen();
+            // return Splashscreen(preLoadPercentage,preLoadState);
           }
         });
   }
