@@ -379,7 +379,7 @@ class _HomePageState extends State<HomePage> {
                                                     ],
                                                     color: Color.fromRGBO(237, 237, 237, 1),
                                                     image: (i.message_image==null)?null:DecorationImage(
-                                                      fit: BoxFit.fitHeight,
+                                                      fit: BoxFit.fill,
                                                       image: MemoryImage(i.message_image),
                                                     )
                                                 ),
