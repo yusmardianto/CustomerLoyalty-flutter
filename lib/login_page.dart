@@ -116,20 +116,37 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Column(
                 children: [
+                  SizedBox(height: MediaQuery.of(context).size.height*0.04,),
                   Container(
+                    alignment: Alignment.center,
                     height: MediaQuery.of(context).size.height*0.44,
-                    padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.16,left: MediaQuery.of(context).size.width*0.24,right: MediaQuery.of(context).size.width*0.24,bottom: MediaQuery.of(context).size.height*0.05),
-                    child: Container(
-                      height: 218,
-                      width: 205,
-                      // decoration: BoxDecoration(
-                      //   image: DecorationImage(
-                      //     image: AssetImage("images/icon.png"),
-                      //     // colorFilter: ColorFilter.mode(Color.fromRGBO(10, 10, 249, 0.5), BlendMode.modulate ),
-                      //     fit: BoxFit.fitHeight,
-                      //   )
-                      // ),
-                    ),
+                    // padding:
+                        // EdgeInsets.only(top:MediaQuery.of(context).size.height*0.16,
+                        // left: MediaQuery.of(context).size.width*0.24,
+                        // right: MediaQuery.of(context).size.width*0.24,
+                        // bottom: MediaQuery.of(context).size.height*0.05
+                    // ),
+                    // child: Container(
+                    //   height: 367,
+                    //   width: 364,
+                    //   decoration: BoxDecoration(
+                    //     image: DecorationImage(
+                    //       fit: BoxFit.fitHeight,
+                    //       image: AssetImage('images/login_logo.png'),
+                    //     )
+                    //   ),
+                    // ),
+                    // child: Container(
+                    //   height: 218,
+                    //   width: 205,
+                    //   decoration: BoxDecoration(
+                    //     image: DecorationImage(
+                    //       image: AssetImage("images/icon.png"),
+                    //       // colorFilter: ColorFilter.mode(Color.fromRGBO(10, 10, 249, 0.5), BlendMode.modulate ),
+                    //       fit: BoxFit.fitHeight,
+                    //     )
+                    //   ),
+                    // ),
                   ),
                   // Container(
                   //   child: Text("Customer Loyalty",style: TextStyle(color: Colors.black.withOpacity(0.75),fontSize: 28,fontWeight: FontWeight.w700, fontFamily: "Roboto",fontStyle: FontStyle.normal),),),

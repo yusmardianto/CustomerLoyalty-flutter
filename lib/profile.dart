@@ -59,6 +59,22 @@ class _ProfileState extends State<Profile> {
               height: MediaQuery.of(context).size.height*0.43,
               width: MediaQuery.of(context).size.width,
             ),
+            Positioned.fill(
+                child:Column(
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).size.height*0.28,),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(32),topRight: Radius.circular(32),)
+                        ),
+                        
+                      ),
+                    ),
+                  ],
+                )
+            ),
             // Container(
             //   height: MediaQuery.of(context).size.height,
             //   width: MediaQuery.of(context).size.width,
@@ -68,13 +84,93 @@ class _ProfileState extends State<Profile> {
             // ),
             Column(
               children: [
+                Container(width: MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height*0.15,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).size.height*0.04,),
+                    Container(height: 40,
+                    child: TextButton(
+                      onPressed: ()async {
+                        var logout = await showDialog(
+                            context: context,
+                            builder: (context)=>SimpleDialog(
+                              children: [
+                                Icon(FontAwesomeIcons.signOutAlt,size: 85,),
+                                Center(child: Text("Logout dari akun ini?",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 16,fontWeight: FontWeight.w400),)),
+                                SizedBox(height: 15),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    FlatButton(
+                                        minWidth: 120,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                            side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                                        ),
+                                        padding: EdgeInsets.all(10),
+                                        onPressed: (){
+                                          Navigator.pop(context,false);
+                                        },
+                                        child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
+                                    ),
+                                    SizedBox(width: 15),
+                                    FlatButton(
+                                        minWidth: 120,
+                                        color: Color.fromRGBO(254, 83, 83, 1),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(15.0)
+                                        ),
+                                        padding: EdgeInsets.all(10),
+                                        onPressed: (){
+                                          globVar.user = null;
+                                          prefs.remove("user");
+                                          Navigator.pop(context,true);
+                                        },
+                                        child: Text("Logout",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
+                                    ),
+                                  ],
+                                ),
+                              ],
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  side: BorderSide(color: Colors.transparent)
+                              ),
+                              contentPadding: EdgeInsets.all(20),
+                            )
+                        );
+                        if(logout??false){
+                          utils.removeBackupGlobVar();
+                          globVar.clear();
+                          Navigator.pushNamed(context, '/login');
+                        }
+                      },
+                      style: ButtonStyle(
+                        minimumSize:  MaterialStateProperty.all(Size(80, 38)),
+                        padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                        backgroundColor: MaterialStateProperty.all(Color.fromRGBO(255, 84, 84, 1)),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)
+                        )),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(FontAwesomeIcons.signOutAlt,color: Colors.white,size: 20,),
+                          Text("  Logout",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w700),),
+                        ],
+                      ),
+                    ),),
+                  ],
+                )),
                 Container(
-                  height: MediaQuery.of(context).size.height*0.45,
+                  height: MediaQuery.of(context).size.height*0.4,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(flex: 1,child: SizedBox()),
                       Expanded(
                         flex: 7,
                         child:
@@ -163,11 +259,11 @@ class _ProfileState extends State<Profile> {
                             });
                           },
                           child: CircleAvatar(
-                            radius: 93,
+                            radius: 73,
                             backgroundColor: Colors.white,
                             child: CircleAvatar(
                               backgroundColor: Colors.grey,
-                              radius: 90,
+                              radius: 70,
                               backgroundImage: (globVar.user!=null &&globVar.user.CUST_PROFILE_IMAGE==null)?null:profileImage.image,
                               child: (globVar.user!=null &&globVar.user.CUST_PROFILE_IMAGE==null)?Icon(Icons.person,color: Colors.white,size: 150,):null,
                             ),
@@ -202,9 +298,9 @@ class _ProfileState extends State<Profile> {
                         // ),
                       ),
                       Expanded(
-                        flex: 1,
+                        flex: 2,
                         child: Container(
-                          child: Text(globVar.user!=null?globVar.user.NAME:"#NAME#",style: TextStyle(color: Colors.white,fontSize: 16,fontStyle: FontStyle.normal,fontWeight: FontWeight.w700),),
+                          child: Text(globVar.user!=null?globVar.user.NAME:"#NAME#",style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontSize: 25,fontStyle: FontStyle.normal,fontWeight: FontWeight.w700),),
                         ),
                       ),
                       Expanded(
@@ -212,7 +308,7 @@ class _ProfileState extends State<Profile> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            FlatButton(
+                            TextButton(
                               onPressed: ()async{
                                 if(changed){
                                   if(toggleEdit){
@@ -249,11 +345,13 @@ class _ProfileState extends State<Profile> {
                                 }
 
                               },
-                              minWidth: 180,
-                              padding: EdgeInsets.all(12),
-                              color: toggleEdit?Colors.green:Colors.blue,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)
+                              style: ButtonStyle(
+                                minimumSize:  MaterialStateProperty.all(Size(177, 38)),
+                                padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                                backgroundColor: MaterialStateProperty.all(toggleEdit?Colors.green:Colors.blue),
+                                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)
+                                )),
                               ),
                               child: toggleEdit
                                   ?Row(
@@ -273,77 +371,270 @@ class _ProfileState extends State<Profile> {
                                       ],
                                     ),
                             ),
-                            FlatButton(
+                            TextButton(
                               onPressed: ()async {
-                                var logout = await showDialog(
+                                Map<String,dynamic> passMap;
+                                final _formPassKey = GlobalKey<FormBuilderState>();
+                                bool obscure1 = true,obscure2 = true,obscure3 = true;
+                                await showDialog(
                                     context: context,
-                                    builder: (context)=>SimpleDialog(
-                                      children: [
-                                        Icon(FontAwesomeIcons.signOutAlt,size: 85,),
-                                        Center(child: Text("Logout dari akun ini?",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 16,fontWeight: FontWeight.w400),)),
-                                        SizedBox(height: 15),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                    builder: (context)=>StatefulBuilder(
+                                        builder: (context,setState)=>SimpleDialog(
                                           children: [
-                                            FlatButton(
-                                                minWidth: 120,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(15.0),
-                                                    side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
-                                                ),
-                                                padding: EdgeInsets.all(10),
-                                                onPressed: (){
-                                                  Navigator.pop(context,false);
-                                                },
-                                                child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
+                                            FormBuilder(
+                                                key: _formPassKey,
+                                                child: Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: FormBuilderTextField(
+                                                        name:"old",
+                                                        obscureText: obscure1??true,
+                                                        validator: (value)=>
+                                                        value == null || value.isEmpty ? "Masukkan password lama":null,
+                                                        decoration: InputDecoration(
+                                                            suffixIcon: InkWell(
+                                                                onTap: (){
+                                                                  setState(() {
+                                                                    obscure1 = !obscure1;
+                                                                  });
+                                                                },
+                                                                child: Icon((obscure1)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
+                                                            focusedBorder: new OutlineInputBorder(
+                                                              borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                              borderRadius: const BorderRadius.all(
+                                                                const Radius.circular(15.0),
+                                                              ),
+                                                            ),
+                                                            border: new OutlineInputBorder(
+                                                              borderRadius: const BorderRadius.all(
+                                                                const Radius.circular(15.0),
+                                                              ),
+                                                            ),
+                                                            contentPadding: EdgeInsets.all(23),
+                                                            hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
+                                                            hintText: "Password lama"
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: FormBuilderTextField(
+                                                        name:"pass",
+                                                        obscureText: obscure2??true,
+                                                        validator: (value)=>
+                                                        value == null || value.isEmpty ? "Masukkan password baru":null,
+                                                        decoration: InputDecoration(
+                                                            suffixIcon: InkWell(
+                                                                onTap: (){
+                                                                  setState(() {
+                                                                    obscure2 = !obscure2;
+                                                                  });
+                                                                },
+                                                                child: Icon((obscure2)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
+                                                            focusedBorder: new OutlineInputBorder(
+                                                              borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                              borderRadius: const BorderRadius.all(
+                                                                const Radius.circular(15.0),
+                                                              ),
+                                                            ),
+                                                            border: new OutlineInputBorder(
+                                                              borderRadius: const BorderRadius.all(
+                                                                const Radius.circular(15.0),
+                                                              ),
+                                                            ),
+                                                            contentPadding: EdgeInsets.all(23),
+                                                            hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
+                                                            hintText: "Password baru"
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: FormBuilderTextField(
+                                                        name:"confirm",
+                                                        obscureText: obscure3??true,
+                                                        decoration: InputDecoration(
+                                                            suffixIcon: InkWell(
+                                                                onTap: (){
+                                                                  setState(() {
+                                                                    obscure3 = !obscure3;
+                                                                  });
+                                                                },
+                                                                child: Icon((obscure3)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
+                                                            focusedBorder: new OutlineInputBorder(
+                                                              borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                              borderRadius: const BorderRadius.all(
+                                                                const Radius.circular(15.0),
+                                                              ),
+                                                            ),
+                                                            border: new OutlineInputBorder(
+                                                              borderRadius: const BorderRadius.all(
+                                                                const Radius.circular(15.0),
+                                                              ),
+                                                            ),
+                                                            contentPadding: EdgeInsets.all(23),
+                                                            hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
+                                                            hintText: "Konfirmasi password"
+                                                        ),
+                                                        validator: (value)=>
+                                                        value == null || value.isEmpty ? "Masukkan password baru":null,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
                                             ),
-                                            SizedBox(width: 15),
-                                            FlatButton(
-                                                minWidth: 120,
-                                                color: Color.fromRGBO(254, 83, 83, 1),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(15.0)
+                                            SizedBox(height: 15),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                FlatButton(
+                                                    minWidth: 120,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(15.0),
+                                                        side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                                                    ),
+                                                    padding: EdgeInsets.all(10),
+                                                    onPressed: (){
+                                                      Navigator.pop(context,false);
+                                                    },
+                                                    child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
                                                 ),
-                                                padding: EdgeInsets.all(10),
-                                                onPressed: (){
-                                                  globVar.user = null;
-                                                  prefs.remove("user");
-                                                  Navigator.pop(context,true);
-                                                },
-                                                child: Text("Logout",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
+                                                SizedBox(width: 15),
+                                                FlatButton(
+                                                    minWidth: 120,
+                                                    color: Colors.amber,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(15.0)
+                                                    ),
+                                                    padding: EdgeInsets.all(10),
+                                                    onPressed: ()async {
+                                                      _formPassKey.currentState.save();
+                                                      if (_formPassKey.currentState.validate()) {
+                                                        if(_formPassKey.currentState.value["pass"].trim() == _formPassKey.currentState.value["confirm"].trim()){
+                                                          passMap = Map<String,dynamic>.from(_formPassKey.currentState.value);
+                                                          passMap.remove("confirm");
+                                                          for(var i=0;i<passMap.keys.length;i++){
+                                                            passMap.update(passMap.keys.toList()[i], (value) => value.trim());
+                                                          }
+                                                          passMap["login_id"]= globVar.auth.login_id;
+                                                          Future future = Auths().changePass(passMap);
+                                                          var res = await utils.showLoadingFuture(context,future);
+                                                          utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
+                                                          if(res["STATUS"]) {
+                                                            Navigator.pop(context);
+                                                          }
+                                                        }
+                                                        else{
+                                                          utils.toast("Password baru tidak sama",type: "ERROR");
+                                                        }
+                                                      }
+                                                    },
+                                                    child: Text("Change",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
+                                                ),
+                                              ],
                                             ),
                                           ],
-                                        ),
-                                      ],
-                                      backgroundColor: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(25.0),
-                                          side: BorderSide(color: Colors.transparent)
-                                      ),
-                                      contentPadding: EdgeInsets.all(20),
+                                          backgroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(25.0),
+                                              side: BorderSide(color: Colors.transparent)
+                                          ),
+                                          contentPadding: EdgeInsets.all(20),
+                                        )
                                     )
                                 );
-                                if(logout??false){
-                                  utils.removeBackupGlobVar();
-                                  globVar.clear();
-                                  Navigator.pushNamed(context, '/login');
-                                }
                               },
-                              minWidth: 180,
-                              padding: EdgeInsets.all(10),
-                              color: Color.fromRGBO(255, 84, 84, 1),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)
+                              style: ButtonStyle(
+                                minimumSize:  MaterialStateProperty.all(Size(177, 38)),
+                                padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                                backgroundColor: MaterialStateProperty.all(Colors.grey),
+                                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)
+                                )),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(FontAwesomeIcons.signOutAlt,color: Colors.white,size: 20,),
-                                  Text("  Logout",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w700),),
+                                  Icon(FontAwesomeIcons.key,color: Colors.white,size: 20,),
+                                  Text("  New Password",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w700),),
                                 ],
                               ),
                             ),
+                            // TextButton(
+                            //   onPressed: ()async {
+                            //     var logout = await showDialog(
+                            //         context: context,
+                            //         builder: (context)=>SimpleDialog(
+                            //           children: [
+                            //             Icon(FontAwesomeIcons.signOutAlt,size: 85,),
+                            //             Center(child: Text("Logout dari akun ini?",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 16,fontWeight: FontWeight.w400),)),
+                            //             SizedBox(height: 15),
+                            //             Row(
+                            //               mainAxisAlignment: MainAxisAlignment.center,
+                            //               children: [
+                            //                 FlatButton(
+                            //                     minWidth: 120,
+                            //                     shape: RoundedRectangleBorder(
+                            //                         borderRadius: BorderRadius.circular(15.0),
+                            //                         side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                            //                     ),
+                            //                     padding: EdgeInsets.all(10),
+                            //                     onPressed: (){
+                            //                       Navigator.pop(context,false);
+                            //                     },
+                            //                     child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
+                            //                 ),
+                            //                 SizedBox(width: 15),
+                            //                 FlatButton(
+                            //                     minWidth: 120,
+                            //                     color: Color.fromRGBO(254, 83, 83, 1),
+                            //                     shape: RoundedRectangleBorder(
+                            //                         borderRadius: BorderRadius.circular(15.0)
+                            //                     ),
+                            //                     padding: EdgeInsets.all(10),
+                            //                     onPressed: (){
+                            //                       globVar.user = null;
+                            //                       prefs.remove("user");
+                            //                       Navigator.pop(context,true);
+                            //                     },
+                            //                     child: Text("Logout",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
+                            //                 ),
+                            //               ],
+                            //             ),
+                            //           ],
+                            //           backgroundColor: Colors.white,
+                            //           shape: RoundedRectangleBorder(
+                            //               borderRadius: BorderRadius.circular(25.0),
+                            //               side: BorderSide(color: Colors.transparent)
+                            //           ),
+                            //           contentPadding: EdgeInsets.all(20),
+                            //         )
+                            //     );
+                            //     if(logout??false){
+                            //       utils.removeBackupGlobVar();
+                            //       globVar.clear();
+                            //       Navigator.pushNamed(context, '/login');
+                            //     }
+                            //   },
+                            //   style: ButtonStyle(
+                            //     minimumSize:  MaterialStateProperty.all(Size(177, 38)),
+                            //     padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+                            //     backgroundColor: MaterialStateProperty.all(Color.fromRGBO(255, 84, 84, 1)),
+                            //     shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            //         borderRadius: BorderRadius.circular(20)
+                            //     )),
+                            //   ),
+                            //   child: Row(
+                            //     mainAxisSize: MainAxisSize.min,
+                            //     mainAxisAlignment: MainAxisAlignment.center,
+                            //     children: [
+                            //       Icon(FontAwesomeIcons.signOutAlt,color: Colors.white,size: 20,),
+                            //       Text("  Logout",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w700),),
+                            //     ],
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -354,200 +645,200 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 10,right: 10),
-                  alignment: Alignment.centerRight,
-                  child: InkWell(
-                    onTap: ()async{
-                      Map<String,dynamic> passMap;
-                      final _formPassKey = GlobalKey<FormBuilderState>();
-                      bool obscure1 = true,obscure2 = true,obscure3 = true;
-                      await showDialog(
-                          context: context,
-                          builder: (context)=>StatefulBuilder(
-                              builder: (context,setState)=>SimpleDialog(
-                                children: [
-                                  FormBuilder(
-                                      key: _formPassKey,
-                                      child: Column(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: FormBuilderTextField(
-                                                name:"old",
-                                                obscureText: obscure1??true,
-                                                validator: (value)=>
-                                                value == null || value.isEmpty ? "Masukkan password lama":null,
-                                              decoration: InputDecoration(
-                                                  suffixIcon: InkWell(
-                                                      onTap: (){
-                                                        setState(() {
-                                                          obscure1 = !obscure1;
-                                                        });
-                                                      },
-                                                      child: Icon((obscure1)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
-                                                  focusedBorder: new OutlineInputBorder(
-                                                    borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                    borderRadius: const BorderRadius.all(
-                                                      const Radius.circular(15.0),
-                                                    ),
-                                                  ),
-                                                  border: new OutlineInputBorder(
-                                                    borderRadius: const BorderRadius.all(
-                                                      const Radius.circular(15.0),
-                                                    ),
-                                                  ),
-                                                  contentPadding: EdgeInsets.all(23),
-                                                  hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
-                                                  hintText: "Password lama"
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: FormBuilderTextField(
-                                              name:"pass",
-                                              obscureText: obscure2??true,
-                                              validator: (value)=>
-                                              value == null || value.isEmpty ? "Masukkan password baru":null,
-                                              decoration: InputDecoration(
-                                                  suffixIcon: InkWell(
-                                                      onTap: (){
-                                                        setState(() {
-                                                          obscure2 = !obscure2;
-                                                        });
-                                                      },
-                                                      child: Icon((obscure2)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
-                                                  focusedBorder: new OutlineInputBorder(
-                                                    borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                    borderRadius: const BorderRadius.all(
-                                                      const Radius.circular(15.0),
-                                                    ),
-                                                  ),
-                                                  border: new OutlineInputBorder(
-                                                    borderRadius: const BorderRadius.all(
-                                                      const Radius.circular(15.0),
-                                                    ),
-                                                  ),
-                                                  contentPadding: EdgeInsets.all(23),
-                                                  hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
-                                                  hintText: "Password baru"
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: FormBuilderTextField(
-                                              name:"confirm",
-                                              obscureText: obscure3??true,
-                                              decoration: InputDecoration(
-                                                  suffixIcon: InkWell(
-                                                      onTap: (){
-                                                        setState(() {
-                                                          obscure3 = !obscure3;
-                                                        });
-                                                      },
-                                                      child: Icon((obscure3)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
-                                                  focusedBorder: new OutlineInputBorder(
-                                                    borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                    borderRadius: const BorderRadius.all(
-                                                      const Radius.circular(15.0),
-                                                    ),
-                                                  ),
-                                                  border: new OutlineInputBorder(
-                                                    borderRadius: const BorderRadius.all(
-                                                      const Radius.circular(15.0),
-                                                    ),
-                                                  ),
-                                                  contentPadding: EdgeInsets.all(23),
-                                                  hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
-                                                  hintText: "Konfirmasi password"
-                                              ),
-                                              validator: (value)=>
-                                              value == null || value.isEmpty ? "Masukkan password baru":null,
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                  ),
-                                  SizedBox(height: 15),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      FlatButton(
-                                          minWidth: 120,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(15.0),
-                                              side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
-                                          ),
-                                          padding: EdgeInsets.all(10),
-                                          onPressed: (){
-                                            Navigator.pop(context,false);
-                                          },
-                                          child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
-                                      ),
-                                      SizedBox(width: 15),
-                                      FlatButton(
-                                          minWidth: 120,
-                                          color: Colors.amber,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(15.0)
-                                          ),
-                                          padding: EdgeInsets.all(10),
-                                          onPressed: ()async {
-                                            _formPassKey.currentState.save();
-                                            if (_formPassKey.currentState.validate()) {
-                                                if(_formPassKey.currentState.value["pass"].trim() == _formPassKey.currentState.value["confirm"].trim()){
-                                                  passMap = Map<String,dynamic>.from(_formPassKey.currentState.value);
-                                                  passMap.remove("confirm");
-                                                  for(var i=0;i<passMap.keys.length;i++){
-                                                    passMap.update(passMap.keys.toList()[i], (value) => value.trim());
-                                                  }
-                                                  passMap["login_id"]= globVar.auth.login_id;
-                                                    Future future = Auths().changePass(passMap);
-                                                    var res = await utils.showLoadingFuture(context,future);
-                                                    utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
-                                                    if(res["STATUS"]) {
-                                                      Navigator.pop(context);
-                                                    }
-                                                }
-                                                else{
-                                                  utils.toast("Password baru tidak sama",type: "ERROR");
-                                                }
-                                            }
-                                          },
-                                          child: Text("Change",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                                backgroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25.0),
-                                    side: BorderSide(color: Colors.transparent)
-                                ),
-                                contentPadding: EdgeInsets.all(20),
-                              )
-                          )
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.amber
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(FontAwesomeIcons.key,size: 15 ,),
-                          SizedBox(width: 10,),
-                          Text("Baru",style: TextStyle(fontWeight: FontWeight.w400, color: Colors.black,fontSize: 16,fontStyle: FontStyle.normal,),),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                // Container(
+                //   padding: EdgeInsets.only(left: 10,right: 10),
+                //   alignment: Alignment.centerRight,
+                //   child: InkWell(
+                //     onTap: ()async{
+                //       Map<String,dynamic> passMap;
+                //       final _formPassKey = GlobalKey<FormBuilderState>();
+                //       bool obscure1 = true,obscure2 = true,obscure3 = true;
+                //       await showDialog(
+                //           context: context,
+                //           builder: (context)=>StatefulBuilder(
+                //               builder: (context,setState)=>SimpleDialog(
+                //                 children: [
+                //                   FormBuilder(
+                //                       key: _formPassKey,
+                //                       child: Column(
+                //                         children: [
+                //                           Padding(
+                //                             padding: const EdgeInsets.all(8.0),
+                //                             child: FormBuilderTextField(
+                //                                 name:"old",
+                //                                 obscureText: obscure1??true,
+                //                                 validator: (value)=>
+                //                                 value == null || value.isEmpty ? "Masukkan password lama":null,
+                //                               decoration: InputDecoration(
+                //                                   suffixIcon: InkWell(
+                //                                       onTap: (){
+                //                                         setState(() {
+                //                                           obscure1 = !obscure1;
+                //                                         });
+                //                                       },
+                //                                       child: Icon((obscure1)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
+                //                                   focusedBorder: new OutlineInputBorder(
+                //                                     borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                //                                     borderRadius: const BorderRadius.all(
+                //                                       const Radius.circular(15.0),
+                //                                     ),
+                //                                   ),
+                //                                   border: new OutlineInputBorder(
+                //                                     borderRadius: const BorderRadius.all(
+                //                                       const Radius.circular(15.0),
+                //                                     ),
+                //                                   ),
+                //                                   contentPadding: EdgeInsets.all(23),
+                //                                   hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
+                //                                   hintText: "Password lama"
+                //                               ),
+                //                             ),
+                //                           ),
+                //                           Padding(
+                //                             padding: const EdgeInsets.all(8.0),
+                //                             child: FormBuilderTextField(
+                //                               name:"pass",
+                //                               obscureText: obscure2??true,
+                //                               validator: (value)=>
+                //                               value == null || value.isEmpty ? "Masukkan password baru":null,
+                //                               decoration: InputDecoration(
+                //                                   suffixIcon: InkWell(
+                //                                       onTap: (){
+                //                                         setState(() {
+                //                                           obscure2 = !obscure2;
+                //                                         });
+                //                                       },
+                //                                       child: Icon((obscure2)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
+                //                                   focusedBorder: new OutlineInputBorder(
+                //                                     borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                //                                     borderRadius: const BorderRadius.all(
+                //                                       const Radius.circular(15.0),
+                //                                     ),
+                //                                   ),
+                //                                   border: new OutlineInputBorder(
+                //                                     borderRadius: const BorderRadius.all(
+                //                                       const Radius.circular(15.0),
+                //                                     ),
+                //                                   ),
+                //                                   contentPadding: EdgeInsets.all(23),
+                //                                   hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
+                //                                   hintText: "Password baru"
+                //                               ),
+                //                             ),
+                //                           ),
+                //                           Padding(
+                //                             padding: const EdgeInsets.all(8.0),
+                //                             child: FormBuilderTextField(
+                //                               name:"confirm",
+                //                               obscureText: obscure3??true,
+                //                               decoration: InputDecoration(
+                //                                   suffixIcon: InkWell(
+                //                                       onTap: (){
+                //                                         setState(() {
+                //                                           obscure3 = !obscure3;
+                //                                         });
+                //                                       },
+                //                                       child: Icon((obscure3)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
+                //                                   focusedBorder: new OutlineInputBorder(
+                //                                     borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                //                                     borderRadius: const BorderRadius.all(
+                //                                       const Radius.circular(15.0),
+                //                                     ),
+                //                                   ),
+                //                                   border: new OutlineInputBorder(
+                //                                     borderRadius: const BorderRadius.all(
+                //                                       const Radius.circular(15.0),
+                //                                     ),
+                //                                   ),
+                //                                   contentPadding: EdgeInsets.all(23),
+                //                                   hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
+                //                                   hintText: "Konfirmasi password"
+                //                               ),
+                //                               validator: (value)=>
+                //                               value == null || value.isEmpty ? "Masukkan password baru":null,
+                //                             ),
+                //                           ),
+                //                         ],
+                //                       )
+                //                   ),
+                //                   SizedBox(height: 15),
+                //                   Row(
+                //                     mainAxisAlignment: MainAxisAlignment.center,
+                //                     children: [
+                //                       FlatButton(
+                //                           minWidth: 120,
+                //                           shape: RoundedRectangleBorder(
+                //                               borderRadius: BorderRadius.circular(15.0),
+                //                               side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                //                           ),
+                //                           padding: EdgeInsets.all(10),
+                //                           onPressed: (){
+                //                             Navigator.pop(context,false);
+                //                           },
+                //                           child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
+                //                       ),
+                //                       SizedBox(width: 15),
+                //                       FlatButton(
+                //                           minWidth: 120,
+                //                           color: Colors.amber,
+                //                           shape: RoundedRectangleBorder(
+                //                               borderRadius: BorderRadius.circular(15.0)
+                //                           ),
+                //                           padding: EdgeInsets.all(10),
+                //                           onPressed: ()async {
+                //                             _formPassKey.currentState.save();
+                //                             if (_formPassKey.currentState.validate()) {
+                //                                 if(_formPassKey.currentState.value["pass"].trim() == _formPassKey.currentState.value["confirm"].trim()){
+                //                                   passMap = Map<String,dynamic>.from(_formPassKey.currentState.value);
+                //                                   passMap.remove("confirm");
+                //                                   for(var i=0;i<passMap.keys.length;i++){
+                //                                     passMap.update(passMap.keys.toList()[i], (value) => value.trim());
+                //                                   }
+                //                                   passMap["login_id"]= globVar.auth.login_id;
+                //                                     Future future = Auths().changePass(passMap);
+                //                                     var res = await utils.showLoadingFuture(context,future);
+                //                                     utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
+                //                                     if(res["STATUS"]) {
+                //                                       Navigator.pop(context);
+                //                                     }
+                //                                 }
+                //                                 else{
+                //                                   utils.toast("Password baru tidak sama",type: "ERROR");
+                //                                 }
+                //                             }
+                //                           },
+                //                           child: Text("Change",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
+                //                       ),
+                //                     ],
+                //                   ),
+                //                 ],
+                //                 backgroundColor: Colors.white,
+                //                 shape: RoundedRectangleBorder(
+                //                     borderRadius: BorderRadius.circular(25.0),
+                //                     side: BorderSide(color: Colors.transparent)
+                //                 ),
+                //                 contentPadding: EdgeInsets.all(20),
+                //               )
+                //           )
+                //       );
+                //     },
+                //     child: Container(
+                //       padding: EdgeInsets.all(10),
+                //       decoration: BoxDecoration(
+                //           borderRadius: BorderRadius.circular(15),
+                //           color: Colors.amber
+                //       ),
+                //       child: Row(
+                //         mainAxisSize: MainAxisSize.min,
+                //         children: [
+                //           Icon(FontAwesomeIcons.key,size: 15 ,),
+                //           SizedBox(width: 10,),
+                //           Text("Baru",style: TextStyle(fontWeight: FontWeight.w400, color: Colors.black,fontSize: 16,fontStyle: FontStyle.normal,),),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 Expanded(
                   child: FormBuilder(
                     key: _formKey,
@@ -558,7 +849,8 @@ class _ProfileState extends State<Profile> {
                     autovalidateMode: AutovalidateMode.disabled,
                     initialValue: userData,
                     child: ListView.builder(
-                      padding: EdgeInsets.only(left: 25,right: 25,bottom: 25,top: 10),
+                        padding: EdgeInsets.all(0),
+                      // padding: EdgeInsets.all(left: 25,right: 25,),
                       itemCount: globVar.user != null ?globVar.user.toJsonDisplay().keys.length:0,
                         itemBuilder: (context,idx)
                             {
@@ -623,8 +915,9 @@ class _ProfileState extends State<Profile> {
                               }
                               return Column(
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 10,left: 15,right: 15,bottom: 10),
+                                  Container(
+                                    color: (idx%2==0)?Color.fromRGBO(233, 232, 232, 1):Colors.white,
+                                    padding: EdgeInsets.only(left: 40,right: 40,),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [

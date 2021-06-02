@@ -15,10 +15,13 @@ class VoucherPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) async{
     var paint = Paint();
     if(type == "Voucher Code"){
-      paint.color = Color.fromRGBO(45, 125, 159, 1);
+      paint.color = Color.fromRGBO(38, 95, 126, 1);
     }
     else{
-      paint.color = Color.fromRGBO(255, 84, 84, 1);
+
+      // paint.color = Color.fromRGBO(255, 84, 84, 1);
+      // paint.color = Color.fromRGBO(1, 1, 52, 1);
+      paint.color = Color.fromRGBO(1, 1, 52, 1);
     }
     paint.style = PaintingStyle.fill;
     var path = Path();

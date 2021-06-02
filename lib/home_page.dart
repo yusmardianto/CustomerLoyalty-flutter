@@ -772,6 +772,11 @@ class _HomePageState extends State<HomePage> {
                                             height: 96,
                                             enableInfiniteScroll: true,
                                             autoPlay: false,
+                                            onPageChanged: (index,reason){
+                                              setState(() {
+                                              myVoucherFocus = index;
+                                              });
+                                            },
                                             // autoPlayAnimationDuration: Duration(seconds: 3)
                                         ),
                                         items:
