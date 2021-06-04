@@ -191,7 +191,7 @@ class _ProfileState extends State<Profile> {
                                     children: [
                                       InkWell(
                                         onTap:()async{
-                                          PickedFile temp = await ImagePicker().getImage(source: ImageSource.gallery);
+                                          PickedFile temp = await ImagePicker().getImage(maxWidth: 700,imageQuality: 50,source: ImageSource.gallery);
                                           if(temp != null){
                                             image = new File(temp.path);
                                           }
@@ -212,7 +212,7 @@ class _ProfileState extends State<Profile> {
                                       Divider(),
                                       InkWell(
                                         onTap: ()async{
-                                          PickedFile temp = await ImagePicker().getImage(source: ImageSource.camera);
+                                          PickedFile temp = await ImagePicker().getImage(maxWidth: 700,imageQuality: 50,source: ImageSource.camera);
                                           if(temp != null){
                                             image = new File(temp.path);
                                           }
