@@ -228,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                               child: Stack(
                                 children: [
                                   Positioned.fill(child: FittedBox(
-                                    child:Image.asset("images/header.jpg",
+                                    child:Image.asset("images/header_yamaha.jpg",
                                       filterQuality: FilterQuality.high,
                                       colorBlendMode: BlendMode.clear,
                                     ),

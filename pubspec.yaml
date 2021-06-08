@@ -1,4 +1,4 @@
-name: customer_loyalty
+name: my_thamrin_club
 description: App for Thamrin Groups Loyal Customers
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -7,7 +7,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.2+19
+version: 1.0.2+20
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -61,7 +61,7 @@ flutter_native_splash:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "images/icon.jpg"
+  image_path: "images/icon.png"
 
 # The following section is specific to Flutter.
 flutter:
@@ -79,8 +79,11 @@ flutter:
     - images/wa.png
     - images/faq.png
     - images/cs.png
-    - images/header.jpg
+    - images/header_yamaha.jpg
     - images/splash.jpg
+    - images/step1.png
+    - images/step2.png
+    - images/step3.png
 #    - images/login_logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

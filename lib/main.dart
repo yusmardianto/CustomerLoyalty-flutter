@@ -13,7 +13,7 @@ import 'vouchers_list.dart';
 import 'CustomShape/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:in_app_update/in_app_update.dart';
-// import 'package:package_info_plus/package_info_plus.dart';
+import 'first_page.dart';
 
 // Images imageHandler = new Images();
 GlobVar globVar;
@@ -140,9 +140,11 @@ class MyApp extends StatelessWidget {
               return Splashscreen();
             } else {
               // Loading is done, return the app:
-              // print("user session ${globVar.user}");
               _check_Update(context);
-                  return (globVar.user!=null)?HomePage():LoginPage();
+                  if(prefs.getBool("first_time")??true){
+                    return FirstPage();
+                  }
+                  else return (globVar.user!=null)?HomePage():LoginPage();
             }
           },
         ),

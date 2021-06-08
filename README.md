@@ -1,4 +1,4 @@
-# customer_loyalty
+# my_thamrin_club
 
 App for Thamrin Groups Loyal Customers
 

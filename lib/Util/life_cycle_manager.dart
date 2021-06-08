@@ -1,4 +1,4 @@
-import 'package:customer_loyalty/api/users.dart';
+import 'package:my_thamrin_club/api/users.dart';
 import 'package:flutter/widgets.dart';
 import '../main.dart';
 class LifeCycleManager extends StatefulWidget {
