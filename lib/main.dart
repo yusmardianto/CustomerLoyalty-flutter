@@ -123,7 +123,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         navigatorKey: navKey,
         debugShowCheckedModeBanner: false,
-        title: 'Customer Loyalty',
+        title: 'MyThamrin Club',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           bottomSheetTheme: BottomSheetThemeData(
