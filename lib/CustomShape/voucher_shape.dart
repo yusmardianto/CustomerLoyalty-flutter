@@ -9,7 +9,8 @@ class VoucherPainter extends CustomPainter {
   // ui.Image assetImage;
   // VoucherPainter(this.assetImage) : super();
   String type;
-  VoucherPainter(this.type) : super();
+  bool withRadius;
+  VoucherPainter(this.type,{this.withRadius=true}) : super();
 
   @override
   void paint(Canvas canvas, Size size) async{
@@ -30,7 +31,7 @@ class VoucherPainter extends CustomPainter {
     path.lineTo(size.width*0.25, size.height);
     path.lineTo(20, size.height);
     path.lineTo(20, 0);
-    path.addRRect(RRect.fromRectAndCorners(Rect.fromLTWH(0, 0, 20, size.height), topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)));
+    path.addRRect(RRect.fromRectAndCorners(Rect.fromLTWH(0, 0, 20, size.height), topLeft: Radius.circular(withRadius?20:0), bottomLeft: Radius.circular(withRadius?20:0)));
     // TODO: Draw your path
     canvas.drawPath(path, paint);
   }
