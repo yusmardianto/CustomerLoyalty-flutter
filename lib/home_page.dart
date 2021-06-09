@@ -996,43 +996,52 @@ class _HomePageState extends State<HomePage> {
                                                           SizedBox(height: 15),
                                                           Center(child: Text("We are available at",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
                                                           Divider(),
-                                                          Row(
-                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                            children: [
-                                                              Image(
-                                                                image:AssetImage("images/wa.png") ,
-                                                                height: 33,
-                                                                width: 33,
-                                                                fit: BoxFit.fitWidth,
-                                                              ),
-                                                              Text("+6281231321231",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400),)
-                                                            ],
+                                                          InkWell(
+                                                            onTap:()=>utils.launchBrowserURL('https://wa.me/628117157788'),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              children: [
+                                                                Image(
+                                                                  image:AssetImage("images/wa.png") ,
+                                                                  height: 33,
+                                                                  width: 33,
+                                                                  fit: BoxFit.fitWidth,
+                                                                ),
+                                                                Text("+62 811-7157-788",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400),)
+                                                              ],
+                                                            ),
                                                           ),
                                                           Divider(),
-                                                          Row(
-                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                            children: [
-                                                              Image(
-                                                                image:AssetImage("images/fb.png") ,
-                                                                height: 33,
-                                                                width: 33,
-                                                                fit: BoxFit.fitWidth,
-                                                              ),
-                                                              Text("Yamaha_Cust_Loyalty",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400))
-                                                            ],
+                                                          InkWell(
+                                                            onTap: ()=>utils.launchBrowserURL('https://www.facebook.com/Yamaha-Thamrin-Brothers-269533563554676/'),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              children: [
+                                                                Image(
+                                                                  image:AssetImage("images/fb.png") ,
+                                                                  height: 33,
+                                                                  width: 33,
+                                                                  fit: BoxFit.fitWidth,
+                                                                ),
+                                                                Text("Yamaha Thamrin",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400))
+                                                              ],
+                                                            ),
                                                           ),
                                                           Divider(),
-                                                          Row(
-                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                            children: [
-                                                              Image(
-                                                                image:AssetImage("images/ig.png") ,
-                                                                height: 33,
-                                                                width: 33,
-                                                                fit: BoxFit.fitWidth,
-                                                              ),
-                                                              Text("@YMH_CUST",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400))
-                                                            ],
+                                                          InkWell(
+                                                            onTap:()=>utils.launchBrowserURL('https://www.instagram.com/yamaha.thamrin/?hl=en'),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              children: [
+                                                                Image(
+                                                                  image:AssetImage("images/ig.png") ,
+                                                                  height: 33,
+                                                                  width: 33,
+                                                                  fit: BoxFit.fitWidth,
+                                                                ),
+                                                                Text("@yamaha.thamrin",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400))
+                                                              ],
+                                                            ),
                                                           ),
                                                         ],
                                                         backgroundColor: Colors.white,
