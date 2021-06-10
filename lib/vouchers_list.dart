@@ -396,32 +396,36 @@ class _VouchersListState extends State<VouchersList>  with SingleTickerProviderS
                         children: [
                           Padding(
                             padding: EdgeInsets.only(bottom: 7),
-                            child: Container(
-                              height: 134,
-                              width: MediaQuery.of(context).size.width,
-                              color:Colors.white,
-                              padding: EdgeInsets.all(25),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom:8.0),
-                                    child: Text("Voucher ${voucher.NAME}",style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontSize: 20,fontWeight: FontWeight.w700),),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom:8.0),
-                                    child: Text(voucher.CAMPAIGN_TYPE??"-"),
-                                  ),
-                                  Divider(),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("Berlaku pada"),
-                                      Text(voucher.PERIOD??''),
-                                    ],
-                                  ),
-                                ],
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: MediaQuery.of(context).size.width,
+                                minHeight: 134,
+                              ),
+                              child: Container(
+                                color:Colors.white,
+                                padding: EdgeInsets.all(25),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom:8.0),
+                                      child: Text("Voucher ${voucher.NAME}",style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontSize: 20,fontWeight: FontWeight.w700),),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom:8.0),
+                                      child: Text(voucher.CAMPAIGN_TYPE??"-"),
+                                    ),
+                                    Divider(),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Berlaku pada"),
+                                        Text(voucher.PERIOD??''),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -549,7 +553,7 @@ class _VouchersListState extends State<VouchersList>  with SingleTickerProviderS
                     //     color: Colors.white,
                     //     borderRadius: BorderRadius.circular(15)
                     // ),
-                    child: Text('Vouchers List',style: TextStyle(fontSize: 35,fontWeight: FontWeight.w700,color: Color.fromRGBO(0, 0, 52, 1)),)
+                    child: Text('List Voucher',style: TextStyle(fontSize: 35,fontWeight: FontWeight.w700,color: Color.fromRGBO(0, 0, 52, 1)),)
                     // TextField(
                     //   controller: search,
                     //   decoration: InputDecoration(
@@ -573,7 +577,7 @@ class _VouchersListState extends State<VouchersList>  with SingleTickerProviderS
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Points',style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontSize: 15,fontWeight: FontWeight.w500),),
-                            Text('Your Available Reward Point',style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontSize: 15,fontWeight: FontWeight.w400),),
+                            Text('Point Reward yang Tersedia',style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontSize: 15,fontWeight: FontWeight.w400),),
                           ],
                         ),
                       ),
@@ -605,10 +609,10 @@ class _VouchersListState extends State<VouchersList>  with SingleTickerProviderS
                     indicatorColor: Color.fromRGBO(0, 0, 52, 1),
                     tabs: [
                       Tab(
-                        text: "Redeem",
+                        text: "Tersedia",
                       ),
                       Tab(
-                        text: "Purchased",
+                        text: "Voucher Saya",
                       ),
                     ]
                   ),
