@@ -141,10 +141,10 @@ class MyApp extends StatelessWidget {
             } else {
               // Loading is done, return the app:
               _check_Update(context);
-                  if(prefs.getBool("first_time")??true){
-                    return FirstPage();
-                  }
-                  else return (globVar.user!=null)?HomePage():LoginPage();
+              if(prefs.getBool("first_time")??true){
+                return FirstPage();
+              }
+              else return (globVar.user!=null)?HomePage():LoginPage();
             }
           },
         ),

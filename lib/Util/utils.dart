@@ -314,7 +314,7 @@ class Util{
                   children: [
                     (code==null)?Container(height: 75,child: Center(child: Text('Code tidak valid')),):SvgPicture.string(Barcode.qrCode().toSvg(code, width: 200, height: 200,drawText: false)),
                     SizedBox(height: 15,),
-                    (code==null)?Container():Center(child: Text("Scan this QrCode to show customer details",textAlign: TextAlign.center,style: GoogleFonts.robotoSlab(fontSize: 14),)),
+                    (code==null)?Container():Center(child: Text("Scan kode QrCode ini untuk menampilkan detail pelanggans",textAlign: TextAlign.center,style: GoogleFonts.robotoSlab(fontSize: 14),)),
                   ],
                 );
           }

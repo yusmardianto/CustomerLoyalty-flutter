@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'CustomShape/circle_tab_indicator.dart';
-import 'Util/glob_var.dart';
-import 'home_page.dart';
-import 'login_page.dart';
 import 'main.dart';
-import 'CustomShape/splash_screen.dart';
 
 class FirstPage extends StatefulWidget {
 
@@ -18,7 +11,7 @@ class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMix
   TabController _controller;
   @override
   void initState() {
-    _controller = TabController(length: 3, vsync: this);
+    _controller = TabController(length: 4, vsync: this);
     super.initState();
   }
 
@@ -71,6 +64,14 @@ class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMix
                                       shape: BoxShape.circle
                                   ),
                                 ),
+                                Container(
+                                  width: 12,
+                                  height: 12,
+                                  decoration: BoxDecoration(
+                                      color: Color.fromRGBO(196, 196, 196, 1),
+                                      shape: BoxShape.circle
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -79,6 +80,10 @@ class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMix
                             controller: _controller,
                             indicator: CircleTabIndicator(color: Color.fromRGBO(0, 0, 52, 1), radius: 6),
                             tabs: [
+                              Container(
+                                width: 13,
+                                height: 13,
+                              ),
                               Container(
                                 width: 13,
                                 height: 13,
@@ -121,7 +126,7 @@ class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMix
                       ),
                       Container(
                         padding: EdgeInsets.all(25),
-                        child:Text('Earn Points',style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontWeight: FontWeight.w700,fontSize: 35,shadows: [
+                        child:Text('Simpan Point',style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontWeight: FontWeight.w700,fontSize: 35,shadows: [
                           Shadow(
                             offset: Offset(1.0, 1.0),
                             blurRadius: 3.0,
@@ -131,7 +136,7 @@ class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMix
                       ),
                       Container(
                           padding: EdgeInsets.all(15),
-                          child:Text('Gain Points by Purchasing \nOur Product',textAlign: TextAlign.center,style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontWeight: FontWeight.w400,fontSize: 25),)
+                          child:Text('Dapatkan point dengan berbelanja produk kami',textAlign: TextAlign.center,style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontWeight: FontWeight.w400,fontStyle: FontStyle.italic,fontSize: 20,),)
                       ),
                     ],
                   ),
@@ -152,7 +157,7 @@ class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMix
                       ),
                       Container(
                           padding: EdgeInsets.all(25),
-                          child:Text('Redeem Points',style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontWeight: FontWeight.w700,fontSize: 35,shadows: [
+                          child:Text('Tukar Point',style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontWeight: FontWeight.w700,fontSize: 35,shadows: [
                             Shadow(
                               offset: Offset(1.0, 1.0),
                               blurRadius: 3.0,
@@ -162,7 +167,32 @@ class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMix
                       ),
                       Container(
                           padding: EdgeInsets.all(15),
-                          child:Text(' Trade Points With Voucher \nTo Get Better Deals',textAlign: TextAlign.center,style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontWeight: FontWeight.w400,fontSize: 25,),)
+                          child:Text('Tukar point dengan voucher untuk mendapatkan diskon atau berbagai diskon lainnya',textAlign: TextAlign.center,style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontWeight: FontWeight.w400,fontStyle: FontStyle.italic,fontSize: 20,),)
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 192,
+                        width: 265,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('images/step3.png'),
+                                fit: BoxFit.fitWidth
+                            )
+                        ),
+                      ),
+                      Container(
+                          padding: EdgeInsets.all(25),
+                          child:Text('Berita Terbaru',style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontWeight: FontWeight.w700,fontSize: 35,),)
+                      ),
+                      Container(
+                          padding: EdgeInsets.all(15),
+                          child:Text('Dapatkan informasi berita dan promo terkini dari perusahaan kami',textAlign: TextAlign.center,style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontWeight: FontWeight.w400,fontStyle: FontStyle.italic,fontSize: 20,),)
                       ),
                     ],
                   ),
@@ -171,28 +201,32 @@ class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMix
                   child: Stack(
                     children: [
                       Positioned.fill(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: 194,
-                              width: 358,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage('images/step3.png'),
-                                      fit: BoxFit.fitHeight
-                                  )
+                        child: Padding(
+                          padding: const EdgeInsets.all(25.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(height: MediaQuery.of(context).size.height*0.04,),
+                              Container(
+                                height: 364,
+                                width: 367,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage('images/step4.png'),
+                                        fit: BoxFit.fitWidth
+                                    )
+                                ),
                               ),
-                            ),
-                            Container(
-                                padding: EdgeInsets.all(25),
-                                child:Text('Latest Info',style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontWeight: FontWeight.w700,fontSize: 35,),)
-                            ),
-                            Container(
-                                padding: EdgeInsets.all(15),
-                                child:Text(' Get Latest News And Deals \nFrom Our Company',textAlign: TextAlign.center,style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontWeight: FontWeight.w400,fontSize: 25,),)
-                            ),
-                          ],
+                              Container(
+                                padding: EdgeInsets.only(top:15),
+                                child: Text("Selamat Bergabung\ndalam\nThamrin Club",textAlign: TextAlign.center,style: TextStyle(fontSize: 30,fontWeight: FontWeight.w700,color: Color.fromRGBO(0, 0, 52, 1)),),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(top:15),
+                                child: Text("Kesetiaan dan kepuasan pelanggan adalah prioritas kami",textAlign: TextAlign.center,style: TextStyle(fontStyle: FontStyle.italic,fontSize: 20,fontWeight: FontWeight.w400,color: Color.fromRGBO(0, 0, 52, 1)),),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Positioned.fill(child: Column(
@@ -203,7 +237,7 @@ class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMix
                                 await prefs.setBool("first_time", false);
                                 await Navigator.pushReplacementNamed(context, '/login');
                               },
-                              child: Container(padding: EdgeInsets.all(25),child: Text('Let\'s get started',style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),decoration: TextDecoration.underline,fontWeight: FontWeight.w400,fontSize: 16,),)))
+                              child: Container(padding: EdgeInsets.all(25),child: Text('Mulai aplikasi',style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),decoration: TextDecoration.underline,fontWeight: FontWeight.w400,fontSize: 16,),)))
                         ],
                       )),
                     ],

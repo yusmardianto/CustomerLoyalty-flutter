@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
       globVar.myVouchers =myVoucherList;
     }
     else{
-      throw('Error fetching redeemed vouchers!');
+      throw('Error mengambil data myvouchers!');
     }
   }
   void _onRefresh() async{
@@ -245,7 +245,7 @@ class _HomePageState extends State<HomePage> {
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Container(
-                                                child: Text("Yamaha Thamrin Club",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 18),),
+                                                child: Text("Thamrin Club",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 18),),
                                               ),
                                               InkWell(
                                                 onTap: ()async {
@@ -435,7 +435,7 @@ class _HomePageState extends State<HomePage> {
                                       Container(
                                         child: Row(
                                           children: [
-                                            Text("Redeem Your Points",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
+                                            Text("Tukarkan Point",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
                                           ],
                                         ),
                                       ),
@@ -606,7 +606,7 @@ class _HomePageState extends State<HomePage> {
                                       Container(
                                         child: Row(
                                           children: [
-                                            Text("Latest from Yamaha Thamrin ",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
+                                            Text("Kabar Terbaru dari Thamrin ",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
                                             // (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${globVar.myVouchers.length}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18),),
                                             // Text(" voucher",style: TextStyle(
                                             // fontWeight: FontWeight.w500,fontSize: 18),),
@@ -966,7 +966,7 @@ class _HomePageState extends State<HomePage> {
                                       Container(
                                         child: Row(
                                           children: [
-                                            Text("Contact Us",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
+                                            Text("Hubungi Kami",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
                                           ],
                                         ),
                                       ),
@@ -994,7 +994,7 @@ class _HomePageState extends State<HomePage> {
                                                         children: [
                                                           Icon(FontAwesomeIcons.phoneSquareAlt,size: 60,),
                                                           SizedBox(height: 15),
-                                                          Center(child: Text("We are available at",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
+                                                          Center(child: Text("Hubungi kami pada",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
                                                           Divider(),
                                                           InkWell(
                                                             onTap:()=>utils.launchBrowserURL('https://wa.me/628117157788'),

@@ -166,12 +166,12 @@ class _ProfileState extends State<Profile> {
                   ],
                 )),
                 Container(
-                  height: MediaQuery.of(context).size.height*0.4,
+                  height: MediaQuery.of(context).size.height*0.3,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(
+                      Flexible(
                         flex: 7,
                         child:
                         InkWell(
@@ -269,41 +269,15 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                         ),
-                        // Stack(
-                        //   children: [
-                        //     Container(
-                        //       height: 180,
-                        //       width: 180,
-                        //       decoration: BoxDecoration(
-                        //         shape: BoxShape.circle,
-                        //         color: Colors.grey,
-                        //       ),
-                        //       child: Image(
-                        //         fit: BoxFit.fill,
-                        //         height: 180,
-                        //         width: 180,
-                        //         errorBuilder: (context,err,stackTrace)=>Icon(Icons.person,color: Colors.white,size: 160,),
-                        //         image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.CUST_DISPLAY_PICTURE}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
-                        //       )
-                        //     ),
-                        //     Container(
-                        //       width: 180,
-                        //       height: 180,
-                        //       decoration: BoxDecoration(
-                        //         shape: BoxShape.circle,
-                        //         border: Border.all(color: Colors.white,width: 3)
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
                       ),
-                      Expanded(
+                      Flexible(
                         flex: 2,
                         child: Container(
+                          alignment: Alignment.center,
                           child: Text(globVar.user!=null?globVar.user.NAME:"#NAME#",style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontSize: 25,fontStyle: FontStyle.normal,fontWeight: FontWeight.w700),),
                         ),
                       ),
-                      Expanded(
+                      Flexible(
                         flex: 2,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -558,7 +532,7 @@ class _ProfileState extends State<Profile> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(FontAwesomeIcons.key,color: Colors.white,size: 20,),
-                                  Text("  New Password",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w700),),
+                                  Text("  Ganti Password",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w700),),
                                 ],
                               ),
                             ),
@@ -645,201 +619,7 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                 ),
-                // Container(
-                //   padding: EdgeInsets.only(left: 10,right: 10),
-                //   alignment: Alignment.centerRight,
-                //   child: InkWell(
-                //     onTap: ()async{
-                //       Map<String,dynamic> passMap;
-                //       final _formPassKey = GlobalKey<FormBuilderState>();
-                //       bool obscure1 = true,obscure2 = true,obscure3 = true;
-                //       await showDialog(
-                //           context: context,
-                //           builder: (context)=>StatefulBuilder(
-                //               builder: (context,setState)=>SimpleDialog(
-                //                 children: [
-                //                   FormBuilder(
-                //                       key: _formPassKey,
-                //                       child: Column(
-                //                         children: [
-                //                           Padding(
-                //                             padding: const EdgeInsets.all(8.0),
-                //                             child: FormBuilderTextField(
-                //                                 name:"old",
-                //                                 obscureText: obscure1??true,
-                //                                 validator: (value)=>
-                //                                 value == null || value.isEmpty ? "Masukkan password lama":null,
-                //                               decoration: InputDecoration(
-                //                                   suffixIcon: InkWell(
-                //                                       onTap: (){
-                //                                         setState(() {
-                //                                           obscure1 = !obscure1;
-                //                                         });
-                //                                       },
-                //                                       child: Icon((obscure1)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
-                //                                   focusedBorder: new OutlineInputBorder(
-                //                                     borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                //                                     borderRadius: const BorderRadius.all(
-                //                                       const Radius.circular(15.0),
-                //                                     ),
-                //                                   ),
-                //                                   border: new OutlineInputBorder(
-                //                                     borderRadius: const BorderRadius.all(
-                //                                       const Radius.circular(15.0),
-                //                                     ),
-                //                                   ),
-                //                                   contentPadding: EdgeInsets.all(23),
-                //                                   hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
-                //                                   hintText: "Password lama"
-                //                               ),
-                //                             ),
-                //                           ),
-                //                           Padding(
-                //                             padding: const EdgeInsets.all(8.0),
-                //                             child: FormBuilderTextField(
-                //                               name:"pass",
-                //                               obscureText: obscure2??true,
-                //                               validator: (value)=>
-                //                               value == null || value.isEmpty ? "Masukkan password baru":null,
-                //                               decoration: InputDecoration(
-                //                                   suffixIcon: InkWell(
-                //                                       onTap: (){
-                //                                         setState(() {
-                //                                           obscure2 = !obscure2;
-                //                                         });
-                //                                       },
-                //                                       child: Icon((obscure2)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
-                //                                   focusedBorder: new OutlineInputBorder(
-                //                                     borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                //                                     borderRadius: const BorderRadius.all(
-                //                                       const Radius.circular(15.0),
-                //                                     ),
-                //                                   ),
-                //                                   border: new OutlineInputBorder(
-                //                                     borderRadius: const BorderRadius.all(
-                //                                       const Radius.circular(15.0),
-                //                                     ),
-                //                                   ),
-                //                                   contentPadding: EdgeInsets.all(23),
-                //                                   hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
-                //                                   hintText: "Password baru"
-                //                               ),
-                //                             ),
-                //                           ),
-                //                           Padding(
-                //                             padding: const EdgeInsets.all(8.0),
-                //                             child: FormBuilderTextField(
-                //                               name:"confirm",
-                //                               obscureText: obscure3??true,
-                //                               decoration: InputDecoration(
-                //                                   suffixIcon: InkWell(
-                //                                       onTap: (){
-                //                                         setState(() {
-                //                                           obscure3 = !obscure3;
-                //                                         });
-                //                                       },
-                //                                       child: Icon((obscure3)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
-                //                                   focusedBorder: new OutlineInputBorder(
-                //                                     borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                //                                     borderRadius: const BorderRadius.all(
-                //                                       const Radius.circular(15.0),
-                //                                     ),
-                //                                   ),
-                //                                   border: new OutlineInputBorder(
-                //                                     borderRadius: const BorderRadius.all(
-                //                                       const Radius.circular(15.0),
-                //                                     ),
-                //                                   ),
-                //                                   contentPadding: EdgeInsets.all(23),
-                //                                   hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
-                //                                   hintText: "Konfirmasi password"
-                //                               ),
-                //                               validator: (value)=>
-                //                               value == null || value.isEmpty ? "Masukkan password baru":null,
-                //                             ),
-                //                           ),
-                //                         ],
-                //                       )
-                //                   ),
-                //                   SizedBox(height: 15),
-                //                   Row(
-                //                     mainAxisAlignment: MainAxisAlignment.center,
-                //                     children: [
-                //                       FlatButton(
-                //                           minWidth: 120,
-                //                           shape: RoundedRectangleBorder(
-                //                               borderRadius: BorderRadius.circular(15.0),
-                //                               side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
-                //                           ),
-                //                           padding: EdgeInsets.all(10),
-                //                           onPressed: (){
-                //                             Navigator.pop(context,false);
-                //                           },
-                //                           child: Text("Tutup",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
-                //                       ),
-                //                       SizedBox(width: 15),
-                //                       FlatButton(
-                //                           minWidth: 120,
-                //                           color: Colors.amber,
-                //                           shape: RoundedRectangleBorder(
-                //                               borderRadius: BorderRadius.circular(15.0)
-                //                           ),
-                //                           padding: EdgeInsets.all(10),
-                //                           onPressed: ()async {
-                //                             _formPassKey.currentState.save();
-                //                             if (_formPassKey.currentState.validate()) {
-                //                                 if(_formPassKey.currentState.value["pass"].trim() == _formPassKey.currentState.value["confirm"].trim()){
-                //                                   passMap = Map<String,dynamic>.from(_formPassKey.currentState.value);
-                //                                   passMap.remove("confirm");
-                //                                   for(var i=0;i<passMap.keys.length;i++){
-                //                                     passMap.update(passMap.keys.toList()[i], (value) => value.trim());
-                //                                   }
-                //                                   passMap["login_id"]= globVar.auth.login_id;
-                //                                     Future future = Auths().changePass(passMap);
-                //                                     var res = await utils.showLoadingFuture(context,future);
-                //                                     utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
-                //                                     if(res["STATUS"]) {
-                //                                       Navigator.pop(context);
-                //                                     }
-                //                                 }
-                //                                 else{
-                //                                   utils.toast("Password baru tidak sama",type: "ERROR");
-                //                                 }
-                //                             }
-                //                           },
-                //                           child: Text("Change",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
-                //                       ),
-                //                     ],
-                //                   ),
-                //                 ],
-                //                 backgroundColor: Colors.white,
-                //                 shape: RoundedRectangleBorder(
-                //                     borderRadius: BorderRadius.circular(25.0),
-                //                     side: BorderSide(color: Colors.transparent)
-                //                 ),
-                //                 contentPadding: EdgeInsets.all(20),
-                //               )
-                //           )
-                //       );
-                //     },
-                //     child: Container(
-                //       padding: EdgeInsets.all(10),
-                //       decoration: BoxDecoration(
-                //           borderRadius: BorderRadius.circular(15),
-                //           color: Colors.amber
-                //       ),
-                //       child: Row(
-                //         mainAxisSize: MainAxisSize.min,
-                //         children: [
-                //           Icon(FontAwesomeIcons.key,size: 15 ,),
-                //           SizedBox(width: 10,),
-                //           Text("Baru",style: TextStyle(fontWeight: FontWeight.w400, color: Colors.black,fontSize: 16,fontStyle: FontStyle.normal,),),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                Expanded(
+                Flexible(
                   child: FormBuilder(
                     key: _formKey,
                     enabled: toggleEdit,
