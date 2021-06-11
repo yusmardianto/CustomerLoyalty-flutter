@@ -14,6 +14,7 @@ import 'CustomShape/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'first_page.dart';
+import "contents_list.dart";
 
 // Images imageHandler = new Images();
 GlobVar globVar;
@@ -154,7 +155,7 @@ class MyApp extends StatelessWidget {
           '/profile' : (context) => new Profile(),
           '/transactions' : (context) => new Transactions(),
           '/vouchers' :(context) => new VouchersList(),
-          // '/news' :(context) => new News(),
+          '/news' :(context) => new ContentList(),
         },
       ),
     );

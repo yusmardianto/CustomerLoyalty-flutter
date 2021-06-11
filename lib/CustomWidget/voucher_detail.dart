@@ -50,146 +50,229 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   String get barrierLabel => null;
 }
 class VoucherDialog{
-  showDialog(Voucher voucher,context){
-    List<Widget> details = [];
-    var voucherDetails = voucher.toJsonDisplay();
-    voucherDetails.keys.forEach((element) {
-      if(voucherDetails[element]!=null){
-        details.add(Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.only(left: 33,right: 33,bottom: 33,top: 33),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(flex: 1,child: Text('$element')),
-              Expanded(child: (voucherDetails[element] is String)?HtmlWidget(utils.htmlEscape(voucherDetails[element]??''),)
-                  :Text("\t${utils.thousandSeperator(voucherDetails[element])??'-'}")),
-            ],
+  // showDialog(Voucher voucher,context){
+  //   List<Widget> details = [];
+  //   var voucherDetails = voucher.toJsonDisplay();
+  //   voucherDetails.keys.forEach((element) {
+  //     if(voucherDetails[element]!=null){
+  //       details.add(Container(
+  //         alignment: Alignment.centerLeft,
+  //         padding: EdgeInsets.only(left: 33,right: 33,bottom: 33,top: 33),
+  //         child: Row(
+  //           crossAxisAlignment: CrossAxisAlignment.center,
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Expanded(flex: 1,child: Text('$element')),
+  //             Expanded(child: (voucherDetails[element] is String)?HtmlWidget(utils.htmlEscape(voucherDetails[element]??''),)
+  //                 :Text("\t${utils.thousandSeperator(voucherDetails[element])??'-'}")),
+  //           ],
+  //         ),
+  //       ));
+  //       if(voucherDetails.keys.last!=element)details.add(Divider());
+  //     }
+  //
+  //   });
+  //
+  //   return Navigator.push(
+  //       context, new HeroDialogRoute(
+  //     builder: (BuildContext context) {
+  //       final _scrollController = ScrollController(initialScrollOffset: 0);
+  //       return new Dialog(
+  //         backgroundColor: Colors.transparent,
+  //         insetPadding: EdgeInsets.all(10),
+  //         child: Container(
+  //           height: MediaQuery.of(context).size.height*0.7,
+  //           child: Stack(
+  //             children: [
+  //               Positioned.fill(
+  //                 child: SingleChildScrollView(
+  //                   child: Column(
+  //                     children: [
+  //                       Container(
+  //                         height: 135,
+  //                       ),
+  //                       Container(
+  //                         decoration: BoxDecoration(
+  //                             color: Colors.white,
+  //                             borderRadius: BorderRadius.circular(20)
+  //                         ),
+  //                         padding: EdgeInsets.only(top: 10),
+  //                         child: Container(
+  //                           height: MediaQuery.of(context).size.height*0.4,
+  //                           child: Column(
+  //                             children: [
+  //                               Flexible(
+  //                                 flex:7,
+  //                                 child: CupertinoScrollbar(
+  //                                   controller: _scrollController,
+  //                                   isAlwaysShown: true,
+  //                                   child: ListView(
+  //                                     children: details,
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                               Flexible(
+  //                                 flex: 1,
+  //                                 child: TextButton(
+  //                                   child:Row(
+  //                                     crossAxisAlignment: CrossAxisAlignment.center,
+  //                                     mainAxisSize: MainAxisSize.min,
+  //                                     children: [
+  //                                       Text("Klaim"),
+  //                                       Text("(${utils.thousandSeperator(voucher.COST_IN_POINT)??''}",style: GoogleFonts.robotoMono(),),
+  //                                       Icon(FontAwesomeIcons.coins,color: Colors.amber,),
+  //                                       Text(")",style: GoogleFonts.robotoMono(),),
+  //                                     ],
+  //                                   ),
+  //                                   onPressed:()async{
+  //                                     Future future = Vouchers().redeem(voucher.LOYALTY_CAMPAIGN_ID);
+  //                                     var res = await utils.showLoadingFuture(context,future);
+  //                                     utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
+  //                                     Navigator.pop(context,true);
+  //                                   },),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //               Positioned.fill(
+  //                 child: new Hero(
+  //                   tag: "details",
+  //                   child: Stack(
+  //                     children: [
+  //                       Container(
+  //                         height: 152,
+  //                         width: MediaQuery.of(context).size.width,
+  //                         decoration: BoxDecoration(
+  //                             borderRadius: BorderRadius.circular(20),
+  //                             color: Colors.white,
+  //                             boxShadow: [
+  //                               BoxShadow(
+  //                                 color: Colors.grey,
+  //                                 spreadRadius: 0.1,
+  //                                 offset: Offset(0,2),
+  //                                 blurRadius: 2,
+  //                               )
+  //                             ]
+  //                         ),
+  //                         child: CustomPaint(
+  //                           painter: VoucherPainter(voucher.CAMPAIGN_TYPE),
+  //                         ),
+  //                       ),
+  //                       Container(
+  //                         padding: EdgeInsets.all(15),
+  //                         height: 152,
+  //                         child: Row(
+  //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                           children: [
+  //                             Column(
+  //                               mainAxisAlignment: MainAxisAlignment.start,
+  //                               crossAxisAlignment: CrossAxisAlignment.start,
+  //                               children: [
+  //                                 Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 34, fontStyle: FontStyle.normal),),),
+  //                                 Text(voucher.CAMPAIGN_TYPE??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
+  //                               ],
+  //                             ),
+  //                             Column(
+  //                               mainAxisAlignment: MainAxisAlignment.center,
+  //                               crossAxisAlignment: CrossAxisAlignment.end,
+  //                               children: [
+  //                                 Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
+  //                                 Padding(
+  //                                   padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
+  //                                   child: Row(
+  //                                     children: [
+  //                                       Text("${utils.thousandSeperator(voucher.REWARD_VALUE)??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
+  //                                       Container(
+  //                                         padding: EdgeInsets.only(left: 5),
+  //                                         child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
+  //                                       ),
+  //                                     ],
+  //                                   ),
+  //                                 ),
+  //                                 Text(voucher.NAME,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 16, fontStyle: FontStyle.normal),),),
+  //                               ],
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   ));
+  // }
+  showVoucherDetails(Voucher voucher,context){
+    showModalBottomSheet(context: context, isScrollControlled: true, builder: (context){
+      return ConstrainedBox(
+        constraints: new BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height*0.96,
+        ),
+        child: Container(
+          // padding: EdgeInsets.only(left:10,right: 10,top: 15,bottom: 15),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            // borderRadius: BorderRadius.only(topLeft: Radius.circular(25),topRight: Radius.circular(25)),
           ),
-        ));
-        if(voucherDetails.keys.last!=element)details.add(Divider());
-      }
-
-    });
-
-    return Navigator.push(
-        context, new HeroDialogRoute(
-      builder: (BuildContext context) {
-        final _scrollController = ScrollController(initialScrollOffset: 0);
-        return new Dialog(
-          backgroundColor: Colors.transparent,
-          insetPadding: EdgeInsets.all(10),
-          child: Container(
-            height: MediaQuery.of(context).size.height*0.7,
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 135,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Hero(
+                tag: "details",
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Container(
+                        // width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          // borderRadius: BorderRadius.circular(20),
+                          // border: Border.all(color: Colors.grey),
+                          color: Colors.white,
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20)
-                          ),
-                          padding: EdgeInsets.only(top: 10),
-                          child: Container(
-                            height: MediaQuery.of(context).size.height*0.4,
-                            child: Column(
-                              children: [
-                                Flexible(
-                                  flex:7,
-                                  child: CupertinoScrollbar(
-                                    controller: _scrollController,
-                                    isAlwaysShown: true,
-                                    child: ListView(
-                                      children: details,
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  child: TextButton(
-                                    child:Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text("Klaim"),
-                                        Text("(${utils.thousandSeperator(voucher.COST_IN_POINT)??''}",style: GoogleFonts.robotoMono(),),
-                                        Icon(FontAwesomeIcons.coins,color: Colors.amber,),
-                                        Text(")",style: GoogleFonts.robotoMono(),),
-                                      ],
-                                    ),
-                                    onPressed:()async{
-                                      Future future = Vouchers().redeem(voucher.LOYALTY_CAMPAIGN_ID);
-                                      var res = await utils.showLoadingFuture(context,future);
-                                      utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
-                                      Navigator.pop(context,true);
-                                    },),
-                                ),
-                              ],
-                            ),
-                          ),
+                        child: CustomPaint(
+                          painter: VoucherPainter(voucher.CAMPAIGN_TYPE,withRadius: false),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-                Positioned.fill(
-                  child: new Hero(
-                    tag: "details",
-                    child: Stack(
+                    Stack(
                       children: [
                         Container(
-                          height: 152,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  spreadRadius: 0.1,
-                                  offset: Offset(0,2),
-                                  blurRadius: 2,
-                                )
-                              ]
-                          ),
-                          child: CustomPaint(
-                            painter: VoucherPainter(voucher.CAMPAIGN_TYPE),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(15),
-                          height: 152,
-                          child: Row(
+                          padding: EdgeInsets.all(20),
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 34, fontStyle: FontStyle.normal),),),
+                                  Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 30, fontStyle: FontStyle.normal),),),
                                   Text(voucher.CAMPAIGN_TYPE??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
                                 ],
                               ),
                               Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
+                                  Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 21, fontStyle: FontStyle.normal),),),
                                   Padding(
-                                    padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
+                                    padding: const EdgeInsets.only(top:5.0,bottom: 5.0),
                                     child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        Text("${utils.thousandSeperator(voucher.REWARD_VALUE)??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
+                                        Text("${voucher.REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
                                         Container(
                                           padding: EdgeInsets.only(left: 5),
-                                          child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
+                                          child: Icon(FontAwesomeIcons.coins,size: 26,color:Colors.amberAccent),
                                         ),
                                       ],
                                     ),
@@ -200,15 +283,141 @@ class VoucherDialog{
                             ],
                           ),
                         ),
+                        Positioned.fill(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                height: 168/3,
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                        colors: [Colors.grey.withOpacity(0.5), Colors.transparent],
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter
+                                    )
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Expanded(
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Container(
+                        color: Color.fromRGBO(214, 214, 214, 1),
+                      ),
+                    ),
+                    Positioned.fill(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 7),
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minWidth: MediaQuery.of(context).size.width,
+                                  minHeight: 134,
+                                ),
+                                child: Container(
+                                  color:Colors.white,
+                                  padding: EdgeInsets.all(25),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom:8.0),
+                                        child: Text("Voucher ${voucher.NAME}",style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontSize: 20,fontWeight: FontWeight.w700),),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom:8.0),
+                                        child: Text(voucher.CAMPAIGN_TYPE??"-"),
+                                      ),
+                                      Divider(),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Berlaku pada"),
+                                          Text(voucher.PERIOD??''),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                color: Colors.white,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      flex:12,
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.vertical,
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.width,
+                                          padding: EdgeInsets.all(25),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(bottom:12.0),
+                                                child: Text("Syarat dan Ketentuan Voucher",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w700),),
+                                              ),
+                                              HtmlWidget(utils.htmlEscape(voucher.CONDITION_DESC??'-'),),
+                                              Divider(),
+                                              Padding(
+                                                padding: const EdgeInsets.only(bottom:12.0),
+                                                child: Text("Deskripsi Voucher",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w700),),
+                                              ),
+                                              HtmlWidget(utils.htmlEscape(voucher.SHORT_DESC??'-'),),
+                                              Divider(),
+                                              Padding(
+                                                padding: const EdgeInsets.only(bottom:12.0),
+                                                child: Text("Cara pakai Voucher",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w700),),
+                                              ),
+                                              HtmlWidget(utils.htmlEscape(voucher.HOW_TO_USE??'-'),),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: TextButton(
+                                        onPressed: ()async {
+                                          Future future = Vouchers().redeem(voucher.LOYALTY_CAMPAIGN_ID);
+                                          var res = await utils.showLoadingFuture(context,future);
+                                          utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
+                                          Navigator.pop(context,res["STATUS"]);
+                                        },
+                                        child: Text("Claim Voucher",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Colors.white),),
+                                        style: ButtonStyle(
+                                          minimumSize: MaterialStateProperty.all(Size(358, 58)),
+                                          backgroundColor: MaterialStateProperty.all(Color.fromRGBO(16, 1, 52, 1)),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        );
-      },
-    ));
+        ),
+      );
+    });
   }
 }

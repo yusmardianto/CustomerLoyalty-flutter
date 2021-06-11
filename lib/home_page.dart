@@ -15,7 +15,7 @@ import 'api/contents.dart';
 import 'DataType/voucher.dart';
 import 'DataType/contents.dart';
 import 'vouchers_list.dart';
-import 'news.dart' as news;
+import 'CustomWidget/news_detail.dart';
 import 'api/users.dart';
 
 
@@ -33,215 +33,6 @@ class _HomePageState extends State<HomePage> {
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   int bannerFocus,myVoucherFocus,availVoucherFocus;
-
-  showVoucherDetails(Voucher voucher){
-    showModalBottomSheet(context: context, isScrollControlled: true, builder: (context){
-      return ConstrainedBox(
-        constraints: new BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height*0.96,
-        ),
-        child: Container(
-          // padding: EdgeInsets.only(left:10,right: 10,top: 15,bottom: 15),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            // borderRadius: BorderRadius.only(topLeft: Radius.circular(25),topRight: Radius.circular(25)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Hero(
-                tag: "details",
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 168,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        // borderRadius: BorderRadius.circular(20),
-                        // border: Border.all(color: Colors.grey),
-                        color: Colors.white,
-                      ),
-                      child: CustomPaint(
-                        painter: VoucherPainter(voucher.CAMPAIGN_TYPE,withRadius: false),
-                      ),
-                    ),
-                    Stack(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 30, fontStyle: FontStyle.normal),),),
-                                  Text(voucher.CAMPAIGN_TYPE??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 21, fontStyle: FontStyle.normal),),),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top:5.0,bottom: 5.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Text("${voucher.REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 20, fontStyle: FontStyle.normal),),),
-                                        Container(
-                                          padding: EdgeInsets.only(left: 5),
-                                          child: Icon(FontAwesomeIcons.coins,size: 26,color:Colors.amberAccent),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Text(voucher.NAME,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 16, fontStyle: FontStyle.normal),),),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned.fill(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                height: 168/3,
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                        colors: [Colors.grey.withOpacity(0.5), Colors.transparent],
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter
-                                    )
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: Container(
-                        color: Color.fromRGBO(214, 214, 214, 1),
-                      ),
-                    ),
-                    Positioned.fill(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 7),
-                              child: ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  minWidth: MediaQuery.of(context).size.width,
-                                  minHeight: 134,
-                                ),
-                                child: Container(
-                                  color:Colors.white,
-                                  padding: EdgeInsets.all(25),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(bottom:8.0),
-                                        child: Text("Voucher ${voucher.NAME}",style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontSize: 20,fontWeight: FontWeight.w700),),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(bottom:8.0),
-                                        child: Text(voucher.CAMPAIGN_TYPE??"-"),
-                                      ),
-                                      Divider(),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Berlaku pada"),
-                                          Text(voucher.PERIOD??''),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                color: Colors.white,
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      flex:12,
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.vertical,
-                                        child: Container(
-                                          width: MediaQuery.of(context).size.width,
-                                          padding: EdgeInsets.all(25),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(bottom:12.0),
-                                                child: Text("Syarat dan Ketentuan Voucher",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w700),),
-                                              ),
-                                              HtmlWidget(utils.htmlEscape(voucher.CONDITION_DESC??'-'),),
-                                              Divider(),
-                                              Padding(
-                                                padding: const EdgeInsets.only(bottom:12.0),
-                                                child: Text("Deskripsi Voucher",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w700),),
-                                              ),
-                                              HtmlWidget(utils.htmlEscape(voucher.SHORT_DESC??'-'),),
-                                              Divider(),
-                                              Padding(
-                                                padding: const EdgeInsets.only(bottom:12.0),
-                                                child: Text("Cara pakai Voucher",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w700),),
-                                              ),
-                                              HtmlWidget(utils.htmlEscape(voucher.HOW_TO_USE??'-'),),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: TextButton(
-                                        onPressed: ()async {
-                                          Future future = Vouchers().redeem(voucher.LOYALTY_CAMPAIGN_ID);
-                                          var res = await utils.showLoadingFuture(context,future);
-                                          utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
-                                          Navigator.pop(context,res["STATUS"]);
-                                        },
-                                        child: Text("Claim Voucher",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Colors.white),),
-                                        style: ButtonStyle(
-                                          minimumSize: MaterialStateProperty.all(Size(358, 58)),
-                                          backgroundColor: MaterialStateProperty.all(Color.fromRGBO(16, 1, 52, 1)),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    });
-  }
 
   loadBanners()async{
     var res = await News().getNews("PROMOTIONS");
@@ -570,7 +361,7 @@ class _HomePageState extends State<HomePage> {
                                           builder: (BuildContext context) {
                                             return InkWell(
                                               onTap: ()async{
-                                                await Navigator.push(context,MaterialPageRoute(builder: (context)=>news.News(i)));
+                                                await Navigator.push(context,MaterialPageRoute(builder: (context)=>NewsDetail(i)));
                                                 await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                                                 setState((){
 
@@ -690,8 +481,8 @@ class _HomePageState extends State<HomePage> {
                                             InkWell(
                                               // onTap: ()=>VoucherDialog().showDialog(globVar.myVouchers[index], context),
                                               onTap: ()async{
-                                                // var refresh = await VoucherDialog().showDialog(item, context);
-                                                var refresh = await showVoucherDetails(item);
+                                                var refresh = await VoucherDialog().showVoucherDetails(item, context);
+                                                // var refresh = await showVoucherDetails(item);
                                                 if(refresh??false) _onRefresh();
                                               },
                                               child: Container(
@@ -828,8 +619,8 @@ class _HomePageState extends State<HomePage> {
                                       InkWell(
                                         onTap: ()async{
                                           // Navigator.pushNamed(context, "/vouchers",);
-                                          // await Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsList()));
-                                          // await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                                          await Navigator.pushNamed(context,"/news");
+                                          await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                                           setState(() {
 
                                           });
@@ -861,7 +652,7 @@ class _HomePageState extends State<HomePage> {
                                               children: [
                                               InkWell(
                                                 onTap:()async{
-                                                  await Navigator.push(context,MaterialPageRoute(builder: (context)=>news.News(NewsList[indx*2])));
+                                                  await Navigator.push(context,MaterialPageRoute(builder: (context)=>NewsDetail(NewsList[indx*2])));
                                                 },
                                                 child: Container(
                                                   decoration: (NewsList[indx*2].message_image!=null)?BoxDecoration(
@@ -877,7 +668,7 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                           ((indx*2+1)<=(NewsList.length-1))?InkWell(
                                             onTap: ()async{
-                                              await Navigator.push(context,MaterialPageRoute(builder: (context)=>news.News(NewsList[indx*2+1])));
+                                              await Navigator.push(context,MaterialPageRoute(builder: (context)=>NewsDetail(NewsList[indx*2+1])));
                                             },
                                             child: Container(
                                                   width:175,
