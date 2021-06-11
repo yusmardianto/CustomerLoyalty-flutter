@@ -116,33 +116,6 @@ class _LoginPageState extends State<LoginPage> {
                   Container(
                     alignment: Alignment.center,
                     height: MediaQuery.of(context).size.height*0.44,
-                    // padding:
-                        // EdgeInsets.only(top:MediaQuery.of(context).size.height*0.16,
-                        // left: MediaQuery.of(context).size.width*0.24,
-                        // right: MediaQuery.of(context).size.width*0.24,
-                        // bottom: MediaQuery.of(context).size.height*0.05
-                    // ),
-                    // child: Container(
-                    //   height: 367,
-                    //   width: 364,
-                    //   decoration: BoxDecoration(
-                    //     image: DecorationImage(
-                    //       fit: BoxFit.fitHeight,
-                    //       image: AssetImage('images/login_logo.png'),
-                    //     )
-                    //   ),
-                    // ),
-                    // child: Container(
-                    //   height: 218,
-                    //   width: 205,
-                    //   decoration: BoxDecoration(
-                    //     image: DecorationImage(
-                    //       image: AssetImage("images/icon.png"),
-                    //       // colorFilter: ColorFilter.mode(Color.fromRGBO(10, 10, 249, 0.5), BlendMode.modulate ),
-                    //       fit: BoxFit.fitHeight,
-                    //     )
-                    //   ),
-                    // ),
                   ),
                   Expanded(
                    child: Padding(
@@ -280,19 +253,14 @@ class _LoginPageState extends State<LoginPage> {
                                                        Container(
                                                            alignment: Alignment.centerRight,
                                                            child:TextButton(
-                                                             onPressed: (){
-                                                               final _formKey = GlobalKey<FormBuilderState>();
-                                                               var gender;
-                                                               final passText  = TextEditingController();
-                                                               final confirmPassText  = TextEditingController();
-                                                               bool obscurePass = true;
-                                                               bool obscureConfirm = true;
-                                                               showModalBottomSheet(
+                                                             onPressed: ()async{
+                                                               final emailText  = TextEditingController();
+                                                               var user_id;
+                                                               var token = await showModalBottomSheet(
                                                                    isScrollControlled: true,
                                                                    context: context,
                                                                    builder: (context) => StatefulBuilder(
                                                                      builder: (context,setState) =>Container(
-                                                                       // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                                                                        height: MediaQuery.of(context).size.height*0.50,
                                                                        decoration: BoxDecoration(
                                                                          color: Colors.white,
@@ -309,45 +277,42 @@ class _LoginPageState extends State<LoginPage> {
                                                                                  children: [
                                                                                    Padding(
                                                                                      padding: const EdgeInsets.only(top:25.0),
-                                                                                     child: FormBuilder(
-                                                                                       key: _formKey,
-                                                                                       autovalidateMode: AutovalidateMode.disabled,
-                                                                                       child: Column(
-                                                                                         children: [
-                                                                                           Padding(
-                                                                                               padding: const EdgeInsets.only(top: 10,),
-                                                                                               child: Text("Lupa Password", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
-                                                                                           ),
-                                                                                           Padding(
-                                                                                               padding: const EdgeInsets.only(top: 30,),
-                                                                                               child: Text("Masukan Email Anda Agar Mendapat Kode Untuk me-Reset Password", textAlign: TextAlign.center, style: TextStyle( fontSize: 15),)
-                                                                                           ),
-                                                                                           Padding(
-                                                                                             padding: const EdgeInsets.only(top: 15,),
-                                                                                             child: FormBuilderTextField(
-                                                                                               validator: (value) =>
-                                                                                               value == null || value.isEmpty ? 'Email tidak boleh kosong' : null,
-                                                                                               name: "email",
-                                                                                               decoration: InputDecoration(
-                                                                                                   focusedBorder: new OutlineInputBorder(
-                                                                                                     borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
-                                                                                                     borderRadius: const BorderRadius.all(
-                                                                                                       const Radius.circular(15.0),
-                                                                                                     ),
+                                                                                     child: Column(
+                                                                                       children: [
+                                                                                         Padding(
+                                                                                             padding: const EdgeInsets.only(top: 10,),
+                                                                                             child: Text("Lupa Password", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
+                                                                                         ),
+                                                                                         Padding(
+                                                                                             padding: const EdgeInsets.only(top: 30,),
+                                                                                             child: Text("Masukan Email Anda Agar Mendapat Kode Untuk me-Reset Password", textAlign: TextAlign.center, style: TextStyle( fontSize: 15),)
+                                                                                         ),
+                                                                                         Padding(
+                                                                                           padding: const EdgeInsets.only(top: 15,),
+                                                                                           child: FormBuilderTextField(
+                                                                                             controller: emailText,
+                                                                                             validator: (value) =>
+                                                                                             value == null || value.isEmpty ? 'Email tidak boleh kosong' : null,
+                                                                                             name: "email",
+                                                                                             decoration: InputDecoration(
+                                                                                                 focusedBorder: new OutlineInputBorder(
+                                                                                                   borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                                                                   borderRadius: const BorderRadius.all(
+                                                                                                     const Radius.circular(15.0),
                                                                                                    ),
-                                                                                                   border: new OutlineInputBorder(
-                                                                                                     borderRadius: const BorderRadius.all(
-                                                                                                       const Radius.circular(15.0),
-                                                                                                     ),
+                                                                                                 ),
+                                                                                                 border: new OutlineInputBorder(
+                                                                                                   borderRadius: const BorderRadius.all(
+                                                                                                     const Radius.circular(15.0),
                                                                                                    ),
-                                                                                                   contentPadding: EdgeInsets.all(23),
-                                                                                                   hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
-                                                                                                   hintText: "Email"
-                                                                                               ),
+                                                                                                 ),
+                                                                                                 contentPadding: EdgeInsets.all(23),
+                                                                                                 hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
+                                                                                                 hintText: "Email"
                                                                                              ),
                                                                                            ),
-                                                                                         ],
-                                                                                       ),
+                                                                                         ),
+                                                                                       ],
                                                                                      ),
                                                                                    ),
                                                                                    Container(
@@ -358,34 +323,14 @@ class _LoginPageState extends State<LoginPage> {
                                                                                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0)),
                                                                                          padding: EdgeInsets.all(12),
                                                                                          onPressed: ()async {
-                                                                                           if(passText.text.trim()==confirmPassText.text.trim()){
-                                                                                             _formKey.currentState.save();
-                                                                                             if (_formKey.currentState.validate()) {
-                                                                                               // print(_formKey.currentState.value);
-                                                                                               final Map<String, dynamic> mapUser = new Map<String, dynamic>.from(_formKey.currentState.value);
-                                                                                               for(var i=0;i<mapUser.keys.length;i++){
-                                                                                                 mapUser.update(mapUser.keys.toList()[i], (value) => (value is String)?value.trim():value);
-                                                                                               }
-                                                                                               mapUser.update("tgl_lahir", (value) => DateFormat("dd-MMM-yyyy").format(value));
-                                                                                               mapUser["corp"] = "TBG";
-                                                                                               Future future = Auths().register(mapUser);
-                                                                                               var res = await utils.showLoadingFuture(context,future);
-                                                                                               utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
-                                                                                               if(res["STATUS"]) {
-                                                                                                 // print([mapUser["email"], mapUser["pass"]]);
-                                                                                                 Future future = Auths().login(mapUser["email"], mapUser["pass"]);
-                                                                                                 var res = await utils.showLoadingFuture(context,future);
-                                                                                                 Navigator.pop(context);
-                                                                                                 if(res["STATUS"]){
-                                                                                                   Navigator.pushReplacementNamed(context, "/home");
-                                                                                                 }
-                                                                                               }
-                                                                                             } else {
-                                                                                               utils.toast("Data belum lengkap. Silakan cek kembali",type:"ERROR");
-                                                                                             }
+                                                                                           Future future = Auths().getResetToken({"email":emailText.text});
+                                                                                           var res = await utils.showLoadingFuture(context,future);
+                                                                                           if(res["STATUS"]){
+                                                                                             user_id = res["DATA"][0]["user_id"];
+                                                                                            Navigator.pop(context,res["DATA"][0]["token"]);
                                                                                            }
                                                                                            else{
-                                                                                             utils.toast("Password tidak sama. Silakan cek kembali",type:"ERROR");
+                                                                                             utils.toast(res["DATA"],type: "ERROR");
                                                                                            }
                                                                                          },
                                                                                          child: Text("Submit",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.normal,fontSize: 24,color: Colors.white),)),
@@ -409,6 +354,213 @@ class _LoginPageState extends State<LoginPage> {
                                                                      ),
                                                                    )
                                                                );
+                                                               if(token!=null){
+                                                                 final codeText  = TextEditingController();
+                                                                 var isValid = await showModalBottomSheet(
+                                                                     isScrollControlled: true,
+                                                                     context: context,
+                                                                     builder: (context) => StatefulBuilder(
+                                                                       builder: (context,setState) =>Container(
+                                                                         height: MediaQuery.of(context).size.height*0.50,
+                                                                         decoration: BoxDecoration(
+                                                                           color: Colors.white,
+                                                                           borderRadius: BorderRadius.only(topLeft: Radius.circular(25),topRight: Radius.circular(25)),
+                                                                         ),
+                                                                         child: SingleChildScrollView(
+                                                                           scrollDirection: Axis.vertical,
+                                                                           child: Column(
+                                                                             mainAxisSize: MainAxisSize.min,
+                                                                             children: [
+                                                                               Padding(
+                                                                                 padding: const EdgeInsets.only(left:53,right: 53),
+                                                                                 child: Column(
+                                                                                   children: [
+                                                                                     Padding(
+                                                                                       padding: const EdgeInsets.only(top:25.0),
+                                                                                       child: Column(
+                                                                                         children: [
+                                                                                           Padding(
+                                                                                               padding: const EdgeInsets.only(top: 10,),
+                                                                                               child: Text("Lupa Password", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
+                                                                                           ),
+                                                                                           Padding(
+                                                                                               padding: const EdgeInsets.only(top: 30,),
+                                                                                               child: Text("Masukan Kode yang Telah Dikirim ke Email Untuk me-Reset Password", textAlign: TextAlign.center, style: TextStyle( fontSize: 15),)
+                                                                                           ),
+                                                                                           Padding(
+                                                                                             padding: const EdgeInsets.only(top: 15,),
+                                                                                             child: FormBuilderTextField(
+                                                                                               controller: codeText,
+                                                                                               validator: (value) =>
+                                                                                               value == null || value.isEmpty ? 'Kode tidak boleh kosong' : null,
+                                                                                               name: "Kode Validasi",
+                                                                                               decoration: InputDecoration(
+                                                                                                   focusedBorder: new OutlineInputBorder(
+                                                                                                     borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                                                                     borderRadius: const BorderRadius.all(
+                                                                                                       const Radius.circular(15.0),
+                                                                                                     ),
+                                                                                                   ),
+                                                                                                   border: new OutlineInputBorder(
+                                                                                                     borderRadius: const BorderRadius.all(
+                                                                                                       const Radius.circular(15.0),
+                                                                                                     ),
+                                                                                                   ),
+                                                                                                   contentPadding: EdgeInsets.all(23),
+                                                                                                   hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
+                                                                                                   hintText: "Kode Validasi"
+                                                                                               ),
+                                                                                             ),
+                                                                                           ),
+                                                                                         ],
+                                                                                       ),
+                                                                                     ),
+                                                                                     Container(
+                                                                                       padding: EdgeInsets.only(top: 25),
+                                                                                       width: 286,
+                                                                                       child: FlatButton(
+                                                                                           color: Color.fromRGBO(	0, 0, 52, 1),
+                                                                                           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0)),
+                                                                                           padding: EdgeInsets.all(12),
+                                                                                           onPressed: ()async {
+                                                                                             Future future = Auths().validateToken({"token":token,"code":codeText.text});
+                                                                                             var res = await utils.showLoadingFuture(context,future);
+                                                                                             if(res["STATUS"]){
+                                                                                               Navigator.pop(context,true);
+                                                                                             }
+                                                                                             else{
+                                                                                               utils.toast(res["DATA"],type: "ERROR");
+                                                                                             }
+                                                                                           },
+                                                                                           child: Text("Submit",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.normal,fontSize: 24,color: Colors.white),)),
+                                                                                     ),
+                                                                                     InkWell(
+                                                                                       onTap: (){
+                                                                                         Navigator.pop(context);
+                                                                                       },
+                                                                                       child: Padding(
+                                                                                           padding: const EdgeInsets.only(top: 30,),
+                                                                                           child: Text("Kembali ke Halaman Login", textAlign: TextAlign.center, style: TextStyle(decoration: TextDecoration.underline,fontSize: 15),)
+                                                                                       ),
+                                                                                     ),
+                                                                                   ],
+                                                                                 ),
+                                                                               ),
+
+                                                                             ],
+                                                                           ),
+                                                                         ),
+                                                                       ),
+                                                                     )
+                                                                 );
+                                                                 if(isValid??false){
+                                                                   final passwordText  = TextEditingController();
+                                                                   bool obscure = true;
+                                                                   await showModalBottomSheet(
+                                                                       isScrollControlled: true,
+                                                                       context: context,
+                                                                       builder: (context) => StatefulBuilder(
+                                                                         builder: (context,setState) =>Container(
+                                                                           height: MediaQuery.of(context).size.height*0.50,
+                                                                           decoration: BoxDecoration(
+                                                                             color: Colors.white,
+                                                                             borderRadius: BorderRadius.only(topLeft: Radius.circular(25),topRight: Radius.circular(25)),
+                                                                           ),
+                                                                           child: SingleChildScrollView(
+                                                                             scrollDirection: Axis.vertical,
+                                                                             child: Column(
+                                                                               mainAxisSize: MainAxisSize.min,
+                                                                               children: [
+                                                                                 Padding(
+                                                                                   padding: const EdgeInsets.only(left:53,right: 53),
+                                                                                   child: Column(
+                                                                                     children: [
+                                                                                       Padding(
+                                                                                         padding: const EdgeInsets.only(top:25.0),
+                                                                                         child: Column(
+                                                                                           children: [
+                                                                                             Padding(
+                                                                                                 padding: const EdgeInsets.only(top: 10,),
+                                                                                                 child: Text("Lupa Password", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
+                                                                                             ),
+                                                                                             Padding(
+                                                                                                 padding: const EdgeInsets.only(top: 30,),
+                                                                                                 child: Text("Masukan Kode yang Telah Dikirim ke Email Untuk me-Reset Password", textAlign: TextAlign.center, style: TextStyle( fontSize: 15),)
+                                                                                             ),
+                                                                                             Padding(
+                                                                                               padding: const EdgeInsets.only(top: 15,),
+                                                                                               child: FormBuilderTextField(
+                                                                                                 obscureText: obscure,
+                                                                                                 controller: passwordText,
+                                                                                                 validator: (value) =>
+                                                                                                 value == null || value.isEmpty ? 'Password baru tidak boleh kosong' : null,
+                                                                                                 name: "Password",
+                                                                                                 decoration: InputDecoration(
+                                                                                                     suffixIcon: InkWell(
+                                                                                                         onTap: (){
+                                                                                                           setState(() {
+                                                                                                             obscure = !obscure;
+                                                                                                           });
+                                                                                                         },
+                                                                                                         child: Icon((obscure)?FontAwesomeIcons.eyeSlash:FontAwesomeIcons.eye)),
+                                                                                                     focusedBorder: new OutlineInputBorder(
+                                                                                                       borderSide: BorderSide(color: Color.fromRGBO(64, 64, 222, 1)),
+                                                                                                       borderRadius: const BorderRadius.all(
+                                                                                                         const Radius.circular(15.0),
+                                                                                                       ),
+                                                                                                     ),
+                                                                                                     border: new OutlineInputBorder(
+                                                                                                       borderRadius: const BorderRadius.all(
+                                                                                                         const Radius.circular(15.0),
+                                                                                                       ),
+                                                                                                     ),
+                                                                                                     contentPadding: EdgeInsets.all(23),
+                                                                                                     hintStyle: TextStyle(fontSize: 18,fontWeight: FontWeight.w200,fontStyle: FontStyle.normal),
+                                                                                                     hintText: "Password baru"
+                                                                                                 ),
+                                                                                               ),
+                                                                                             ),
+                                                                                           ],
+                                                                                         ),
+                                                                                       ),
+                                                                                       Container(
+                                                                                         padding: EdgeInsets.only(top: 25),
+                                                                                         width: 286,
+                                                                                         child: FlatButton(
+                                                                                             color: Color.fromRGBO(	0, 0, 52, 1),
+                                                                                             shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(25.0)),
+                                                                                             padding: EdgeInsets.all(12),
+                                                                                             onPressed: ()async {
+                                                                                               Future future = Auths().changePass({"login_id":user_id,"pass":passwordText.text,"check_old":"FALSE"});
+                                                                                               var res = await utils.showLoadingFuture(context,future);
+                                                                                               utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
+                                                                                               if(res["STATUS"]) {
+                                                                                                 Navigator.pop(context);
+                                                                                               }
+                                                                                             },
+                                                                                             child: Text("Submit",style: TextStyle(fontWeight: FontWeight.w500,fontStyle: FontStyle.normal,fontSize: 24,color: Colors.white),)),
+                                                                                       ),
+                                                                                       InkWell(
+                                                                                         onTap: (){
+                                                                                           Navigator.pop(context);
+                                                                                         },
+                                                                                         child: Padding(
+                                                                                             padding: const EdgeInsets.only(top: 30,),
+                                                                                             child: Text("Kembali ke Halaman Login", textAlign: TextAlign.center, style: TextStyle(decoration: TextDecoration.underline,fontSize: 15),)
+                                                                                         ),
+                                                                                       ),
+                                                                                     ],
+                                                                                   ),
+                                                                                 ),
+
+                                                                               ],
+                                                                             ),
+                                                                           ),
+                                                                         ),
+                                                                       )
+                                                                   );
+                                                                 }
+                                                               }
                                                              },
                                                              child: Text("Lupa Password",style: TextStyle(fontWeight: FontWeight.w200,decoration: TextDecoration.underline,color: Color.fromRGBO(5,0,255,1),fontSize: 16,fontStyle: FontStyle.normal,),),
                                                            )

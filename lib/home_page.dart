@@ -202,13 +202,6 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
           child: Stack(
             children: [
-              // Container(
-              //   height: MediaQuery.of(context).size.height,
-              //   width: MediaQuery.of(context).size.width,
-              //   child: CustomPaint(
-              //     painter: DiagonalPainter(),
-              //   ),
-              // ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

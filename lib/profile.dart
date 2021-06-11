@@ -288,7 +288,6 @@ class _ProfileState extends State<Profile> {
                                   if(toggleEdit){
                                     _formKey.currentState.save();
                                     if (_formKey.currentState.validate()) {
-                                      // print(_formKey.currentState.value);
                                       final Map<String, dynamic> mapUser = new Map<String, dynamic>.from(_formKey.currentState.value);
                                       for(var i=0;i<mapUser.keys.length;i++){
                                         mapUser.update(mapUser.keys.toList()[i], (value) => (value is String)?value.trim():value);

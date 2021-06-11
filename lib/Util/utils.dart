@@ -55,7 +55,7 @@ class Util{
       }
       Future<http.Response> futureResponse = http.post(
           '$url', headers: headers,
-          body: json.encode(jsonData));;
+          body: json.encode(jsonData));
       if (timeout)
         futureResponse.timeout(
             Duration(seconds: second));
@@ -68,6 +68,7 @@ class Util{
         if(data["STATUS"]==200){
           var res;
           try{
+
             res =  decoder.convert(data["DATA"]);
           }catch(e){
             res = data["DATA"];

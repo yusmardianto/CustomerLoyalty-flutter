@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 class User {
   int CUST_ID;
   int CUST_POINT;
+  int MEMBERSHIP_ID;
   String NAME;
   String CORP;
   String GENDER;
@@ -25,6 +26,7 @@ class User {
   User(
       this.CUST_ID,
       this.CUST_POINT,
+      this.MEMBERSHIP_ID,
       this.NAME,
       this.CORP,
       this.GENDER,
@@ -47,20 +49,21 @@ class User {
     this.CORP = json[jsonKeys[0]].toString();
     this.CUST_ID = json[jsonKeys[1]];
     this.CUST_POINT = json[jsonKeys[2]];
-    this.NAME = json[jsonKeys[3]];
-    this.GENDER = json[jsonKeys[4]];
-    this.IDENTITY_NUMBER = json[jsonKeys[5]];
-    this.BIRTH_DATE =  (json[jsonKeys[6]]==null)?null:DateTime.parse(json[jsonKeys[6]]).toLocal();
-    this.EMAIL = json[jsonKeys[7]];
-    this.PHONE = json[jsonKeys[8]];
-    this.COMPANY_NAME = json[jsonKeys[9]];
-    this.STREET_NAME = json[jsonKeys[10]];
-    this.POSTAL_CODE = json[jsonKeys[11]];
-    this.LOYALTY_LEVEL = json[jsonKeys[12]];
-    this.CITY = json[jsonKeys[13]];
-    this.PROVINCE = json[jsonKeys[14]];
-    this.LOYALTY_LEVEL_IMAGE = (json[jsonKeys[15]]==null)?null:Base64Decoder().convert(json[jsonKeys[15]]);
-    this.CUST_PROFILE_IMAGE = (json[jsonKeys[16]]==null)?null:Base64Decoder().convert(json[jsonKeys[16]]);
+    this.MEMBERSHIP_ID = json[jsonKeys[3]];
+    this.NAME = json[jsonKeys[4]];
+    this.GENDER = json[jsonKeys[5]];
+    this.IDENTITY_NUMBER = json[jsonKeys[6]];
+    this.BIRTH_DATE =  (json[jsonKeys[7]]==null)?null:DateTime.parse(json[jsonKeys[7]]).toLocal();
+    this.EMAIL = json[jsonKeys[8]];
+    this.PHONE = json[jsonKeys[9]];
+    this.COMPANY_NAME = json[jsonKeys[10]];
+    this.STREET_NAME = json[jsonKeys[11]];
+    this.POSTAL_CODE = json[jsonKeys[12]];
+    this.LOYALTY_LEVEL = json[jsonKeys[13]];
+    this.CITY = json[jsonKeys[14]];
+    this.PROVINCE = json[jsonKeys[15]];
+    this.LOYALTY_LEVEL_IMAGE = (json[jsonKeys[16]]==null)?null:Base64Decoder().convert(json[jsonKeys[16]]);
+    this.CUST_PROFILE_IMAGE = (json[jsonKeys[17]]==null)?null:Base64Decoder().convert(json[jsonKeys[17]]);
   }
 
   // User.fromJson(Map<String, dynamic> json)
@@ -87,6 +90,7 @@ class User {
     "CORP":CORP,
     "CUST_ID":CUST_ID,
     "CUST_POINT":CUST_POINT,
+    "MEMBERSHIP_ID":MEMBERSHIP_ID,
     "NAME":NAME,
     "GENDER":GENDER,
     "IDENTITY_NUMBER" : IDENTITY_NUMBER,

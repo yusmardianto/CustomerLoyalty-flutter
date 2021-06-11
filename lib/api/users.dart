@@ -9,10 +9,8 @@ class Users{
     if(res["STATUS"]!=1){
       return false;
     }
-    // print("test $res");
     globVar.user = User.fromJson(res["DATA"][0]);
     utils.backupGlobVar();
-    // print("current ${ModalRoute.of(navKey.currentContext).settings.name}");
     return true;
   }
   update (Map<String,dynamic> user)async{
