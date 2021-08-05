@@ -24,6 +24,23 @@ class Users{
       return {"STATUS":false,"DATA":"Gagal menghubungi server. ${e}."};
     }
   }
+
+  checkAgreement(String agreement,cust_id,corp) async {
+    var res = await utils.post({"agreement":agreement,"cust_id":cust_id,"corp":corp},globVar.hostRest+"/customer/agreement",secure: true);
+    if(res["STATUS"]!=1){
+      return {"STATUS":false,"DATA":"Gagal menghubungi server."};
+    }
+    return {"STATUS":true,"DATA":res["DATA"]};
+  }
+
+  updateAgreement(String agreement,value,cust_id,corp) async {
+    var res = await utils.put({"value":value,"agreement":agreement,"cust_id":cust_id,"corp":corp},globVar.hostRest+"/customer/agreement",secure: true);
+    if(res["STATUS"]!=1){
+      return {"STATUS":false,"DATA":res["DATA"]};
+    }
+    return {"STATUS":true,"DATA":res["DATA"]};
+  }
+
   updateDP(File image)async{
     var res = await utils.postImage(image,globVar.hostRest+"/customer/changeDP",secure: true,customHeader: {
       "custId":globVar.user.CUST_ID,

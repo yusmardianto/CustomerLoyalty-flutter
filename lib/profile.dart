@@ -29,7 +29,7 @@ class _ProfileState extends State<Profile> {
   reloadUser(){
     imageCache.clear();
     userData = new Map<String,dynamic>.from(globVar.user.toJsonDisplay());
-    userData.update("Tanggal_Lahir", (value) => DateFormat("dd-MMM-yyyy").parse(value));
+    if(userData["Tanggal_Lahir"]!= null)userData.update("Tanggal_Lahir", (value) => DateFormat("dd-MMM-yyyy").parse(value));
     gender = userData["Gender"];
     if(globVar.user.CUST_PROFILE_IMAGE!=null)profileImage = Image.memory(globVar.user.CUST_PROFILE_IMAGE);
     setState(() {
@@ -294,7 +294,7 @@ class _ProfileState extends State<Profile> {
                                       }
                                       mapUser["cust_id"] = globVar.user.CUST_ID;
                                       mapUser["corp"] = globVar.auth.corp;
-                                      mapUser.update("Tanggal_Lahir", (value) => DateFormat("dd-MMM-yyyy").format(value));
+                                      if(mapUser["Tanggal_Lahir"]!= null)mapUser.update("Tanggal_Lahir", (value) => DateFormat("dd-MMM-yyyy").format(value));
                                       Future future = Users().update(mapUser);
                                       var res = await utils.showLoadingFuture(context,future);
                                       utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");

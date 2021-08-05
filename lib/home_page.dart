@@ -117,13 +117,98 @@ class _HomePageState extends State<HomePage> {
   
   void initialization()async{
     try{
-      await loadVoucher();
-      // print("test ${globVar.user.CUST_ID} ${globVar.auth.corp}");
       var isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
       if(!isFinish) throw ("Failed refreshing user data");
-      await loadAvailableVoucher();
-      await loadNews();
-      await loadBanners();
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        var agreement = await Users().checkAgreement('LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
+        if(agreement["STATUS"]&&agreement["DATA"]!='y'){
+          final ScrollController _scontroller = ScrollController();
+          var result = await showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (BuildContext context) => StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState){
+                return new SimpleDialog(
+                  contentPadding: EdgeInsets.all(0.0),
+                  children:[
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height*0.8,
+                          width: MediaQuery.of(context).size.width*0.9,
+                          child: Scrollbar(
+                            isAlwaysShown: true,
+                            controller: _scontroller,
+                            child: SingleChildScrollView(
+                                controller: _scontroller,
+                                child: HtmlWidget(agreement["DATA"],
+                                  textStyle: TextStyle(fontSize: 12),)
+                            ),
+                          ),
+                        ),
+                        Container(
+                            alignment:Alignment.center,
+                            padding: EdgeInsets.only(top:15,bottom:15,left:25,right:25),
+                            child:Row(
+                              mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                              children: [
+                                new TextButton(
+                                  child: new Text("Cancel",style: TextStyle(color: Colors.grey),),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                ),
+                                new TextButton(
+                                  child: new Text("Agree"),
+                                  onPressed: () async {
+                                    var agree = await Users().updateAgreement('LEGAL_AGREEMENT','TRUE', globVar.user.CUST_ID, globVar.auth.corp);
+                                    if(agree["STATUS"]) Navigator.of(context).pop(true);
+                                    else{
+                                      utils.toast(agree["DATA"],type:"ERROR");
+                                    }
+                                  },
+                                ),
+                              ],
+                            )
+                        ),
+                      ],
+                    ),
+                  ],
+                  // actions: <Widget>[
+                  //   new TextButton(
+                  //     child: new Text("Cancel"),
+                  //     onPressed: () {
+                  //       Navigator.of(context).pop(false);
+                  //     },
+                  //   ),
+                  //   new TextButton(
+                  //     child: new Text("Agree"),
+                  //     onPressed: () {
+                  //       Navigator.of(context).pop(true);
+                  //     },
+                  //   ),
+                  // ],
+                );
+              },
+            ),
+          );
+          if(result??false){
+            await loadVoucher();
+            await loadAvailableVoucher();
+            await loadNews();
+            await loadBanners();
+          }
+          else SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+        }
+        else{
+          await loadVoucher();
+          await loadAvailableVoucher();
+          await loadNews();
+          await loadBanners();
+        }
+      });
+
     }catch(e){
       // utils.toast(e.message??e,type:'ERROR');
       utils.toast("Error dalam memperbarui data. Cek koneksi internet.",type:'ERROR');

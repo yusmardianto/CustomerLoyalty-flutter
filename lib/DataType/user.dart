@@ -53,7 +53,7 @@ class User {
     this.NAME = json[jsonKeys[4]];
     this.GENDER = json[jsonKeys[5]];
     this.IDENTITY_NUMBER = json[jsonKeys[6]];
-    this.BIRTH_DATE =  (json[jsonKeys[7]]==null)?null:DateTime.parse(json[jsonKeys[7]]).toLocal();
+    this.BIRTH_DATE =  (json[jsonKeys[7]]==null||json[jsonKeys[7]]=='null')?null:DateTime.parse(json[jsonKeys[7]]).toLocal();
     this.EMAIL = json[jsonKeys[8]];
     this.PHONE = json[jsonKeys[9]];
     this.COMPANY_NAME = json[jsonKeys[10]];
@@ -62,8 +62,8 @@ class User {
     this.LOYALTY_LEVEL = json[jsonKeys[13]];
     this.CITY = json[jsonKeys[14]];
     this.PROVINCE = json[jsonKeys[15]];
-    this.LOYALTY_LEVEL_IMAGE = (json[jsonKeys[16]]==null)?null:Base64Decoder().convert(json[jsonKeys[16]]);
-    this.CUST_PROFILE_IMAGE = (json[jsonKeys[17]]==null)?null:Base64Decoder().convert(json[jsonKeys[17]]);
+    this.LOYALTY_LEVEL_IMAGE = (json[jsonKeys[16]]==null||json[jsonKeys[16]]=='null')?null:Base64Decoder().convert(json[jsonKeys[16]]);
+    this.CUST_PROFILE_IMAGE = (json[jsonKeys[17]]==null||json[jsonKeys[17]]=='null')?null:Base64Decoder().convert(json[jsonKeys[17]]);
   }
 
   // User.fromJson(Map<String, dynamic> json)
@@ -110,7 +110,7 @@ class User {
   Map<String, dynamic> toJsonDisplay()=>{
     "Nama":NAME??'',
     "Gender":GENDER??'',
-    "Tanggal_Lahir":(BIRTH_DATE==null)?'':DateFormat("dd-MMM-yyyy").format(BIRTH_DATE),
+    "Tanggal_Lahir":(BIRTH_DATE==null)?null:DateFormat("dd-MMM-yyyy").format(BIRTH_DATE),
     "Email":EMAIL??'',
     "Phone":PHONE??'',
     "Alamat":STREET_NAME??'',
