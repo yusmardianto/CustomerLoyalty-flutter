@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'Util/middleware.dart';
 import 'login_page.dart';
 import 'home_page.dart';
 import 'profile.dart';
@@ -137,10 +138,13 @@ class MyApp extends StatelessWidget {
             } else {
               // Loading is done, return the app:
               _check_Update(context);
-              if(prefs.getBool("first_time")??true){
-                return FirstPage();
-              }
-              else return (globVar.user!=null)?HomePage():LoginPage();
+              return MiddleWare(
+                child: (prefs.getBool("first_time")??true)?FirstPage():(globVar.user!=null)?HomePage():LoginPage(),
+              );
+              // if(prefs.getBool("first_time")??true){
+              //   return FirstPage();
+              // }
+              // else return (globVar.user!=null)?HomePage():LoginPage();
             }
           },
         ),

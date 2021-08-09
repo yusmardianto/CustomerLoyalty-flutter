@@ -8,6 +8,7 @@ import 'CustomShape/voucher_shape.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'CustomWidget/voucher_detail.dart';
+import 'Util/middleware.dart';
 import 'main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'api/vouchers.dart';
@@ -175,20 +176,6 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ],
-                  // actions: <Widget>[
-                  //   new TextButton(
-                  //     child: new Text("Cancel"),
-                  //     onPressed: () {
-                  //       Navigator.of(context).pop(false);
-                  //     },
-                  //   ),
-                  //   new TextButton(
-                  //     child: new Text("Agree"),
-                  //     onPressed: () {
-                  //       Navigator.of(context).pop(true);
-                  //     },
-                  //   ),
-                  // ],
                 );
               },
             ),
@@ -439,7 +426,7 @@ class _HomePageState extends State<HomePage> {
                                           builder: (BuildContext context) {
                                             return InkWell(
                                               onTap: ()async{
-                                                await Navigator.push(context,MaterialPageRoute(builder: (context)=>NewsDetail(i)));
+                                                await MiddleWare.of(context).pushConditionally(context,MaterialPageRoute(builder: (context)=>NewsDetail(i)));
                                                 await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                                                 setState((){
 
@@ -521,7 +508,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       InkWell(
                                         onTap: ()async{
-                                          await Navigator.push(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: false,)));
+                                          await MiddleWare.of(context).pushConditionally(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: false,)));
                                           await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                                           setState(() {
 
@@ -696,8 +683,8 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       InkWell(
                                         onTap: ()async{
-                                          // Navigator.pushNamed(context, "/vouchers",);
-                                          await Navigator.pushNamed(context,"/news");
+                                          // MiddleWare.of(context).pushConditionallyNamed(context, "/vouchers",);
+                                          await MiddleWare.of(context).pushConditionallyNamed(context,"/news");
                                           await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                                           setState(() {
 
@@ -730,7 +717,7 @@ class _HomePageState extends State<HomePage> {
                                               children: [
                                               InkWell(
                                                 onTap:()async{
-                                                  await Navigator.push(context,MaterialPageRoute(builder: (context)=>NewsDetail(NewsList[indx*2])));
+                                                  await MiddleWare.of(context).pushConditionally(context,MaterialPageRoute(builder: (context)=>NewsDetail(NewsList[indx*2])));
                                                 },
                                                 child: Container(
                                                   decoration: (NewsList[indx*2].message_image!=null)?BoxDecoration(
@@ -746,7 +733,7 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                           ((indx*2+1)<=(NewsList.length-1))?InkWell(
                                             onTap: ()async{
-                                              await Navigator.push(context,MaterialPageRoute(builder: (context)=>NewsDetail(NewsList[indx*2+1])));
+                                              await MiddleWare.of(context).pushConditionally(context,MaterialPageRoute(builder: (context)=>NewsDetail(NewsList[indx*2+1])));
                                             },
                                             child: Container(
                                                   width:175,
@@ -825,8 +812,8 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       InkWell(
                                         onTap: ()async{
-                                          // Navigator.pushNamed(context, "/vouchers",);
-                                          await Navigator.push(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: true,)));
+                                          // MiddleWare.of(context).pushConditionallyNamed(context, "/vouchers",);
+                                          await MiddleWare.of(context).pushConditionally(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: true,)));
                                           await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                                           setState(() {
 
@@ -1224,7 +1211,7 @@ class _HomePageState extends State<HomePage> {
                     Container(color: Colors.grey.withOpacity(0.2), width: 1,),
                     InkWell(
                       onTap: ()async{
-                        await Navigator.pushNamed(context, "/transactions");
+                        await MiddleWare.of(context).pushConditionallyNamed(context, "/transactions");
                         await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                         setState(() {
 
@@ -1238,7 +1225,7 @@ class _HomePageState extends State<HomePage> {
                     Container(color: Colors.grey.withOpacity(0.2), width: 1,),
                     InkWell(
                       onTap: ()async{
-                        await Navigator.pushNamed(context, "/vouchers");
+                        await MiddleWare.of(context).pushConditionallyNamed(context, "/vouchers");
                         await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                         setState(() {
 
@@ -1252,7 +1239,7 @@ class _HomePageState extends State<HomePage> {
                     Container(color: Colors.grey.withOpacity(0.2), width: 1,),
                     InkWell(
                       onTap: () async {
-                        await Navigator.pushNamed(context, "/profile");
+                        await MiddleWare.of(context).pushConditionallyNamed(context, "/profile");
                         await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                         setState(() {
 
@@ -1273,11 +1260,11 @@ class _HomePageState extends State<HomePage> {
       //   onTap: (idx)async{
       //     switch(idx){
       //       case 0 : {
-      //         // Navigator.pushReplacementNamed(context, "/home");
+      //         // MiddleWare.of(context).pushConditionallyReplacementNamed(context, "/home");
       //         _onRefresh();
       //       }break;
       //       case 1 : {
-      //         await Navigator.pushNamed(context, "/transactions");
+      //         await MiddleWare.of(context).pushConditionallyNamed(context, "/transactions");
       //       }break;
       //       // case 2 : {
       //
@@ -1341,10 +1328,10 @@ class _HomePageState extends State<HomePage> {
       //         // );
       //       // }break;
       //       case 2 : {
-      //         await Navigator.pushNamed(context, "/vouchers");
+      //         await MiddleWare.of(context).pushConditionallyNamed(context, "/vouchers");
       //       }break;
       //       case 3 : {
-      //         await Navigator.pushNamed(context, "/profile");
+      //         await MiddleWare.of(context).pushConditionallyNamed(context, "/profile");
       //       }break;
       //     }
       //     if(idx!=0){

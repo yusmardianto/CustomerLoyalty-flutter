@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:my_thamrin_club/api/users.dart';
 import 'package:flutter/widgets.dart';
 import '../main.dart';
@@ -29,7 +32,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     }
     else if(state == AppLifecycleState.resumed){
       // await utils.removeBackupGlobVar();
-      if(globVar!=null && globVar.user!=null) await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+      if(globVar!=null && globVar.user!=null) {
+        await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+      }
     }
   }
   @override
