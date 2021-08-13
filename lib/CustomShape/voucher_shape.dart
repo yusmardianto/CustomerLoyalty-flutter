@@ -1,13 +1,6 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'dart:ui' as ui;
-
-import 'package:flutter/services.dart';
 
 class VoucherPainter extends CustomPainter {
-  // ui.Image assetImage;
-  // VoucherPainter(this.assetImage) : super();
   String type;
   bool withRadius;
   VoucherPainter(this.type,{this.withRadius=true}) : super();
@@ -19,9 +12,6 @@ class VoucherPainter extends CustomPainter {
       paint.color = Color.fromRGBO(38, 95, 126, 1);
     }
     else{
-
-      // paint.color = Color.fromRGBO(255, 84, 84, 1);
-      // paint.color = Color.fromRGBO(1, 1, 52, 1);
       paint.color = Color.fromRGBO(1, 1, 52, 1);
     }
     paint.style = PaintingStyle.fill;

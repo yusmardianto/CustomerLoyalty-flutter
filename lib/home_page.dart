@@ -3,12 +3,10 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'CustomShape/diagonal_shaper.dart';
 import 'CustomShape/voucher_shape.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'CustomWidget/voucher_detail.dart';
-import 'Util/middleware.dart';
 import 'main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'api/vouchers.dart';
@@ -21,19 +19,26 @@ import 'api/users.dart';
 
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
-
+  // HomePage({Key key}) : super(key: key);
+  bool redirect;
+  HomePage({this.redirect=false});
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with RouteAware{
   List<NewsBanner> BannerList= [];
   List<NewsBanner> NewsList = [];
   List<Voucher> voucherList = [];
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   int bannerFocus,myVoucherFocus,availVoucherFocus;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context));
+  }
 
   loadBanners()async{
     var res = await News().getNews("PROMOTIONS");
@@ -115,7 +120,68 @@ class _HomePageState extends State<HomePage> {
       throw('Error fetching available vouchers!');
     }
   }
-  
+  agreementDialog(context,agreement)async{
+    ScrollController _scontroller = ScrollController();
+    return await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) => StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState){
+          return WillPopScope(
+            onWillPop: () => Future.value(false),
+            child: new SimpleDialog(
+              contentPadding: EdgeInsets.all(0.0),
+              children:[
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height*0.8,
+                      width: MediaQuery.of(context).size.width*0.9,
+                      child: Scrollbar(
+                        isAlwaysShown: true,
+                        controller: _scontroller,
+                        child: SingleChildScrollView(
+                            controller: _scontroller,
+                            child: HtmlWidget(agreement["DATA"],
+                              textStyle: TextStyle(fontSize: 12),)
+                        ),
+                      ),
+                    ),
+                    Container(
+                        alignment:Alignment.center,
+                        padding: EdgeInsets.only(top:15,bottom:15,left:25,right:25),
+                        child:Row(
+                          mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                          children: [
+                            new TextButton(
+                              child: new Text("Cancel",style: TextStyle(color: Colors.grey),),
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                            ),
+                            new TextButton(
+                              child: new Text("Agree"),
+                              onPressed: () async {
+                                var agree = await Users().updateAgreement('LEGAL_AGREEMENT','TRUE', globVar.user.CUST_ID, globVar.auth.corp);
+                                if(agree["STATUS"]) Navigator.of(context).pop(true);
+                                else{
+                                  utils.toast(agree["DATA"],type:"ERROR");
+                                }
+                              },
+                            ),
+                          ],
+                        )
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
   void initialization()async{
     try{
       var isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
@@ -123,63 +189,7 @@ class _HomePageState extends State<HomePage> {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         var agreement = await Users().checkAgreement('LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
         if(agreement["STATUS"]&&agreement["DATA"]!='y'){
-          final ScrollController _scontroller = ScrollController();
-          var result = await showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (BuildContext context) => StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState){
-                return new SimpleDialog(
-                  contentPadding: EdgeInsets.all(0.0),
-                  children:[
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height*0.8,
-                          width: MediaQuery.of(context).size.width*0.9,
-                          child: Scrollbar(
-                            isAlwaysShown: true,
-                            controller: _scontroller,
-                            child: SingleChildScrollView(
-                                controller: _scontroller,
-                                child: HtmlWidget(agreement["DATA"],
-                                  textStyle: TextStyle(fontSize: 12),)
-                            ),
-                          ),
-                        ),
-                        Container(
-                            alignment:Alignment.center,
-                            padding: EdgeInsets.only(top:15,bottom:15,left:25,right:25),
-                            child:Row(
-                              mainAxisAlignment:MainAxisAlignment.spaceBetween,
-                              children: [
-                                new TextButton(
-                                  child: new Text("Cancel",style: TextStyle(color: Colors.grey),),
-                                  onPressed: () {
-                                    Navigator.of(context).pop(false);
-                                  },
-                                ),
-                                new TextButton(
-                                  child: new Text("Agree"),
-                                  onPressed: () async {
-                                    var agree = await Users().updateAgreement('LEGAL_AGREEMENT','TRUE', globVar.user.CUST_ID, globVar.auth.corp);
-                                    if(agree["STATUS"]) Navigator.of(context).pop(true);
-                                    else{
-                                      utils.toast(agree["DATA"],type:"ERROR");
-                                    }
-                                  },
-                                ),
-                              ],
-                            )
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            ),
-          );
+          var result = await agreementDialog(context,agreement);
           if(result??false){
             await loadVoucher();
             await loadAvailableVoucher();
@@ -426,7 +436,7 @@ class _HomePageState extends State<HomePage> {
                                           builder: (BuildContext context) {
                                             return InkWell(
                                               onTap: ()async{
-                                                await MiddleWare.of(context).pushConditionally(context,MaterialPageRoute(builder: (context)=>NewsDetail(i)));
+                                                await Navigator.push(context,MaterialPageRoute(builder: (context)=>NewsDetail(i)));
                                                 await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                                                 setState((){
 
@@ -508,7 +518,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       InkWell(
                                         onTap: ()async{
-                                          await MiddleWare.of(context).pushConditionally(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: false,)));
+                                          await Navigator.push(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: false,)));
                                           await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                                           setState(() {
 
@@ -683,8 +693,8 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       InkWell(
                                         onTap: ()async{
-                                          // MiddleWare.of(context).pushConditionallyNamed(context, "/vouchers",);
-                                          await MiddleWare.of(context).pushConditionallyNamed(context,"/news");
+                                          // Navigator.pushNamed(context, "/vouchers",);
+                                          await Navigator.pushNamed(context,"/news");
                                           await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                                           setState(() {
 
@@ -717,7 +727,7 @@ class _HomePageState extends State<HomePage> {
                                               children: [
                                               InkWell(
                                                 onTap:()async{
-                                                  await MiddleWare.of(context).pushConditionally(context,MaterialPageRoute(builder: (context)=>NewsDetail(NewsList[indx*2])));
+                                                  await Navigator.push(context,MaterialPageRoute(builder: (context)=>NewsDetail(NewsList[indx*2])));
                                                 },
                                                 child: Container(
                                                   decoration: (NewsList[indx*2].message_image!=null)?BoxDecoration(
@@ -733,7 +743,7 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                           ((indx*2+1)<=(NewsList.length-1))?InkWell(
                                             onTap: ()async{
-                                              await MiddleWare.of(context).pushConditionally(context,MaterialPageRoute(builder: (context)=>NewsDetail(NewsList[indx*2+1])));
+                                              await Navigator.push(context,MaterialPageRoute(builder: (context)=>NewsDetail(NewsList[indx*2+1])));
                                             },
                                             child: Container(
                                                   width:175,
@@ -812,8 +822,8 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       InkWell(
                                         onTap: ()async{
-                                          // MiddleWare.of(context).pushConditionallyNamed(context, "/vouchers",);
-                                          await MiddleWare.of(context).pushConditionally(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: true,)));
+                                          // Navigator.pushNamed(context, "/vouchers",);
+                                          await Navigator.push(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: true,)));
                                           await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                                           setState(() {
 
@@ -833,7 +843,7 @@ class _HomePageState extends State<HomePage> {
                                 Column(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(top:15.0),
+                                      padding: const EdgeInsets.only(top: 15),
                                       child: CarouselSlider(
                                         options: CarouselOptions(
                                             viewportFraction:1-(62/MediaQuery.of(context).size.width),
@@ -850,75 +860,78 @@ class _HomePageState extends State<HomePage> {
                                         items:
                                         globVar.myVouchers.map((item)=>
                                             InkWell(
-                                              // onTap: ()=>VoucherDialog().showDialog(globVar.myVouchers[index], context),
                                               onTap: ()async{
-                                                bool genBarcode = await showDialog(
-                                                    context: context,
-                                                    builder: (context)=>SimpleDialog(
-                                                      children: [
-                                                        Icon(FontAwesomeIcons.gifts,size: 60,),
-                                                        SizedBox(height: 15),
-                                                        Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
-                                                        SizedBox(height: 15),
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: [
-                                                            FlatButton(
-                                                                minWidth: 120,
-                                                                shape: RoundedRectangleBorder(
-                                                                    borderRadius: BorderRadius.circular(15.0),
-                                                                    side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
-                                                                ),
-                                                                padding: EdgeInsets.all(10),
-                                                                onPressed: (){
-                                                                  Navigator.pop(context,false);
-                                                                },
-                                                                child: Text("Batal",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),)
-                                                            ),
-                                                            SizedBox(width: 15),
-                                                            FlatButton(
-                                                                minWidth: 120,
-                                                                color: Colors.green,
-                                                                shape: RoundedRectangleBorder(
-                                                                    borderRadius: BorderRadius.circular(15.0)
-                                                                ),
-                                                                padding: EdgeInsets.all(10),
-                                                                onPressed: (){
-                                                                  Navigator.pop(context,true);
-                                                                },
-                                                                child: Text("Gunakan",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),)
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                      backgroundColor: Colors.white,
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(25.0),
-                                                          side: BorderSide(color: Colors.transparent)
-                                                      ),
-                                                      contentPadding: EdgeInsets.all(20),
-                                                    )
-                                                );
-
-                                                if(genBarcode??false){
-                                                  Future future = Vouchers().useVoucher(item.LOYALTY_CUST_REWARD_ID);
-                                                  var res = await utils.showLoadingFuture(context,future);
-                                                  if(res["STATUS"]){
-                                                    print(res["DATA"]);
-                                                    await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
-                                                    await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                                                    setState(() {
-
-                                                    });
-                                                  }
-                                                  else{
-                                                    utils.toast(res["DATA"],type: "ERROR");
-                                                  }
-                                                }
+                                                var refresh = await VoucherDialog().showVoucherDetails(voucherList[voucherList.indexWhere((element) => element.LOYALTY_CAMPAIGN_ID == item.LOYALTY_CAMPAIGN_ID)], context);
                                               },
+                                              // onTap: ()async{
+                                              //   bool genBarcode = await showDialog(
+                                              //       context: context,
+                                              //       builder: (context)=>SimpleDialog(
+                                              //         children: [
+                                              //           Icon(FontAwesomeIcons.gifts,size: 60,),
+                                              //           SizedBox(height: 15),
+                                              //           Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
+                                              //           SizedBox(height: 15),
+                                              //           Row(
+                                              //             mainAxisAlignment: MainAxisAlignment.center,
+                                              //             children: [
+                                              //               FlatButton(
+                                              //                   minWidth: 120,
+                                              //                   shape: RoundedRectangleBorder(
+                                              //                       borderRadius: BorderRadius.circular(15.0),
+                                              //                       side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                                              //                   ),
+                                              //                   padding: EdgeInsets.all(10),
+                                              //                   onPressed: (){
+                                              //                     Navigator.pop(context,false);
+                                              //                   },
+                                              //                   child: Text("Batal",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),)
+                                              //               ),
+                                              //               SizedBox(width: 15),
+                                              //               FlatButton(
+                                              //                   minWidth: 120,
+                                              //                   color: Colors.green,
+                                              //                   shape: RoundedRectangleBorder(
+                                              //                       borderRadius: BorderRadius.circular(15.0)
+                                              //                   ),
+                                              //                   padding: EdgeInsets.all(10),
+                                              //                   onPressed: (){
+                                              //                     Navigator.pop(context,true);
+                                              //                   },
+                                              //                   child: Text("Gunakan",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),)
+                                              //               ),
+                                              //             ],
+                                              //           ),
+                                              //         ],
+                                              //         backgroundColor: Colors.white,
+                                              //         shape: RoundedRectangleBorder(
+                                              //             borderRadius: BorderRadius.circular(25.0),
+                                              //             side: BorderSide(color: Colors.transparent)
+                                              //         ),
+                                              //         contentPadding: EdgeInsets.all(20),
+                                              //       )
+                                              //   );
+                                              //
+                                              //   if(genBarcode??false){
+                                              //     Future future = Vouchers().useVoucher(item.LOYALTY_CUST_REWARD_ID);
+                                              //     var res = await utils.showLoadingFuture(context,future);
+                                              //     if(res["STATUS"]){
+                                              //       print(res["DATA"]);
+                                              //       await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
+                                              //       await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                                              //       setState(() {
+                                              //
+                                              //       });
+                                              //     }
+                                              //     else{
+                                              //       utils.toast(res["DATA"],type: "ERROR");
+                                              //     }
+                                              //   }
+                                              // },
                                               child: Stack(
                                                 children: [
                                                   Container(
+                                                    margin: EdgeInsets.symmetric(horizontal: 10),
                                                     height: 152,
                                                     width: MediaQuery.of(context).size.width,
                                                     decoration: BoxDecoration(
@@ -931,6 +944,7 @@ class _HomePageState extends State<HomePage> {
                                                     ),
                                                   ),
                                                   Container(
+                                                    margin: EdgeInsets.symmetric(horizontal: 10),
                                                     padding: EdgeInsets.all(12),
                                                     height: 152,
                                                     alignment: Alignment.centerRight,
@@ -1211,7 +1225,7 @@ class _HomePageState extends State<HomePage> {
                     Container(color: Colors.grey.withOpacity(0.2), width: 1,),
                     InkWell(
                       onTap: ()async{
-                        await MiddleWare.of(context).pushConditionallyNamed(context, "/transactions");
+                        await Navigator.pushNamed(context, "/transactions");
                         await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                         setState(() {
 
@@ -1225,7 +1239,7 @@ class _HomePageState extends State<HomePage> {
                     Container(color: Colors.grey.withOpacity(0.2), width: 1,),
                     InkWell(
                       onTap: ()async{
-                        await MiddleWare.of(context).pushConditionallyNamed(context, "/vouchers");
+                        await Navigator.pushNamed(context, "/vouchers");
                         await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                         setState(() {
 
@@ -1239,7 +1253,7 @@ class _HomePageState extends State<HomePage> {
                     Container(color: Colors.grey.withOpacity(0.2), width: 1,),
                     InkWell(
                       onTap: () async {
-                        await MiddleWare.of(context).pushConditionallyNamed(context, "/profile");
+                        await Navigator.pushNamed(context, "/profile");
                         await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                         setState(() {
 
@@ -1254,101 +1268,51 @@ class _HomePageState extends State<HomePage> {
               ),
             )
         ),
-      //  BottomNavigationBar(
-      //   backgroundColor: Colors.transparent,
-      //   type : BottomNavigationBarType.fixed,
-      //   onTap: (idx)async{
-      //     switch(idx){
-      //       case 0 : {
-      //         // MiddleWare.of(context).pushConditionallyReplacementNamed(context, "/home");
-      //         _onRefresh();
-      //       }break;
-      //       case 1 : {
-      //         await MiddleWare.of(context).pushConditionallyNamed(context, "/transactions");
-      //       }break;
-      //       // case 2 : {
-      //
-      //         // showModalBottomSheet(
-      //         //     isScrollControlled: true,
-      //         //     context: context,
-      //         //     builder: (context) => Container(
-      //         //       // padding: EdgeInsets.all(22),
-      //         //       height: MediaQuery.of(context).size.height*0.4,
-      //         //       decoration: BoxDecoration(
-      //         //         color: Colors.white,
-      //         //         borderRadius: BorderRadius.only(topLeft: Radius.circular(25),topRight: Radius.circular(25)),
-      //         //       ),
-      //         //       child: SingleChildScrollView(
-      //         //         scrollDirection: Axis.vertical,
-      //         //         child: Column(
-      //         //           crossAxisAlignment: CrossAxisAlignment.start,
-      //         //           mainAxisSize: MainAxisSize.min,
-      //         //           children: [
-      //         //               SizedBox(height: 20,),
-      //         //               Container(padding: EdgeInsets.all(22),child: Text("Apa yang mau dilakukan hari ini ?",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w300,color: Colors.black),)),
-      //         //             Container(
-      //         //               height: 106.0*2,
-      //         //               child: GridView.builder(
-      //         //                   physics: NeverScrollableScrollPhysics(),
-      //         //                   padding: EdgeInsets.only(top: 22,right: 10,left: 10),
-      //         //                   itemCount: 8,
-      //         //                   shrinkWrap: true,
-      //         //                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-      //         //                   itemBuilder: (context,indx)=>Padding(
-      //         //                     padding: const EdgeInsets.all(10.0),
-      //         //                     child: Container(
-      //         //                       height: 74,
-      //         //                       width: 74,
-      //         //                       child: Card(
-      //         //                         color: (indx==0)?Colors.white:Color.fromRGBO(237, 237, 237, 1),
-      //         //                         elevation: 5,
-      //         //                         // color: Color.fromRGBO(237, 237, 237, 1),
-      //         //                         child: InkWell(
-      //         //                           onTap: (){},
-      //         //                           child: new GridTile(
-      //         //                             footer: Center(child: new Text((indx==0)?"Transfer":"",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 14,color: Color.fromRGBO(148, 148, 148, 0.9)),)),
-      //         //                             child: (indx==0)?Padding(
-      //         //                               padding: const EdgeInsets.only(top: 6,left: 6,right: 6,bottom: 14),
-      //         //                               child: Image(
-      //         //                                 image: AssetImage("images/transfer.png"),
-      //         //                                 alignment: Alignment.topCenter,
-      //         //                                 fit: BoxFit.cover,
-      //         //                               ),
-      //         //                             ):Container(), //just for testing, will fill with image later
-      //         //                           ),
-      //         //                         ),
-      //         //                       ),
-      //         //                     ),
-      //         //                   )),
-      //         //             )
-      //         //           ],
-      //         //         ),
-      //         //       ),
-      //         //     )
-      //         // );
-      //       // }break;
-      //       case 2 : {
-      //         await MiddleWare.of(context).pushConditionallyNamed(context, "/vouchers");
-      //       }break;
-      //       case 3 : {
-      //         await MiddleWare.of(context).pushConditionallyNamed(context, "/profile");
-      //       }break;
-      //     }
-      //     if(idx!=0){
-      //       await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-      //       setState(() {
-      //
-      //       });
-      //     }
-      //   },
-      //   items: [
-      //     BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.home,color: Colors.black,)),
-      //     BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.receipt,color: Colors.black,)),
-      //     // BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.dollarSign,color: Colors.white,)),
-      //     BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.gift,color: Colors.black,)),
-      //     BottomNavigationBarItem(title: Container(),icon: Icon(FontAwesomeIcons.addressCard,color: Colors.black,)),
-      //   ],
-      // ),
     );
+  }
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPush()async  {
+    //pushed to home
+    final route = ModalRoute.of(context).settings.name;
+    // print('didPush route: $route');
+  }
+
+  @override
+  void didPopNext() async {
+    //popped to home
+    final route = ModalRoute.of(context).settings.name;
+    if((ModalRoute.of(context).settings.name == '/home'||ModalRoute.of(context).settings.name == '/') && !widget.redirect){
+      var agreement = await Users().checkAgreement('LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
+      if(agreement["STATUS"]&&agreement["DATA"]!='y'){
+        await agreementDialog(context,agreement);
+      }
+    }
+    // print('didPopNext route: $route');
+  }
+
+  @override
+  void didPushNext() async {
+    //pushed from home
+    final route = ModalRoute.of(context).settings.name;
+    if((ModalRoute.of(context).settings.name == '/home'||ModalRoute.of(context).settings.name == '/') && !widget.redirect){
+      var agreement = await Users().checkAgreement('LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
+      if(agreement["STATUS"]&&agreement["DATA"]!='y'){
+        await agreementDialog(context,agreement);
+      }
+    }
+    // print('didPushNext route: $route');
+  }
+
+  @override
+  void didPop() {
+    //pop from home
+    final route = ModalRoute.of(context).settings.name;
+    // print('didPop route: $route');
   }
 }

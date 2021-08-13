@@ -7,7 +7,6 @@ import '../main.dart';
 class NewsDetail extends StatefulWidget {
   final NewsBanner News;
   NewsDetail(this.News);
-  // NewsDetail({Key key}) : super(key: key);
 
   @override
   _NewsDetailState createState() => _NewsDetailState();

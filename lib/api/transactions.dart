@@ -1,7 +1,4 @@
-import 'package:intl/intl.dart';
-
 import "../main.dart";
-import '../DataType/user.dart';
 
 class Trans{
   getList(start_date,end_date)async {

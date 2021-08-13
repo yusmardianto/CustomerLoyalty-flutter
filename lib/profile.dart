@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:intl/intl.dart';
-import 'CustomShape/wave_shaper.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'api/users.dart';
 import 'api/auths.dart';

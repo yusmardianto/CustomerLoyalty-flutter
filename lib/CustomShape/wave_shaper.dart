@@ -1,13 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
-import 'package:flutter/services.dart';
-
 class WavePainter extends CustomPainter {
   ui.Image assetImage;
-  // WavePainter(this.assetImage) : super();
   WavePainter() : super();
 
   @override

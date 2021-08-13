@@ -83,6 +83,8 @@ class MyVoucher{
   DateTime CREATED_DATE;
   int REWARD_VALUE;
   int LOYALTY_CUST_REWARD_ID;
+  int LOYALTY_CAMPAIGN_ID;
+
 
 
   MyVoucher(
@@ -92,7 +94,8 @@ class MyVoucher{
       this.PERIOD,
       this.CREATED_DATE,
       this.REWARD_VALUE,
-      this.LOYALTY_CUST_REWARD_ID
+      this.LOYALTY_CUST_REWARD_ID,
+      this.LOYALTY_CAMPAIGN_ID,
       );
 
   MyVoucher.fromJson(Map<String, dynamic> json)
@@ -102,7 +105,8 @@ class MyVoucher{
         PERIOD = json["PERIOD"],
         CREATED_DATE = DateTime.parse(json["CREATED_DATE"]).toLocal(),
         REWARD_VALUE = json["REWARD_VALUE"],
-        LOYALTY_CUST_REWARD_ID = json["LOYALTY_CUST_REWARD_ID"]
+        LOYALTY_CUST_REWARD_ID = json["LOYALTY_CUST_REWARD_ID"],
+        LOYALTY_CAMPAIGN_ID = json["LOYALTY_CAMPAIGN_ID"]
   ;
 
   Map<String, dynamic> toJson()=>{
@@ -112,6 +116,7 @@ class MyVoucher{
     "PERIOD" : PERIOD,
     "CREATED_DATE" : CREATED_DATE,
     "REWARD_VALUE" : REWARD_VALUE,
-    "LOYALTY_CUST_REWARD_ID": LOYALTY_CUST_REWARD_ID
+    "LOYALTY_CUST_REWARD_ID": LOYALTY_CUST_REWARD_ID,
+    "LOYALTY_CAMPAIGN_ID" : LOYALTY_CAMPAIGN_ID
   };
 }

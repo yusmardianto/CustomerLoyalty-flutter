@@ -1,25 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'CustomShape/multi_shaper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'CustomShape/voucher_shape.dart';
 import 'CustomWidget/news_detail.dart';
 import 'DataType/contents.dart';
 import 'api/contents.dart';
-import 'api/users.dart';
 import 'main.dart';
-import 'DataType/voucher.dart';
-import 'api/vouchers.dart';
-import 'CustomWidget/voucher_detail.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:simple_moment/simple_moment.dart';
 
 
 
 class ContentList extends StatefulWidget {
-  // ContentList({Key key}) : super(key: key);
   bool checkMyVoucher;
   ContentList({this.checkMyVoucher=false});
 

@@ -1,10 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
-
-import 'package:flutter/services.dart';
-
 class MulltiPainter extends CustomPainter {
   ui.Image assetImage;
   // MulltiPainter(this.assetImage) : super();

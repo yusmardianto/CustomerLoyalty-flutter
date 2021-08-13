@@ -1,16 +1,13 @@
-import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import './CustomShape/round_shaper.dart';
 import 'dart:ui' as ui;
 import 'main.dart';
 import "api/auths.dart";
 import "package:flutter_form_builder/flutter_form_builder.dart";
-import "DataType/user.dart";
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -147,6 +144,8 @@ class _LoginPageState extends State<LoginPage> {
                                      builder: (context,setState)
                                      {
                                        return Container(
+                                         // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                         height: MediaQuery.of(context).size.height*0.6+MediaQuery.of(context).viewInsets.bottom,
                                          decoration: BoxDecoration(
                                            color: Colors.white,
                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(18),topRight: Radius.circular(18)),
@@ -623,7 +622,7 @@ class _LoginPageState extends State<LoginPage> {
                                     context: context,
                                     builder: (context) => StatefulBuilder(
                                       builder: (context,setState) =>Container(
-                                        // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                                         height: MediaQuery.of(context).size.height*0.85,
                                         decoration: BoxDecoration(
                                           color: Colors.white,

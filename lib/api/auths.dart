@@ -1,7 +1,4 @@
-import 'package:flutter/widgets.dart';
-
 import "../main.dart";
-import '../DataType/user.dart';
 import '../DataType/auth.dart';
 import 'users.dart';
 class Auths{
