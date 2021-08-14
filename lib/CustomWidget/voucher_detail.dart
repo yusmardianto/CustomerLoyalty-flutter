@@ -211,7 +211,7 @@ class VoucherDialog{
   //     },
   //   ));
   // }
-  showVoucherDetails(Voucher voucher,context){
+  showVoucherDetails(Voucher voucher,context,{rewardId=null}){
     showModalBottomSheet(context: context, isScrollControlled: true, builder: (context){
       return ConstrainedBox(
         constraints: new BoxConstraints(
@@ -390,13 +390,86 @@ class VoucherDialog{
                                     ),
                                     Expanded(
                                       flex: 1,
-                                      child: TextButton(
-                                        onPressed: ()async {
-                                          Future future = Vouchers().redeem(voucher.LOYALTY_CAMPAIGN_ID);
-                                          var res = await utils.showLoadingFuture(context,future);
-                                          utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
-                                          Navigator.pop(context,res["STATUS"]);
+                                      child: (rewardId != null)
+                                        ? TextButton(
+                                        child: Text("Gunakan Voucher",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Colors.white),),
+                                        style: ButtonStyle(
+                                          minimumSize: MaterialStateProperty.all(Size(358, 58)),
+                                          backgroundColor: MaterialStateProperty.all(Color.fromRGBO(16, 1, 52, 1)),
+                                        ),
+                                        onPressed: ()async{
+                                          bool genBarcode = await showDialog(
+                                              context: context,
+                                              builder: (context)=>SimpleDialog(
+                                                children: [
+                                                  Icon(FontAwesomeIcons.gifts,size: 60,),
+                                                  SizedBox(height: 15),
+                                                  Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
+                                                  SizedBox(height: 15),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      FlatButton(
+                                                          minWidth: 120,
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(15.0),
+                                                              side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                                                          ),
+                                                          padding: EdgeInsets.all(10),
+                                                          onPressed: (){
+                                                            Navigator.pop(context,false);
+                                                          },
+                                                          child: Text("Batal",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),)
+                                                      ),
+                                                      SizedBox(width: 15),
+                                                      FlatButton(
+                                                          minWidth: 120,
+                                                          color: Colors.green,
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(15.0)
+                                                          ),
+                                                          padding: EdgeInsets.all(10),
+                                                          onPressed: (){
+                                                            Navigator.pop(context,true);
+                                                          },
+                                                          child: Text("Gunakan",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),)
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                                backgroundColor: Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(25.0),
+                                                    side: BorderSide(color: Colors.transparent)
+                                                ),
+                                                contentPadding: EdgeInsets.all(20),
+                                              )
+                                          );
+
+                                          if(genBarcode??false){
+                                            Future future = Vouchers().useVoucher(rewardId);
+                                            var res = await utils.showLoadingFuture(context,future);
+                                            if(res["STATUS"]){
+                                              await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
+                                              // await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                                              // setState(() {
+                                              //
+                                              // });
+                                            }
+                                            else{
+                                              //Navigator.pop(context,res["STATUS"]);
+                                              utils.toast(res["DATA"],type: "ERROR");
+                                            }
+                                          }
                                         },
+                                      )
+                                          :TextButton(
+                                          onPressed: ()async {
+                                            Future future = Vouchers().redeem(voucher.LOYALTY_CAMPAIGN_ID);
+                                            var res = await utils.showLoadingFuture(context,future);
+                                            utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
+                                            Navigator.pop(context,res["STATUS"]);
+                                          },
                                         child: Text("Claim Voucher",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Colors.white),),
                                         style: ButtonStyle(
                                           minimumSize: MaterialStateProperty.all(Size(358, 58)),

@@ -22,6 +22,15 @@ class Vouchers{
     return res;
   }
 
+  voucherDetails(loyalty_campaign_id)async{
+    var res = await utils.post(
+        {
+          "loyalty_campaign_id" : loyalty_campaign_id
+        },
+        globVar.hostRest + "/voucher/", secure: true, many: true);
+    return res;
+  }
+
   redeem(voucher_id)async {
     // print("id $voucher_id");
     try{

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,9 +21,9 @@ import 'api/users.dart';
 
 
 class HomePage extends StatefulWidget {
-  // HomePage({Key key}) : super(key: key);
-  bool redirect;
-  HomePage({this.redirect=false});
+  HomePage({Key key}) : super(key: key);
+  // bool redirect;
+  // HomePage({this.redirect=false});
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -861,73 +863,78 @@ class _HomePageState extends State<HomePage> with RouteAware{
                                         globVar.myVouchers.map((item)=>
                                             InkWell(
                                               onTap: ()async{
-                                                var refresh = await VoucherDialog().showVoucherDetails(voucherList[voucherList.indexWhere((element) => element.LOYALTY_CAMPAIGN_ID == item.LOYALTY_CAMPAIGN_ID)], context);
+                                                var result = await Vouchers().voucherDetails(item.LOYALTY_CAMPAIGN_ID);
+                                                if(result["STATUS"]==1&&result["DATA"].length>0){
+                                                  var details = new Voucher.fromJson(result["DATA"][0]);
+                                                  await VoucherDialog().showVoucherDetails(details, context,rewardId: item.LOYALTY_CUST_REWARD_ID);
+                                                  _onRefresh();
+                                                }
+                                                else{
+                                                  bool genBarcode = await showDialog(
+                                                      context: context,
+                                                      builder: (context)=>SimpleDialog(
+                                                        children: [
+                                                          Icon(FontAwesomeIcons.gifts,size: 60,),
+                                                          SizedBox(height: 15),
+                                                          Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
+                                                          SizedBox(height: 15),
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: [
+                                                              FlatButton(
+                                                                  minWidth: 120,
+                                                                  shape: RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.circular(15.0),
+                                                                      side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                                                                  ),
+                                                                  padding: EdgeInsets.all(10),
+                                                                  onPressed: (){
+                                                                    Navigator.pop(context,false);
+                                                                  },
+                                                                  child: Text("Batal",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),)
+                                                              ),
+                                                              SizedBox(width: 15),
+                                                              FlatButton(
+                                                                  minWidth: 120,
+                                                                  color: Colors.green,
+                                                                  shape: RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.circular(15.0)
+                                                                  ),
+                                                                  padding: EdgeInsets.all(10),
+                                                                  onPressed: (){
+                                                                    Navigator.pop(context,true);
+                                                                  },
+                                                                  child: Text("Gunakan",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),)
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                        backgroundColor: Colors.white,
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(25.0),
+                                                            side: BorderSide(color: Colors.transparent)
+                                                        ),
+                                                        contentPadding: EdgeInsets.all(20),
+                                                      )
+                                                  );
+
+                                                  if(genBarcode??false){
+                                                    Future future = Vouchers().useVoucher(item.LOYALTY_CUST_REWARD_ID);
+                                                    var res = await utils.showLoadingFuture(context,future);
+                                                    if(res["STATUS"]){
+                                                      print(res["DATA"]);
+                                                      await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
+                                                      await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                                                      setState(() {
+
+                                                      });
+                                                    }
+                                                    else{
+                                                      utils.toast(res["DATA"],type: "ERROR");
+                                                    }
+                                                  }
+                                                }
                                               },
-                                              // onTap: ()async{
-                                              //   bool genBarcode = await showDialog(
-                                              //       context: context,
-                                              //       builder: (context)=>SimpleDialog(
-                                              //         children: [
-                                              //           Icon(FontAwesomeIcons.gifts,size: 60,),
-                                              //           SizedBox(height: 15),
-                                              //           Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
-                                              //           SizedBox(height: 15),
-                                              //           Row(
-                                              //             mainAxisAlignment: MainAxisAlignment.center,
-                                              //             children: [
-                                              //               FlatButton(
-                                              //                   minWidth: 120,
-                                              //                   shape: RoundedRectangleBorder(
-                                              //                       borderRadius: BorderRadius.circular(15.0),
-                                              //                       side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
-                                              //                   ),
-                                              //                   padding: EdgeInsets.all(10),
-                                              //                   onPressed: (){
-                                              //                     Navigator.pop(context,false);
-                                              //                   },
-                                              //                   child: Text("Batal",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),)
-                                              //               ),
-                                              //               SizedBox(width: 15),
-                                              //               FlatButton(
-                                              //                   minWidth: 120,
-                                              //                   color: Colors.green,
-                                              //                   shape: RoundedRectangleBorder(
-                                              //                       borderRadius: BorderRadius.circular(15.0)
-                                              //                   ),
-                                              //                   padding: EdgeInsets.all(10),
-                                              //                   onPressed: (){
-                                              //                     Navigator.pop(context,true);
-                                              //                   },
-                                              //                   child: Text("Gunakan",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),)
-                                              //               ),
-                                              //             ],
-                                              //           ),
-                                              //         ],
-                                              //         backgroundColor: Colors.white,
-                                              //         shape: RoundedRectangleBorder(
-                                              //             borderRadius: BorderRadius.circular(25.0),
-                                              //             side: BorderSide(color: Colors.transparent)
-                                              //         ),
-                                              //         contentPadding: EdgeInsets.all(20),
-                                              //       )
-                                              //   );
-                                              //
-                                              //   if(genBarcode??false){
-                                              //     Future future = Vouchers().useVoucher(item.LOYALTY_CUST_REWARD_ID);
-                                              //     var res = await utils.showLoadingFuture(context,future);
-                                              //     if(res["STATUS"]){
-                                              //       print(res["DATA"]);
-                                              //       await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
-                                              //       await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                                              //       setState(() {
-                                              //
-                                              //       });
-                                              //     }
-                                              //     else{
-                                              //       utils.toast(res["DATA"],type: "ERROR");
-                                              //     }
-                                              //   }
-                                              // },
                                               child: Stack(
                                                 children: [
                                                   Container(
@@ -1279,18 +1286,22 @@ class _HomePageState extends State<HomePage> with RouteAware{
   @override
   void didPush()async  {
     //pushed to home
-    final route = ModalRoute.of(context).settings.name;
+    // final route = ModalRoute.of(context).settings.name;
     // print('didPush route: $route');
   }
 
   @override
   void didPopNext() async {
     //popped to home
-    final route = ModalRoute.of(context).settings.name;
-    if((ModalRoute.of(context).settings.name == '/home'||ModalRoute.of(context).settings.name == '/') && !widget.redirect){
+    // final route = ModalRoute.of(context).settings.name;
+    if((ModalRoute.of(context).settings.name == '/home'||ModalRoute.of(context).settings.name == '/') ){
       var agreement = await Users().checkAgreement('LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
       if(agreement["STATUS"]&&agreement["DATA"]!='y'){
-        await agreementDialog(context,agreement);
+        var result = await agreementDialog(context,agreement);
+        if(!(result??false)){
+          // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+          exit(0);
+        }
       }
     }
     // print('didPopNext route: $route');
@@ -1299,11 +1310,14 @@ class _HomePageState extends State<HomePage> with RouteAware{
   @override
   void didPushNext() async {
     //pushed from home
-    final route = ModalRoute.of(context).settings.name;
-    if((ModalRoute.of(context).settings.name == '/home'||ModalRoute.of(context).settings.name == '/') && !widget.redirect){
+    // final route = ModalRoute.of(context).settings.name;
+    if((ModalRoute.of(context).settings.name == '/home'||ModalRoute.of(context).settings.name == '/')){
       var agreement = await Users().checkAgreement('LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
       if(agreement["STATUS"]&&agreement["DATA"]!='y'){
-        await agreementDialog(context,agreement);
+        var result = await agreementDialog(context,agreement);
+        if(!(result??false)){
+          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+        }
       }
     }
     // print('didPushNext route: $route');
@@ -1312,7 +1326,7 @@ class _HomePageState extends State<HomePage> with RouteAware{
   @override
   void didPop() {
     //pop from home
-    final route = ModalRoute.of(context).settings.name;
+    // final route = ModalRoute.of(context).settings.name;
     // print('didPop route: $route');
   }
 }
