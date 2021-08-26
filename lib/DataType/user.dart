@@ -22,6 +22,7 @@ class User {
   String PROVINCE;
   Uint8List LOYALTY_LEVEL_IMAGE;
   Uint8List CUST_PROFILE_IMAGE;
+  String MEMBERSHIP;
 
   User(
       this.CUST_ID,
@@ -42,6 +43,7 @@ class User {
       this.PROVINCE,
       this.LOYALTY_LEVEL_IMAGE,
       this.CUST_PROFILE_IMAGE,
+      this.MEMBERSHIP,
   );
 
   User.fromJson(Map<String, dynamic> json){
@@ -64,6 +66,7 @@ class User {
     this.PROVINCE = json[jsonKeys[15]];
     this.LOYALTY_LEVEL_IMAGE = (json[jsonKeys[16]]==null||json[jsonKeys[16]]=='null')?null:Base64Decoder().convert(json[jsonKeys[16]]);
     this.CUST_PROFILE_IMAGE = (json[jsonKeys[17]]==null||json[jsonKeys[17]]=='null')?null:Base64Decoder().convert(json[jsonKeys[17]]);
+    this.MEMBERSHIP = json[jsonKeys[18]];
   }
 
   // User.fromJson(Map<String, dynamic> json)
@@ -105,6 +108,7 @@ class User {
     "PROVINCE" : PROVINCE,
     "LOYALTY_LEVEL_IMAGE":LOYALTY_LEVEL_IMAGE==null?null:Base64Encoder().convert(LOYALTY_LEVEL_IMAGE),
     "CUST_PROFILE_IMAGE" :CUST_PROFILE_IMAGE==null?null: Base64Encoder().convert(CUST_PROFILE_IMAGE),
+    "MEMBERSHIP" :MEMBERSHIP
   };
 
   Map<String, dynamic> toJsonDisplay()=>{

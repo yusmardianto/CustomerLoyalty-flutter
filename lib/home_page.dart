@@ -306,13 +306,14 @@ class _HomePageState extends State<HomePage> with RouteAware{
                               // padding: EdgeInsets.only(bottom:15),
                               child: Stack(
                                 children: [
-                                  Positioned.fill(child: FittedBox(
-                                    child:Image.asset("images/header_yamaha.jpg",
-                                      filterQuality: FilterQuality.high,
-                                      colorBlendMode: BlendMode.clear,
-                                    ),
-                                    fit:BoxFit.fill,
-                                  )),
+                                  Positioned.fill(child: Container(color:Color.fromRGBO(0, 0, 52, 1))),
+                                  // Positioned.fill(child: FittedBox(
+                                  //   child:Image.asset("images/header_yamaha.jpg",
+                                  //     filterQuality: FilterQuality.high,
+                                  //     colorBlendMode: BlendMode.clear,
+                                  //   ),
+                                  //   fit:BoxFit.fill,
+                                  // )),
                                   Padding(
                                     padding: const EdgeInsets.only(bottom:18.0),
                                     child: Column(
@@ -324,7 +325,7 @@ class _HomePageState extends State<HomePage> with RouteAware{
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Container(
-                                                child: Text("Thamrin Club",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 18),),
+                                                child: Text((globVar.user.MEMBERSHIP??"MyThamrin Club").length>30?(globVar.user.MEMBERSHIP??"MyThamrin Club").substring(0,29):(globVar.user.MEMBERSHIP??"MyThamrin Club"),style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 14),),
                                               ),
                                               InkWell(
                                                 onTap: ()async {
@@ -337,23 +338,47 @@ class _HomePageState extends State<HomePage> with RouteAware{
                                             ],
                                           ),
                                         ),
-                                        Padding(
-                                            padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                                            child: Row(
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text("Hi ",style: TextStyle(fontSize:18,color: Colors.white,fontWeight: FontWeight.w300),),
-                                                Text("${globVar.user!=null?globVar.user.NAME:""},",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.w500),)
+                                                Padding(
+                                                    padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                                    child: Row(
+                                                      children: [
+                                                        Text("Hi ",style: TextStyle(fontSize:18,color: Colors.white,fontWeight: FontWeight.w300),),
+                                                        Text("${globVar.user!=null?globVar.user.NAME:""},",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.w500),)
+                                                      ],
+                                                    )
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                                  child: Container(
+                                                    child: Text("Kamu punya \t:",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 16),),
+                                                  ),
+                                                ),
                                               ],
-                                            )
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                              child: Container(
+                                                height:30,
+                                                width: 100,
+                                                child: FittedBox(
+                                                  child:Image.asset("images/Thamrinfull.png",
+                                                    filterQuality: FilterQuality.high,
+                                                    colorBlendMode: BlendMode.clear,
+                                                  ),
+                                                  fit:BoxFit.fill,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                                          child: Container(
-                                            child: Text("Kamu punya \t:",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 16),),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(top: 15,right: 18,left: 45),
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
@@ -361,6 +386,18 @@ class _HomePageState extends State<HomePage> with RouteAware{
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   Container(
+                                                    height:25,
+                                                    width:25,
+                                                    child:FittedBox(
+                                                      child:Image.asset("images/thamrin.png",
+                                                        filterQuality: FilterQuality.high,
+                                                        colorBlendMode: BlendMode.clear,
+                                                      ),
+                                                      fit:BoxFit.fill,
+                                                    )
+                                                  ),
+                                                  Container(
+                                                    padding:EdgeInsets.only(left:10),
                                                     child: Text("Points : ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 14),),
                                                   ),
                                                   Container(
