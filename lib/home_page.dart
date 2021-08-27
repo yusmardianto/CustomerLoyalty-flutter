@@ -367,9 +367,16 @@ class _HomePageState extends State<HomePage> with RouteAware{
                                                 height:30,
                                                 width: 100,
                                                 child: FittedBox(
-                                                  child:Image.asset("images/Thamrinfull.png",
+                                                  child:(globVar.user.MEMBERSHIP_IMAGE==null)?Image.asset("images/Thamrinfull.png",
                                                     filterQuality: FilterQuality.high,
                                                     colorBlendMode: BlendMode.clear,
+                                                  ):Image(
+                                                    height: 18,
+                                                    // width: 60,
+                                                    fit: BoxFit.cover,
+                                                    // errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
+                                                    // image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
+                                                    image: MemoryImage(globVar.user.MEMBERSHIP_IMAGE),
                                                   ),
                                                   fit:BoxFit.fill,
                                                 ),
