@@ -158,8 +158,18 @@ class _HomePageState extends State<HomePage> with RouteAware{
                           children: [
                             new TextButton(
                               child: new Text("Cancel",style: TextStyle(color: Colors.grey),),
-                              onPressed: () {
-                                Navigator.of(context).pop(false);
+                              onPressed: () async{
+                                var agree = await Users().updateAgreement('LEGAL_AGREEMENT','FALSE', globVar.user.CUST_ID, globVar.auth.corp);
+                                print("test ${agreement["REQUIRED"]} $agreement");
+                                if(agree["STATUS"]) {
+                                  if(agreement["REQUIRED"]=="TRUE"){
+                                    Navigator.of(context).pop(false);
+                                  }
+                                  else Navigator.of(context).pop(true);
+                                }
+                                else{
+                                  utils.toast(agree["DATA"],type:"ERROR");
+                                }
                               },
                             ),
                             new TextButton(
@@ -198,7 +208,9 @@ class _HomePageState extends State<HomePage> with RouteAware{
             await loadNews();
             await loadBanners();
           }
-          else SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+          else {
+              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+          }
         }
         else{
           await loadVoucher();
@@ -428,9 +440,8 @@ class _HomePageState extends State<HomePage> with RouteAware{
                                                   Container(
                                                     padding: EdgeInsets.only(left: 5),
                                                     child: (globVar.user.LOYALTY_LEVEL_IMAGE==null)?Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,):Image(
-                                                      height: 18,
-                                                      width: 18,
-                                                      fit: BoxFit.cover,
+                                                      height: 12.07,
+                                                      fit: BoxFit.fitHeight,
                                                       // errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
                                                       // image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
                                                       image: MemoryImage(globVar.user.LOYALTY_LEVEL_IMAGE),
@@ -1344,7 +1355,8 @@ class _HomePageState extends State<HomePage> with RouteAware{
         var result = await agreementDialog(context,agreement);
         if(!(result??false)){
           // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-          exit(0);
+            exit(0);
+
         }
       }
     }
@@ -1360,7 +1372,7 @@ class _HomePageState extends State<HomePage> with RouteAware{
       if(agreement["STATUS"]&&agreement["DATA"]!='y'){
         var result = await agreementDialog(context,agreement);
         if(!(result??false)){
-          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+            SystemChannels.platform.invokeMethod('SystemNavigator.pop');
         }
       }
     }

@@ -51,29 +51,34 @@ class Util{
       if(secure) {
         await tokenFetch();
         headers["Authorization"] =
-            "bearer ${globVar.tokenRest.token}";
+        "bearer ${globVar.tokenRest.token}";
       }
       Future<http.Response> futureResponse = http.post(
-          '$url', headers: headers,
+          Uri.parse(url), headers: headers,
           body: json.encode(jsonData));
+      http.Response response;
       if (timeout)
-        futureResponse.timeout(
+        response = await futureResponse.timeout(
             Duration(seconds: second));
-      http.Response response = await Future.sync(() => futureResponse);
+      else response = await futureResponse;
+      // util.printWrapped("post response => ${response.body.toString()}");
       if(htmlErrorTitle(response.body.toString())!=""){
+        // print(["errorpost",htmlErrorTitle(response.body.toString())]);
         return {"STATUS":(response.statusCode != 200)?0:1,"DATA":htmlErrorTitle(response.body.toString())};
       }
       else{
         final Map data = decoder.convert(response.body);
         if(data["STATUS"]==200){
-          var res;
-          try{
-
-            res =  decoder.convert(data["DATA"]);
-          }catch(e){
-            res = data["DATA"];
-          }
-          return {"STATUS":1,"DATA":res};
+          final Map res = {};
+          data.remove("STATUS");
+          data.keys.forEach((element) {
+            try{
+              res[element] = decoder.convert(data[element]);
+            }catch(e){
+              res[element] = data[element];
+            }
+          });
+          return {"STATUS":1,...res};
         }
         else{
           return {"STATUS":0,"DATA":data["ERROR"]};

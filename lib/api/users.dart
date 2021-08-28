@@ -29,7 +29,7 @@ class Users{
     if(res["STATUS"]!=1){
       return {"STATUS":false,"DATA":"Gagal menghubungi server."};
     }
-    return {"STATUS":true,"DATA":res["DATA"]};
+    return {"STATUS":true,"DATA":res["DATA"],"REQUIRED":res["REQUIRED"]};
   }
 
   updateAgreement(String agreement,value,cust_id,corp) async {
