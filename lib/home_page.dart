@@ -19,7 +19,6 @@ import 'vouchers_list.dart';
 import 'CustomWidget/news_detail.dart';
 import 'api/users.dart';
 
-
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
   // bool redirect;
@@ -28,13 +27,13 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with RouteAware{
-  List<NewsBanner> BannerList= [];
+class _HomePageState extends State<HomePage> with RouteAware {
+  List<NewsBanner> BannerList = [];
   List<NewsBanner> NewsList = [];
   List<Voucher> voucherList = [];
   RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
-  int bannerFocus,myVoucherFocus,availVoucherFocus;
+      RefreshController(initialRefresh: false);
+  int bannerFocus, myVoucherFocus, availVoucherFocus;
 
   @override
   void didChangeDependencies() {
@@ -42,11 +41,11 @@ class _HomePageState extends State<HomePage> with RouteAware{
     routeObserver.subscribe(this, ModalRoute.of(context));
   }
 
-  loadBanners()async{
+  loadBanners() async {
     var res = await News().getNews("PROMOTIONS");
-    if(res["STATUS"]==1){
+    if (res["STATUS"] == 1) {
       BannerList.clear();
-      for(var i = 0;i<res["DATA"].length;i++){
+      for (var i = 0; i < res["DATA"].length; i++) {
         BannerList.add(NewsBanner.fromJson(res["DATA"][i]));
       }
       setState(() {
@@ -55,136 +54,148 @@ class _HomePageState extends State<HomePage> with RouteAware{
         bannerFocus = 0;
         globVar.isLoading = false;
       });
-    }
-    else{
-      throw('Error fetching banners!');
+    } else {
+      throw ('Error fetching banners!');
     }
   }
-  loadNews()async{
+
+  loadNews() async {
     var res = await News().getNews("NEWS");
-    if(res["STATUS"]==1){
+    if (res["STATUS"] == 1) {
       NewsList.clear();
-      for(var i = 0;i<res["DATA"].length;i++){
+      for (var i = 0; i < res["DATA"].length; i++) {
         NewsList.add(NewsBanner.fromJson(res["DATA"][i]));
       }
-    }
-    else{
-      throw('Error fetching banners!');
+    } else {
+      throw ('Error fetching banners!');
     }
   }
-  loadVoucher()async {
+
+  loadVoucher() async {
     setState(() {
       globVar.isLoading = true;
     });
     var res = await Vouchers().getMyVoucherList();
-    if(res["STATUS"]==1){
+    if (res["STATUS"] == 1) {
       List<MyVoucher> myVoucherList = [];
-      for(var i = 0;i<res["DATA"].length;i++){
+      for (var i = 0; i < res["DATA"].length; i++) {
         myVoucherList.add(MyVoucher.fromJson(res["DATA"][i]));
       }
-      globVar.myVouchers =myVoucherList;
-    }
-    else{
-      throw('Error mengambil data myvouchers!');
+      globVar.myVouchers = myVoucherList;
+    } else {
+      throw ('Error mengambil data myvouchers!');
     }
   }
-  void _onRefresh() async{
+
+  void _onRefresh() async {
     print("refreshing");
-    try{
+    try {
       await Future.delayed(Duration(milliseconds: 1000));
       await loadVoucher();
-      var isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-      if(!isFinish) throw ("Failed refreshing user data");
+      var isFinish =
+          await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+      if (!isFinish) throw ("Failed refreshing user data");
       await loadAvailableVoucher();
       await loadNews();
       await loadBanners();
       _refreshController.refreshCompleted();
-    }
-    catch(e){
+    } catch (e) {
       setState(() {
         globVar.isLoading = false;
       });
       _refreshController.refreshCompleted();
     }
-
   }
-  
-  loadAvailableVoucher()async {
+
+  loadAvailableVoucher() async {
     var res = await Vouchers().getAvailableList();
-    if(res["STATUS"]==1){
+    if (res["STATUS"] == 1) {
       voucherList.clear();
-      for(var i = 0;i<res["DATA"].length;i++){
+      for (var i = 0; i < res["DATA"].length; i++) {
         voucherList.add(Voucher.fromJson(res["DATA"][i]));
       }
-      setState((){});
-    }
-    else{
-      throw('Error fetching available vouchers!');
+      setState(() {});
+    } else {
+      throw ('Error fetching available vouchers!');
     }
   }
-  agreementDialog(context,agreement)async{
+
+  agreementDialog(context, agreement) async {
     ScrollController _scontroller = ScrollController();
     return await showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) => StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState){
+        builder: (BuildContext context, StateSetter setState) {
           return WillPopScope(
             onWillPop: () => Future.value(false),
             child: new SimpleDialog(
               contentPadding: EdgeInsets.all(0.0),
-              children:[
+              children: [
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      height: MediaQuery.of(context).size.height*0.8,
-                      width: MediaQuery.of(context).size.width*0.9,
+                      height: MediaQuery.of(context).size.height * 0.8,
+                      width: MediaQuery.of(context).size.width * 0.9,
                       child: Scrollbar(
                         isAlwaysShown: true,
                         controller: _scontroller,
                         child: SingleChildScrollView(
                             controller: _scontroller,
-                            child: HtmlWidget(agreement["DATA"],
-                              textStyle: TextStyle(fontSize: 12),)
-                        ),
+                            child: HtmlWidget(
+                              agreement["DATA"],
+                              textStyle: TextStyle(fontSize: 12),
+                            )),
                       ),
                     ),
                     Container(
-                        alignment:Alignment.center,
-                        padding: EdgeInsets.only(top:15,bottom:15,left:25,right:25),
-                        child:Row(
-                          mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.only(
+                            top: 15, bottom: 15, left: 25, right: 25),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             new TextButton(
-                              child: new Text("Cancel",style: TextStyle(color: Colors.grey),),
-                              onPressed: () async{
-                                var agree = await Users().updateAgreement('LEGAL_AGREEMENT','FALSE', globVar.user.CUST_ID, globVar.auth.corp);
-                                print("test ${agreement["REQUIRED"]} $agreement");
-                                if(agree["STATUS"]) {
-                                  if(agreement["REQUIRED"]=="TRUE"){
+                              child: new Text(
+                                "Cancel",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              onPressed: () async {
+                                var agree = await Users().updateAgreement(
+                                    'LEGAL_AGREEMENT',
+                                    'FALSE',
+                                    globVar.user.CUST_ID,
+                                    globVar.auth.corp);
+                                print(
+                                    "test ${agreement["REQUIRED"]} $agreement");
+                                if (agree["STATUS"]) {
+                                  if (agreement["REQUIRED"] == "TRUE") {
                                     Navigator.of(context).pop(false);
-                                  }
-                                  else Navigator.of(context).pop(true);
-                                }
-                                else{
-                                  utils.toast(agree["DATA"],type:"ERROR");
+                                  } else
+                                    Navigator.of(context).pop(true);
+                                } else {
+                                  utils.toast(agree["DATA"], type: "ERROR");
                                 }
                               },
                             ),
                             new TextButton(
                               child: new Text("Agree"),
                               onPressed: () async {
-                                var agree = await Users().updateAgreement('LEGAL_AGREEMENT','TRUE', globVar.user.CUST_ID, globVar.auth.corp);
-                                if(agree["STATUS"]) Navigator.of(context).pop(true);
-                                else{
-                                  utils.toast(agree["DATA"],type:"ERROR");
+                                var agree = await Users().updateAgreement(
+                                    'LEGAL_AGREEMENT',
+                                    'TRUE',
+                                    globVar.user.CUST_ID,
+                                    globVar.auth.corp);
+                                if (agree["STATUS"])
+                                  Navigator.of(context).pop(true);
+                                else {
+                                  utils.toast(agree["DATA"], type: "ERROR");
                                 }
                               },
                             ),
                           ],
-                        )
-                    ),
+                        )),
                   ],
                 ),
               ],
@@ -194,103 +205,118 @@ class _HomePageState extends State<HomePage> with RouteAware{
       ),
     );
   }
-  void initialization()async{
-    try{
-      var isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-      if(!isFinish) throw ("Failed refreshing user data");
+
+  void initialization() async {
+    try {
+      var isFinish =
+          await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+      if (!isFinish) throw ("Failed refreshing user data");
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        var agreement = await Users().checkAgreement('LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
-        if(agreement["STATUS"]&&agreement["DATA"]!='y'){
-          var result = await agreementDialog(context,agreement);
-          if(result??false){
+        var agreement = await Users().checkAgreement(
+            'LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
+        if (agreement["STATUS"] && agreement["DATA"] != 'y') {
+          var result = await agreementDialog(context, agreement);
+          if (result ?? false) {
             await loadVoucher();
             await loadAvailableVoucher();
             await loadNews();
             await loadBanners();
+          } else {
+            SystemChannels.platform.invokeMethod('SystemNavigator.pop');
           }
-          else {
-              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-          }
-        }
-        else{
+        } else {
           await loadVoucher();
           await loadAvailableVoucher();
           await loadNews();
           await loadBanners();
         }
       });
-
-    }catch(e){
+    } catch (e) {
       // utils.toast(e.message??e,type:'ERROR');
-      utils.toast("Error dalam memperbarui data. Cek koneksi internet.",type:'ERROR');
+      utils.toast("Error dalam memperbarui data. Cek koneksi internet.",
+          type: 'ERROR');
       setState(() {
         globVar.isLoading = false;
       });
     }
-
   }
+
   @override
   void initState() {
     initialization();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: WillPopScope(
-        onWillPop: ()async{
-            var exit = await showDialog(
-                context: context,
-                builder: (context)=>SimpleDialog(
-                  children: [
-                    Icon(Icons.meeting_room,size: 85,),
-                    Center(child: Text("Sudah ingin keluar ?",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
-                    SizedBox(height: 15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FlatButton(
-                          minWidth: 120,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
-                            ),
-                          padding: EdgeInsets.all(10),
-                            onPressed: (){
-                              Navigator.pop(context,false);
-                            },
-                            child: Text("Tutup",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),)
-                        ),
-                        SizedBox(width: 15),
-                        FlatButton(
-                            minWidth: 120,
-                          color: Color.fromRGBO(254, 83, 83, 1),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0)
-                          ),
-                            padding: EdgeInsets.all(10),
-                            onPressed: ()async{
-                              await utils.backupGlobVar();
-                              Navigator.pop(context,true);
-                            },
-                            child: Text("Keluar",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),)
-                        ),
-                      ],
-                    ),
-                  ],
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                      side: BorderSide(color: Colors.transparent)
-                  ),
-                  contentPadding: EdgeInsets.all(20),
-                )
-            );
-            if(exit??false){
-                SystemNavigator.pop();
-            }
-            return false;
+        onWillPop: () async {
+          var exit = await showDialog(
+              context: context,
+              builder: (context) => SimpleDialog(
+                    children: [
+                      Icon(
+                        Icons.meeting_room,
+                        size: 85,
+                      ),
+                      Center(
+                          child: Text(
+                        "Sudah ingin keluar ?",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w400),
+                      )),
+                      SizedBox(height: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FlatButton(
+                              minWidth: 120,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  side: BorderSide(
+                                      color: Color.fromRGBO(64, 64, 222, 1))),
+                              padding: EdgeInsets.all(10),
+                              onPressed: () {
+                                Navigator.pop(context, false);
+                              },
+                              child: Text(
+                                "Tutup",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w500),
+                              )),
+                          SizedBox(width: 15),
+                          FlatButton(
+                              minWidth: 120,
+                              color: Color.fromRGBO(254, 83, 83, 1),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0)),
+                              padding: EdgeInsets.all(10),
+                              onPressed: () async {
+                                await utils.backupGlobVar();
+                                Navigator.pop(context, true);
+                              },
+                              child: Text(
+                                "Keluar",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500),
+                              )),
+                        ],
+                      ),
+                    ],
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                        side: BorderSide(color: Colors.transparent)),
+                    contentPadding: EdgeInsets.all(20),
+                  ));
+          if (exit ?? false) {
+            SystemNavigator.pop();
+          }
+          return false;
         },
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -301,8 +327,10 @@ class _HomePageState extends State<HomePage> with RouteAware{
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: MediaQuery.of(context).size.height*0.04,
-                  child: Container(color:Color.fromRGBO(0, 0, 46, 1)),),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.04,
+                    child: Container(color: Color.fromRGBO(0, 0, 46, 1)),
+                  ),
                   Expanded(
                     child: SmartRefresher(
                       // header: WaterDropHeader(),
@@ -315,116 +343,218 @@ class _HomePageState extends State<HomePage> with RouteAware{
                           children: [
                             //Header
                             Container(
-                              // padding: EdgeInsets.only(bottom:15),
-                              child: Stack(
-                                children: [
-                                  Positioned.fill(child: Container(color:Color.fromRGBO(0, 0, 52, 1))),
-                                  // Positioned.fill(child: FittedBox(
-                                  //   child:Image.asset("images/header_yamaha.jpg",
-                                  //     filterQuality: FilterQuality.high,
-                                  //     colorBlendMode: BlendMode.clear,
-                                  //   ),
-                                  //   fit:BoxFit.fill,
-                                  // )),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom:18.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                // padding: EdgeInsets.only(bottom:15),
+                                child: Stack(
+                              children: [
+                                Positioned.fill(
+                                    child: Container(
+                                        color: Color.fromRGBO(0, 0, 52, 1))),
+                                // Positioned.fill(child: FittedBox(
+                                //   child:Image.asset("images/header_yamaha.jpg",
+                                //     filterQuality: FilterQuality.high,
+                                //     colorBlendMode: BlendMode.clear,
+                                //   ),
+                                //   fit:BoxFit.fill,
+                                // )),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 18.0),
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                          padding: const EdgeInsets.only(
+                                              top: 15, right: 18, left: 18),
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Container(
-                                                child: Text((globVar.user.MEMBERSHIP??"MyThamrin Club").length>30?(globVar.user.MEMBERSHIP??"MyThamrin Club").substring(0,29):(globVar.user.MEMBERSHIP??"MyThamrin Club"),style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 14),),
+                                                child: Text(
+                                                  (globVar.user.MEMBERSHIP ??
+                                                                  "MyThamrin Club")
+                                                              .length >
+                                                          30
+                                                      ? (globVar.user
+                                                                  .MEMBERSHIP ??
+                                                              "MyThamrin Club")
+                                                          .substring(0, 29)
+                                                      : (globVar.user
+                                                              .MEMBERSHIP ??
+                                                          "MyThamrin Club"),
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 14),
+                                                ),
                                               ),
                                               InkWell(
-                                                onTap: ()async {
-                                                  await utils.genQRcode(context,globVar.user.CUST_ID.toString());
+                                                onTap: () async {
+                                                  await utils.genQRcode(
+                                                      context,
+                                                      globVar.user.CUST_ID
+                                                          .toString());
                                                 },
                                                 child: Container(
-                                                  child: Icon(Icons.qr_code_scanner_sharp,color: Colors.white,size: 24,),
+                                                  child: Icon(
+                                                    Icons.qr_code_scanner_sharp,
+                                                    color: Colors.white,
+                                                    size: 24,
+                                                  ),
                                                 ),
                                               )
                                             ],
                                           ),
                                         ),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Padding(
-                                                    padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 15,
+                                                            right: 18,
+                                                            left: 18),
                                                     child: Row(
                                                       children: [
-                                                        Text("Hi ",style: TextStyle(fontSize:18,color: Colors.white,fontWeight: FontWeight.w300),),
-                                                        Text("${globVar.user!=null?globVar.user.NAME:""},",style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.w500),)
+                                                        Text(
+                                                          "Hi ",
+                                                          style: TextStyle(
+                                                              fontSize: 18,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300),
+                                                        ),
+                                                        Text(
+                                                          "${globVar.user != null ? globVar.user.NAME : ""},",
+                                                          style: TextStyle(
+                                                              fontSize: 18,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                        )
                                                       ],
-                                                    )
-                                                ),
+                                                    )),
                                                 Padding(
-                                                  padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 15,
+                                                          right: 18,
+                                                          left: 18),
                                                   child: Container(
-                                                    child: Text("Kamu punya \t:",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 16),),
+                                                    child: Text(
+                                                      "Kamu punya \t:",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                          fontSize: 16),
+                                                    ),
                                                   ),
                                                 ),
                                               ],
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                              padding: const EdgeInsets.only(
+                                                  top: 15, right: 18, left: 18),
                                               child: Container(
-                                                height:30,
-                                                width: 100,
+                                                // height: 30,
+                                                width: 150,
                                                 child: FittedBox(
-                                                  child:(globVar.user.MEMBERSHIP_IMAGE==null)?Image.asset("images/Thamrinfull.png",
-                                                    filterQuality: FilterQuality.high,
-                                                    colorBlendMode: BlendMode.clear,
-                                                  ):Image(
-                                                    height: 18,
-                                                    // width: 60,
-                                                    fit: BoxFit.cover,
-                                                    // errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
-                                                    // image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
-                                                    image: MemoryImage(globVar.user.MEMBERSHIP_IMAGE),
-                                                  ),
-                                                  fit:BoxFit.fill,
+                                                  child: (globVar.user
+                                                              .MEMBERSHIP_IMAGE ==
+                                                          null)
+                                                      ? Image.asset(
+                                                          "images/ThamrinfullBlack.png",
+                                                          filterQuality:
+                                                              FilterQuality
+                                                                  .high,
+                                                          colorBlendMode:
+                                                              BlendMode.clear,
+                                                        )
+                                                      : Image(
+                                                          height: 18,
+                                                          // width: 60,
+                                                          fit: BoxFit.cover,
+                                                          // errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
+                                                          // image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
+                                                          image: MemoryImage(globVar
+                                                              .user
+                                                              .MEMBERSHIP_IMAGE),
+                                                        ),
+                                                  fit: BoxFit.fill,
                                                 ),
                                               ),
                                             ),
                                           ],
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
+                                          padding: const EdgeInsets.only(
+                                              top: 15, right: 18, left: 18),
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   Container(
-                                                    height:25,
-                                                    width:25,
-                                                    child:FittedBox(
-                                                      child:Image.asset("images/thamrin.png",
-                                                        filterQuality: FilterQuality.high,
-                                                        colorBlendMode: BlendMode.clear,
-                                                      ),
-                                                      fit:BoxFit.fill,
-                                                    )
+                                                      height: 25,
+                                                      width: 25,
+                                                      child: FittedBox(
+                                                        child: Image.asset(
+                                                          "images/thamrin.png",
+                                                          filterQuality:
+                                                              FilterQuality
+                                                                  .high,
+                                                          colorBlendMode:
+                                                              BlendMode.clear,
+                                                        ),
+                                                        fit: BoxFit.fill,
+                                                      )),
+                                                  Container(
+                                                    padding: EdgeInsets.only(
+                                                        left: 10),
+                                                    child: Text(
+                                                      "Points : ",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 14),
+                                                    ),
                                                   ),
                                                   Container(
-                                                    padding:EdgeInsets.only(left:10),
-                                                    child: Text("Points : ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 14),),
+                                                    child: Text(
+                                                        "${utils.thousandSeperator(globVar.user.CUST_POINT ?? '')}",
+                                                        style:
+                                                            GoogleFonts.ptMono(
+                                                          textStyle: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            fontSize: 18,
+                                                          ),
+                                                        )),
                                                   ),
                                                   Container(
-                                                    child: Text("${utils.thousandSeperator(globVar.user.CUST_POINT??'')}",style: GoogleFonts.ptMono(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 18, ),)),
-                                                  ),
-                                                  Container(
-                                                    padding: EdgeInsets.only(left: 5),
-                                                    child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
+                                                    padding: EdgeInsets.only(
+                                                        left: 5),
+                                                    child: Icon(
+                                                        FontAwesomeIcons.coins,
+                                                        size: 18,
+                                                        color:
+                                                            Colors.amberAccent),
                                                   ),
                                                 ],
                                               ),
@@ -432,832 +562,1384 @@ class _HomePageState extends State<HomePage> with RouteAware{
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   Container(
-                                                    child: Text("Level \t: ",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 14),),
-                                                  ),
-                                                  Container(
-                                                    child: Text("${globVar.user.LOYALTY_LEVEL??''}",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 16, fontFamily: "PT_Mono"),),
-                                                  ),
-                                                  Container(
-                                                    padding: EdgeInsets.only(left: 5),
-                                                    child: (globVar.user.LOYALTY_LEVEL_IMAGE==null)?Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,):Image(
-                                                      height: 12.07,
-                                                      fit: BoxFit.fitHeight,
-                                                      // errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
-                                                      // image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
-                                                      image: MemoryImage(globVar.user.LOYALTY_LEVEL_IMAGE),
+                                                    child: Text(
+                                                      "Level \t: ",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 14),
                                                     ),
+                                                  ),
+                                                  Container(
+                                                    child: Text(
+                                                      "${globVar.user.LOYALTY_LEVEL ?? ''}",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 16,
+                                                          fontFamily:
+                                                              "PT_Mono"),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.only(
+                                                        left: 5),
+                                                    child: (globVar.user
+                                                                .LOYALTY_LEVEL_IMAGE ==
+                                                            null)
+                                                        ? Icon(
+                                                            FontAwesomeIcons
+                                                                .solidImage,
+                                                            size: 18,
+                                                            color: Colors.white,
+                                                          )
+                                                        : Image(
+                                                            height: 12.07,
+                                                            fit: BoxFit
+                                                                .fitHeight,
+                                                            // errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
+                                                            // image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
+                                                            image: MemoryImage(
+                                                                globVar.user
+                                                                    .LOYALTY_LEVEL_IMAGE),
+                                                          ),
                                                   ),
                                                 ],
                                               ),
                                             ],
                                           ),
                                         ),
-                                      ]
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ),
+                                      ]),
+                                ),
+                              ],
+                            )),
                             //Banners
                             Container(
                                 child: Column(
-                                  children: [
-                                    CarouselSlider(
-                                      options: CarouselOptions(height: 114.0,
-                                          onPageChanged: (indx,reason){
-                                              setState(() {
-                                                bannerFocus = indx;
-                                              });
-                                          },
-                                          enableInfiniteScroll: BannerList.length!=1 && BannerList.length!=0,disableCenter: true,viewportFraction: 1.0 ,enlargeCenterPage: false,autoPlay: true,autoPlayAnimationDuration: Duration(seconds: 3)),
-                                      items: (BannerList.length==0)?[1].map((i){
-                                        return Container(
-                                          alignment: Alignment.center,
-                                          child: (globVar.isLoading)?null:Text("No Banners",style: TextStyle(fontWeight: FontWeight.w700,decoration: TextDecoration.underline,color: Colors.grey),),
-                                          width: MediaQuery.of(context).size.width,
-                                          height: 114,
-                                          decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  offset: Offset(1.0,1.0),
-                                                  color: Colors.grey,
-                                                  blurRadius: 3
-                                              )
-                                            ],
-                                            color: Color.fromRGBO(237, 237, 237, 1),
-                                          ),
-                                        );
-                                      }).toList():BannerList.map((i) {
-                                        // print("banner ${i.message_image}");
-                                        return Builder(
-                                          builder: (BuildContext context) {
-                                            return InkWell(
-                                              onTap: ()async{
-                                                await Navigator.push(context,MaterialPageRoute(builder: (context)=>NewsDetail(i)));
-                                                await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                                                setState((){
-
-                                                });
-                                              },
-                                              child: Container(
-                                                width: MediaQuery.of(context).size.width,
-                                                height: 114,
-                                                // margin: EdgeInsets.symmetric(horizontal: 10.0),
-                                                decoration: BoxDecoration(
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                          offset: Offset(1.0,1.0),
-                                                          color: Colors.grey,
-                                                          blurRadius: 3
-                                                      )
-                                                    ],
-                                                    color: Color.fromRGBO(237, 237, 237, 1),
-                                                    image: (i.message_image==null)?null:DecorationImage(
-                                                      fit: BoxFit.fill,
-                                                      image: MemoryImage(i.message_image),
-                                                    )
+                              children: [
+                                CarouselSlider(
+                                  options: CarouselOptions(
+                                      height: 114.0,
+                                      onPageChanged: (indx, reason) {
+                                        setState(() {
+                                          bannerFocus = indx;
+                                        });
+                                      },
+                                      enableInfiniteScroll:
+                                          BannerList.length != 1 &&
+                                              BannerList.length != 0,
+                                      disableCenter: true,
+                                      viewportFraction: 1.0,
+                                      enlargeCenterPage: false,
+                                      autoPlay: true,
+                                      autoPlayAnimationDuration:
+                                          Duration(seconds: 3)),
+                                  items: (BannerList.length == 0)
+                                      ? [1].map((i) {
+                                          return Container(
+                                            alignment: Alignment.center,
+                                            child: (globVar.isLoading)
+                                                ? null
+                                                : Text(
+                                                    "No Banners",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                        color: Colors.grey),
+                                                  ),
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: 114,
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    offset: Offset(1.0, 1.0),
+                                                    color: Colors.grey,
+                                                    blurRadius: 3)
+                                              ],
+                                              color: Color.fromRGBO(
+                                                  237, 237, 237, 1),
+                                            ),
+                                          );
+                                        }).toList()
+                                      : BannerList.map((i) {
+                                          // print("banner ${i.message_image}");
+                                          return Builder(
+                                            builder: (BuildContext context) {
+                                              return InkWell(
+                                                onTap: () async {
+                                                  await Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              NewsDetail(i)));
+                                                  await Users().refreshUser(
+                                                      globVar.user.CUST_ID,
+                                                      globVar.auth.corp);
+                                                  setState(() {});
+                                                },
+                                                child: Container(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  height: 114,
+                                                  // margin: EdgeInsets.symmetric(horizontal: 10.0),
+                                                  decoration: BoxDecoration(
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            offset: Offset(
+                                                                1.0, 1.0),
+                                                            color: Colors.grey,
+                                                            blurRadius: 3)
+                                                      ],
+                                                      color: Color.fromRGBO(
+                                                          237, 237, 237, 1),
+                                                      image: (i.message_image ==
+                                                              null)
+                                                          ? null
+                                                          : DecorationImage(
+                                                              fit: BoxFit.fill,
+                                                              image: MemoryImage(
+                                                                  i.message_image),
+                                                            )),
                                                 ),
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      }).toList(),
-                                    ),
-                                    Container(
-                                      height:28,
-                                      padding: EdgeInsets.only(top:10,bottom:10),
-                                      child: (BannerList.length==0)?Container(padding: EdgeInsets.all(2),width: 20,child: LinearProgressIndicator(backgroundColor: Colors.grey,valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
-                                      )):ListView.builder(shrinkWrap: true,scrollDirection: Axis.horizontal,itemCount: BannerList.length,itemBuilder: (context,index)=>Padding(
-                                          padding: EdgeInsets.only(left:2,right:2),
-                                          child: Container(height: (bannerFocus==index)?8:4,width: (bannerFocus==index)?8:4,decoration: BoxDecoration(
-                                              color: (bannerFocus==index)?Colors.redAccent:Colors.grey,
-                                              shape: BoxShape.circle
-                                          ),),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                )
-                            ),
-                            //MyVouchers
-                            (globVar.isLoading==null||globVar.isLoading)
-                            ?Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(15),
-                                  child: Container(
-                                      height: 96,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(6),
-                                          color: Color.fromRGBO(237, 237, 237, 1)
-                                      )
-                                  ),
-                                ),
-                                Container(padding: EdgeInsets.all(2),width: 20,child: LinearProgressIndicator(backgroundColor: Colors.grey,valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
-                                ))
-                              ],
-                            )
-                            :(voucherList.length==0)
-                                ?Container()
-                                :Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text("Tukarkan Point",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
-                                          ],
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: ()async{
-                                          await Navigator.push(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: false,)));
-                                          await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                                          setState(() {
-
-                                          });
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.only(right: 15),
-                                          child: Text("Semua",style: TextStyle(
-                                              decoration: TextDecoration.underline,
-                                              fontWeight: FontWeight.w300,fontSize: 14),),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top:15.0),
-                                      child: CarouselSlider(
-                                        options: CarouselOptions(
-                                            viewportFraction:1-(62/MediaQuery.of(context).size.width),
-                                            height: 96,
-                                            enableInfiniteScroll: true,
-                                            autoPlay: false,
-                                            // autoPlayAnimationDuration: Duration(seconds: 3),
-                                            onPageChanged: (index,reason){
-                                              setState(() {
-                                                availVoucherFocus = index;
-                                              });
+                                              );
                                             },
+                                          );
+                                        }).toList(),
+                                ),
+                                Container(
+                                  height: 28,
+                                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                                  child: (BannerList.length == 0)
+                                      ? Container(
+                                          padding: EdgeInsets.all(2),
+                                          width: 20,
+                                          child: LinearProgressIndicator(
+                                            backgroundColor: Colors.grey,
+                                            valueColor:
+                                                new AlwaysStoppedAnimation<
+                                                    Color>(Colors.white),
+                                          ))
+                                      : ListView.builder(
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: BannerList.length,
+                                          itemBuilder: (context, index) =>
+                                              Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 2, right: 2),
+                                            child: Container(
+                                              height: (bannerFocus == index)
+                                                  ? 8
+                                                  : 4,
+                                              width: (bannerFocus == index)
+                                                  ? 8
+                                                  : 4,
+                                              decoration: BoxDecoration(
+                                                  color: (bannerFocus == index)
+                                                      ? Colors.redAccent
+                                                      : Colors.grey,
+                                                  shape: BoxShape.circle),
+                                            ),
+                                          ),
                                         ),
-                                        items:
-                                        voucherList.map((item)=>
-                                            InkWell(
-                                              // onTap: ()=>VoucherDialog().showDialog(globVar.myVouchers[index], context),
-                                              onTap: ()async{
-                                                var refresh = await VoucherDialog().showVoucherDetails(item, context);
-                                                // var refresh = await showVoucherDetails(item);
-                                                if(refresh??false) _onRefresh();
-                                              },
-                                              child: Container(
-                                                margin: EdgeInsets.symmetric(horizontal: 10),
-                                                child: Stack(
-                                                  children: [
-                                                    Container(
-                                                      height: 152,
-                                                      width: MediaQuery.of(context).size.width,
-                                                      decoration: BoxDecoration(
-                                                        border: Border.all(color: Colors.grey,width: 0.3),
-                                                        borderRadius: BorderRadius.circular(20),
-                                                        color: Colors.white,
+                                )
+                              ],
+                            )),
+                            //MyVouchers
+                            (globVar.isLoading == null || globVar.isLoading)
+                                ? Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(15),
+                                        child: Container(
+                                            height: 96,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                                color: Color.fromRGBO(
+                                                    237, 237, 237, 1))),
+                                      ),
+                                      Container(
+                                          padding: EdgeInsets.all(2),
+                                          width: 20,
+                                          child: LinearProgressIndicator(
+                                            backgroundColor: Colors.grey,
+                                            valueColor:
+                                                new AlwaysStoppedAnimation<
+                                                    Color>(Colors.white),
+                                          ))
+                                    ],
+                                  )
+                                : (voucherList.length == 0)
+                                    ? Container()
+                                    : Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 15, right: 18, left: 18),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        "Tukarkan Point",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w300,
+                                                            fontSize: 18),
                                                       ),
-                                                      child: CustomPaint(
-                                                        painter: VoucherPainter(item.SHORT_DESC),
-                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () async {
+                                                    await Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                VouchersList(
+                                                                  checkMyVoucher:
+                                                                      false,
+                                                                )));
+                                                    await Users().refreshUser(
+                                                        globVar.user.CUST_ID,
+                                                        globVar.auth.corp);
+                                                    setState(() {});
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.only(
+                                                        right: 15),
+                                                    child: Text(
+                                                      "Semua",
+                                                      style: TextStyle(
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline,
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                          fontSize: 14),
                                                     ),
-                                                    Container(
-                                                      padding: EdgeInsets.all(12),
-                                                      height: 152,
-                                                      alignment: Alignment.centerRight,
-                                                      child: Column(
-                                                        mainAxisSize: MainAxisSize.min,
-                                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                                        children: [
-                                                          Row(
-                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                            children: [
-                                                              Column(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 15.0),
+                                                child: CarouselSlider(
+                                                  options: CarouselOptions(
+                                                    viewportFraction: 1 -
+                                                        (62 /
+                                                            MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width),
+                                                    height: 96,
+                                                    enableInfiniteScroll: true,
+                                                    autoPlay: false,
+                                                    // autoPlayAnimationDuration: Duration(seconds: 3),
+                                                    onPageChanged:
+                                                        (index, reason) {
+                                                      setState(() {
+                                                        availVoucherFocus =
+                                                            index;
+                                                      });
+                                                    },
+                                                  ),
+                                                  items: voucherList
+                                                      .map((item) => InkWell(
+                                                            // onTap: ()=>VoucherDialog().showDialog(globVar.myVouchers[index], context),
+                                                            onTap: () async {
+                                                              var refresh =
+                                                                  await VoucherDialog()
+                                                                      .showVoucherDetails(
+                                                                          item,
+                                                                          context);
+                                                              // var refresh = await showVoucherDetails(item);
+                                                              if (refresh ??
+                                                                  false)
+                                                                _onRefresh();
+                                                            },
+                                                            child: Container(
+                                                              margin: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          10),
+                                                              child: Stack(
                                                                 children: [
-                                                                  Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 20, ),),),
-                                                                    Text(item.CAMPAIGN_TYPE??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 16, ),),),
-                                                                ],
-                                                              ),
-                                                              Column(
-                                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                                children: [
-                                                                  Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 16, ),),),
-                                                                  Padding(
-                                                                    padding: const EdgeInsets.only(top:10.0,bottom: 10.0),
-                                                                    child: Row(
+                                                                  Container(
+                                                                    height: 152,
+                                                                    width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      border: Border.all(
+                                                                          color: Colors
+                                                                              .grey,
+                                                                          width:
+                                                                              0.3),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              20),
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                    child:
+                                                                        CustomPaint(
+                                                                      painter:
+                                                                          VoucherPainter(
+                                                                              item.SHORT_DESC),
+                                                                    ),
+                                                                  ),
+                                                                  Container(
+                                                                    padding:
+                                                                        EdgeInsets.all(
+                                                                            12),
+                                                                    height: 152,
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .centerRight,
+                                                                    child:
+                                                                        Column(
+                                                                      mainAxisSize:
+                                                                          MainAxisSize
+                                                                              .min,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .end,
                                                                       children: [
-                                                                        Text("${utils.thousandSeperator(item.REWARD_VALUE)??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 14, ),),),
-                                                                        Container(
-                                                                          padding: EdgeInsets.only(left: 5),
-                                                                          child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
+                                                                        Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.spaceBetween,
+                                                                          children: [
+                                                                            Column(
+                                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              children: [
+                                                                                Text(
+                                                                                  "VOUCHERS",
+                                                                                  style: GoogleFonts.robotoCondensed(
+                                                                                    textStyle: TextStyle(
+                                                                                      color: Colors.white,
+                                                                                      fontWeight: FontWeight.w700,
+                                                                                      fontSize: 20,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                Text(
+                                                                                  item.CAMPAIGN_TYPE ?? "-",
+                                                                                  style: GoogleFonts.robotoCondensed(
+                                                                                    textStyle: TextStyle(
+                                                                                      color: Colors.amber,
+                                                                                      fontWeight: FontWeight.w700,
+                                                                                      fontSize: 16,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                            Column(
+                                                                              mainAxisAlignment: MainAxisAlignment.end,
+                                                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                                                              children: [
+                                                                                Text(
+                                                                                  "POTONGAN",
+                                                                                  style: GoogleFonts.robotoCondensed(
+                                                                                    textStyle: TextStyle(
+                                                                                      color: Color.fromRGBO(57, 153, 184, 1),
+                                                                                      fontWeight: FontWeight.w700,
+                                                                                      fontSize: 16,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                Padding(
+                                                                                  padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                                                                                  child: Row(
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        "${utils.thousandSeperator(item.REWARD_VALUE) ?? '-'}",
+                                                                                        style: GoogleFonts.robotoMono(
+                                                                                          textStyle: TextStyle(
+                                                                                            color: Color.fromRGBO(14, 60, 74, 1),
+                                                                                            fontWeight: FontWeight.w700,
+                                                                                            fontSize: 14,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      Container(
+                                                                                        padding: EdgeInsets.only(left: 5),
+                                                                                        child: Icon(FontAwesomeIcons.coins, size: 18, color: Colors.amberAccent),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ],
                                                                         ),
+                                                                        // Text(item.PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 15, ),),),
                                                                       ],
                                                                     ),
                                                                   ),
                                                                 ],
                                                               ),
-                                                            ],
-                                                          ),
-                                                          // Text(item.PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 15, ),),),
-
-                                                        ],
-                                                      ),
-
-                                                    ),
-                                                  ],
+                                                            ),
+                                                          ))
+                                                      .toList(),
                                                 ),
                                               ),
-                                            )).toList()
-                                        ,
-                                      ),
-                                    ),
-                                    Container(
-                                      height:28,
-                                      padding: EdgeInsets.only(top:10,bottom:10),
-                                      child: ListView.builder(shrinkWrap: true,scrollDirection: Axis.horizontal,itemCount: voucherList.length,itemBuilder: (context,index)=>Padding(
-                                        padding: EdgeInsets.only(left:2,right:2),
-                                        child: Container(height: (availVoucherFocus==index)?8:4,width: (availVoucherFocus==index)?8:4,decoration: BoxDecoration(
-                                            color: (availVoucherFocus==index)?Colors.redAccent:Colors.grey,
-                                            shape: BoxShape.circle
-                                        ),),
-                                      ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                            //News
-                            (globVar.isLoading==null||globVar.isLoading)
-                            ?Padding(
-                              padding: const EdgeInsets.only(top:15.0),
-                              child: Container(
-                                height:90,
-                                child: ListView.builder(scrollDirection: Axis.horizontal,shrinkWrap:true,itemCount: 2,itemBuilder: (context,indx)=>Container(
-                                  width:MediaQuery.of(context).size.width,
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Container(
-                                        color:Color.fromRGBO(237, 237, 237, 1),
-                                        width:175,
-                                        height:89,
-                                      ),
-                                      Container(
-                                        color: Color.fromRGBO(237, 237, 237, 1),
-                                        width:175,
-                                        height:89,
-                                      )
-                                    ],
-                                  ),
-                                )),
-                              ),
-                            )
-                            :(NewsList.length==0)
-                                ?Container()
-                                :Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text("Kabar Terbaru dari Thamrin ",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
-                                            // (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${globVar.myVouchers.length}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18),),
-                                            // Text(" voucher",style: TextStyle(
-                                            // fontWeight: FontWeight.w500,fontSize: 18),),
-                                          ],
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: ()async{
-                                          // Navigator.pushNamed(context, "/vouchers",);
-                                          await Navigator.pushNamed(context,"/news");
-                                          await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                                          setState(() {
-
-                                          });
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.only(right: 15),
-                                          child: Text("Semua",style: TextStyle(
-
-                                              decoration: TextDecoration.underline,
-                                              fontWeight: FontWeight.w300,fontSize: 14),),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top:15.0),
-                                      child: Container(
-                                        height:90,
-                                        child: ListView.builder(scrollDirection: Axis.horizontal,shrinkWrap:true,itemCount: (NewsList.length/2).ceil(),itemBuilder: (context,indx)
-                                          {
-                                            return Container(
-                                            width:MediaQuery.of(context).size.width,
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                              InkWell(
-                                                onTap:()async{
-                                                  await Navigator.push(context,MaterialPageRoute(builder: (context)=>NewsDetail(NewsList[indx*2])));
-                                                },
-                                                child: Container(
-                                                  decoration: (NewsList[indx*2].message_image!=null)?BoxDecoration(
-                                                  image: DecorationImage(
-                                                  image: MemoryImage(NewsList[indx*2].message_image),
-                                                  fit: BoxFit.fitWidth
-                                                  )
-                                                  ):null,
-                                                  width:175,
-                                                  height:89,
-                                                  child: (NewsList[indx*2].message_image==null)?Center(child: Text("No Image"),):null,
-                                                ),
-                                              ),
-                                          ((indx*2+1)<=(NewsList.length-1))?InkWell(
-                                            onTap: ()async{
-                                              await Navigator.push(context,MaterialPageRoute(builder: (context)=>NewsDetail(NewsList[indx*2+1])));
-                                            },
-                                            child: Container(
-                                                  width:175,
-                                                  height:89,
-                                                  decoration: (NewsList[indx*2+1].message_image!=null)?BoxDecoration(
-                                                  image: DecorationImage(
-                                                  image: MemoryImage(NewsList[indx*2+1].message_image),
-                                                  fit: BoxFit.fitWidth
-                                                  )
-                                                  ):null,
-                                                  child: (NewsList[indx*2+1].message_image==null)?Center(child: Text("No Image"),):null,
-                                                ),
-                                          ):Container(
-                                                width:175,
-                                                height:89,
-                                              ),
-                                            ],
-                                            ),
-                                          );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                    // Container(
-                                    //   height:28,
-                                    //   padding: EdgeInsets.only(top:10,bottom:10),
-                                    //   child: ListView.builder(shrinkWrap: true,scrollDirection: Axis.horizontal,itemCount: globVar.myVouchers.length,itemBuilder: (context,index)=>Padding(
-                                    //     padding: EdgeInsets.only(left:2,right:2),
-                                    //     child: Container(height: (myVoucherFocus==index)?8:4,width: (myVoucherFocus==index)?8:4,decoration: BoxDecoration(
-                                    //         color: (myVoucherFocus==index)?Colors.redAccent:Colors.grey,
-                                    //         shape: BoxShape.circle
-                                    //     ),),
-                                    //   ),
-                                    //   ),
-                                    // )
-                                  ],
-                                ),
-                              ],
-                            ),
-                            //Available Voucher
-                            (globVar.isLoading==null||globVar.isLoading)
-                                ?Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(15),
-                                  child: Container(
-                                      height: 96,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(6),
-                                          color: Color.fromRGBO(237, 237, 237, 1)
-                                      )
-                                  ),
-                                ),
-                                Container(padding: EdgeInsets.all(2),width: 20,child: LinearProgressIndicator(backgroundColor: Colors.grey,valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
-                                ))
-                              ],
-                            )
-                                :(globVar.myVouchers.length==0)
-                                ?Container()
-                                :Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text("My Vouchers ",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
-                                            // (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${globVar.myVouchers.length}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18),),
-                                            // Text(" voucher",style: TextStyle(
-                                            // fontWeight: FontWeight.w500,fontSize: 18),),
-                                          ],
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: ()async{
-                                          // Navigator.pushNamed(context, "/vouchers",);
-                                          await Navigator.push(context, MaterialPageRoute(builder: (context)=>VouchersList(checkMyVoucher: true,)));
-                                          await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                                          setState(() {
-
-                                          });
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.only(right: 15),
-                                          child: Text("Semua",style: TextStyle(
-
-                                              decoration: TextDecoration.underline,
-                                              fontWeight: FontWeight.w300,fontSize: 14),),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 15),
-                                      child: CarouselSlider(
-                                        options: CarouselOptions(
-                                            viewportFraction:1-(62/MediaQuery.of(context).size.width),
-                                            height: 96,
-                                            enableInfiniteScroll: true,
-                                            autoPlay: false,
-                                            onPageChanged: (index,reason){
-                                              setState(() {
-                                              myVoucherFocus = index;
-                                              });
-                                            },
-                                            // autoPlayAnimationDuration: Duration(seconds: 3)
-                                        ),
-                                        items:
-                                        globVar.myVouchers.map((item)=>
-                                            InkWell(
-                                              onTap: ()async{
-                                                var result = await Vouchers().voucherDetails(item.LOYALTY_CAMPAIGN_ID);
-                                                if(result["STATUS"]==1&&result["DATA"].length>0){
-                                                  var details = new Voucher.fromJson(result["DATA"][0]);
-                                                  await VoucherDialog().showVoucherDetails(details, context,rewardId: item.LOYALTY_CUST_REWARD_ID);
-                                                  _onRefresh();
-                                                }
-                                                else{
-                                                  bool genBarcode = await showDialog(
-                                                      context: context,
-                                                      builder: (context)=>SimpleDialog(
-                                                        children: [
-                                                          Icon(FontAwesomeIcons.gifts,size: 60,),
-                                                          SizedBox(height: 15),
-                                                          Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
-                                                          SizedBox(height: 15),
-                                                          Row(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            children: [
-                                                              FlatButton(
-                                                                  minWidth: 120,
-                                                                  shape: RoundedRectangleBorder(
-                                                                      borderRadius: BorderRadius.circular(15.0),
-                                                                      side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
-                                                                  ),
-                                                                  padding: EdgeInsets.all(10),
-                                                                  onPressed: (){
-                                                                    Navigator.pop(context,false);
-                                                                  },
-                                                                  child: Text("Batal",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),)
-                                                              ),
-                                                              SizedBox(width: 15),
-                                                              FlatButton(
-                                                                  minWidth: 120,
-                                                                  color: Colors.green,
-                                                                  shape: RoundedRectangleBorder(
-                                                                      borderRadius: BorderRadius.circular(15.0)
-                                                                  ),
-                                                                  padding: EdgeInsets.all(10),
-                                                                  onPressed: (){
-                                                                    Navigator.pop(context,true);
-                                                                  },
-                                                                  child: Text("Gunakan",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),)
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                        backgroundColor: Colors.white,
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(25.0),
-                                                            side: BorderSide(color: Colors.transparent)
-                                                        ),
-                                                        contentPadding: EdgeInsets.all(20),
-                                                      )
-                                                  );
-
-                                                  if(genBarcode??false){
-                                                    Future future = Vouchers().useVoucher(item.LOYALTY_CUST_REWARD_ID);
-                                                    var res = await utils.showLoadingFuture(context,future);
-                                                    if(res["STATUS"]){
-                                                      print(res["DATA"]);
-                                                      await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
-                                                      await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                                                      setState(() {
-
-                                                      });
-                                                    }
-                                                    else{
-                                                      utils.toast(res["DATA"],type: "ERROR");
-                                                    }
-                                                  }
-                                                }
-                                              },
-                                              child: Stack(
-                                                children: [
-                                                  Container(
-                                                    margin: EdgeInsets.symmetric(horizontal: 10),
-                                                    height: 152,
-                                                    width: MediaQuery.of(context).size.width,
-                                                    decoration: BoxDecoration(
-                                                      border: Border.all(color: Colors.grey,width: 0.3),
-                                                      borderRadius: BorderRadius.circular(20),
-                                                      color: Colors.white,
-                                                    ),
-                                                    child: CustomPaint(
-                                                      painter: VoucherPainter(item.DESCRIPTION),
+                                              Container(
+                                                height: 28,
+                                                padding: EdgeInsets.only(
+                                                    top: 10, bottom: 10),
+                                                child: ListView.builder(
+                                                  shrinkWrap: true,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount: voucherList.length,
+                                                  itemBuilder:
+                                                      (context, index) =>
+                                                          Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 2, right: 2),
+                                                    child: Container(
+                                                      height:
+                                                          (availVoucherFocus ==
+                                                                  index)
+                                                              ? 8
+                                                              : 4,
+                                                      width:
+                                                          (availVoucherFocus ==
+                                                                  index)
+                                                              ? 8
+                                                              : 4,
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              (availVoucherFocus ==
+                                                                      index)
+                                                                  ? Colors
+                                                                      .redAccent
+                                                                  : Colors.grey,
+                                                          shape:
+                                                              BoxShape.circle),
                                                     ),
                                                   ),
-                                                  Container(
-                                                    margin: EdgeInsets.symmetric(horizontal: 10),
-                                                    padding: EdgeInsets.all(12),
-                                                    height: 152,
-                                                    alignment: Alignment.centerRight,
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                                      children: [
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                            //News
+                            (globVar.isLoading == null || globVar.isLoading)
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 15.0),
+                                    child: Container(
+                                      height: 90,
+                                      child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          shrinkWrap: true,
+                                          itemCount: 2,
+                                          itemBuilder: (context, indx) =>
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    Container(
+                                                      color: Color.fromRGBO(
+                                                          237, 237, 237, 1),
+                                                      width: 175,
+                                                      height: 89,
+                                                    ),
+                                                    Container(
+                                                      color: Color.fromRGBO(
+                                                          237, 237, 237, 1),
+                                                      width: 175,
+                                                      height: 89,
+                                                    )
+                                                  ],
+                                                ),
+                                              )),
+                                    ),
+                                  )
+                                : (NewsList.length == 0)
+                                    ? Container()
+                                    : Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 15, right: 18, left: 18),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        "Kabar Terbaru dari Thamrin ",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w300,
+                                                            fontSize: 18),
+                                                      ),
+                                                      // (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${globVar.myVouchers.length}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18),),
+                                                      // Text(" voucher",style: TextStyle(
+                                                      // fontWeight: FontWeight.w500,fontSize: 18),),
+                                                    ],
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () async {
+                                                    // Navigator.pushNamed(context, "/vouchers",);
+                                                    await Navigator.pushNamed(
+                                                        context, "/news");
+                                                    await Users().refreshUser(
+                                                        globVar.user.CUST_ID,
+                                                        globVar.auth.corp);
+                                                    setState(() {});
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.only(
+                                                        right: 15),
+                                                    child: Text(
+                                                      "Semua",
+                                                      style: TextStyle(
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline,
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                          fontSize: 14),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 15.0),
+                                                child: Container(
+                                                  height: 90,
+                                                  child: ListView.builder(
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    shrinkWrap: true,
+                                                    itemCount:
+                                                        (NewsList.length / 2)
+                                                            .ceil(),
+                                                    itemBuilder:
+                                                        (context, indx) {
+                                                      return Container(
+                                                        width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
                                                           children: [
-                                                            Column(
-                                                              mainAxisAlignment: MainAxisAlignment.start,
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                Text("VOUCHERS",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 20, ),),),
-                                                                Text(item.COUPON??"-",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.w700,fontSize: 16, ),),),
-                                                              ],
+                                                            InkWell(
+                                                              onTap: () async {
+                                                                await Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                                NewsDetail(NewsList[indx * 2])));
+                                                              },
+                                                              child: Container(
+                                                                decoration: (NewsList[indx *
+                                                                                2]
+                                                                            .message_image !=
+                                                                        null)
+                                                                    ? BoxDecoration(
+                                                                        image: DecorationImage(
+                                                                            image:
+                                                                                MemoryImage(NewsList[indx * 2].message_image),
+                                                                            fit: BoxFit.fitWidth))
+                                                                    : null,
+                                                                width: 175,
+                                                                height: 89,
+                                                                child: (NewsList[indx *
+                                                                                2]
+                                                                            .message_image ==
+                                                                        null)
+                                                                    ? Center(
+                                                                        child: Text(
+                                                                            "No Image"),
+                                                                      )
+                                                                    : null,
+                                                              ),
                                                             ),
-                                                            Column(
-                                                              mainAxisAlignment: MainAxisAlignment.end,
-                                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                                            ((indx * 2 + 1) <=
+                                                                    (NewsList
+                                                                            .length -
+                                                                        1))
+                                                                ? InkWell(
+                                                                    onTap:
+                                                                        () async {
+                                                                      await Navigator.push(
+                                                                          context,
+                                                                          MaterialPageRoute(
+                                                                              builder: (context) => NewsDetail(NewsList[indx * 2 + 1])));
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      width:
+                                                                          175,
+                                                                      height:
+                                                                          89,
+                                                                      decoration: (NewsList[indx * 2 + 1].message_image !=
+                                                                              null)
+                                                                          ? BoxDecoration(
+                                                                              image: DecorationImage(image: MemoryImage(NewsList[indx * 2 + 1].message_image), fit: BoxFit.fitWidth))
+                                                                          : null,
+                                                                      child: (NewsList[indx * 2 + 1].message_image ==
+                                                                              null)
+                                                                          ? Center(
+                                                                              child: Text("No Image"),
+                                                                            )
+                                                                          : null,
+                                                                    ),
+                                                                  )
+                                                                : Container(
+                                                                    width: 175,
+                                                                    height: 89,
+                                                                  ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              // Container(
+                                              //   height:28,
+                                              //   padding: EdgeInsets.only(top:10,bottom:10),
+                                              //   child: ListView.builder(shrinkWrap: true,scrollDirection: Axis.horizontal,itemCount: globVar.myVouchers.length,itemBuilder: (context,index)=>Padding(
+                                              //     padding: EdgeInsets.only(left:2,right:2),
+                                              //     child: Container(height: (myVoucherFocus==index)?8:4,width: (myVoucherFocus==index)?8:4,decoration: BoxDecoration(
+                                              //         color: (myVoucherFocus==index)?Colors.redAccent:Colors.grey,
+                                              //         shape: BoxShape.circle
+                                              //     ),),
+                                              //   ),
+                                              //   ),
+                                              // )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                            //Available Voucher
+                            (globVar.isLoading == null || globVar.isLoading)
+                                ? Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(15),
+                                        child: Container(
+                                            height: 96,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                                color: Color.fromRGBO(
+                                                    237, 237, 237, 1))),
+                                      ),
+                                      Container(
+                                          padding: EdgeInsets.all(2),
+                                          width: 20,
+                                          child: LinearProgressIndicator(
+                                            backgroundColor: Colors.grey,
+                                            valueColor:
+                                                new AlwaysStoppedAnimation<
+                                                    Color>(Colors.white),
+                                          ))
+                                    ],
+                                  )
+                                : (globVar.myVouchers.length == 0)
+                                    ? Container()
+                                    : Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 15, right: 18, left: 18),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        "My Vouchers ",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w300,
+                                                            fontSize: 18),
+                                                      ),
+                                                      // (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${globVar.myVouchers.length}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18),),
+                                                      // Text(" voucher",style: TextStyle(
+                                                      // fontWeight: FontWeight.w500,fontSize: 18),),
+                                                    ],
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () async {
+                                                    // Navigator.pushNamed(context, "/vouchers",);
+                                                    await Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                VouchersList(
+                                                                  checkMyVoucher:
+                                                                      true,
+                                                                )));
+                                                    await Users().refreshUser(
+                                                        globVar.user.CUST_ID,
+                                                        globVar.auth.corp);
+                                                    setState(() {});
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.only(
+                                                        right: 15),
+                                                    child: Text(
+                                                      "Semua",
+                                                      style: TextStyle(
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline,
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                          fontSize: 14),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 15),
+                                                child: CarouselSlider(
+                                                  options: CarouselOptions(
+                                                    viewportFraction: 1 -
+                                                        (62 /
+                                                            MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width),
+                                                    height: 96,
+                                                    enableInfiniteScroll: true,
+                                                    autoPlay: false,
+                                                    onPageChanged:
+                                                        (index, reason) {
+                                                      setState(() {
+                                                        myVoucherFocus = index;
+                                                      });
+                                                    },
+                                                    // autoPlayAnimationDuration: Duration(seconds: 3)
+                                                  ),
+                                                  items: globVar.myVouchers
+                                                      .map((item) => InkWell(
+                                                            onTap: () async {
+                                                              var result =
+                                                                  await Vouchers()
+                                                                      .voucherDetails(
+                                                                          item.LOYALTY_CAMPAIGN_ID);
+                                                              if (result["STATUS"] ==
+                                                                      1 &&
+                                                                  result["DATA"]
+                                                                          .length >
+                                                                      0) {
+                                                                var details =
+                                                                    new Voucher
+                                                                        .fromJson(result[
+                                                                            "DATA"]
+                                                                        [0]);
+                                                                await VoucherDialog()
+                                                                    .showVoucherDetails(
+                                                                        details,
+                                                                        context,
+                                                                        rewardId:
+                                                                            item.LOYALTY_CUST_REWARD_ID);
+                                                                _onRefresh();
+                                                              } else {
+                                                                bool
+                                                                    genBarcode =
+                                                                    await showDialog(
+                                                                        context:
+                                                                            context,
+                                                                        builder: (context) =>
+                                                                            SimpleDialog(
+                                                                              children: [
+                                                                                Icon(
+                                                                                  FontAwesomeIcons.gifts,
+                                                                                  size: 60,
+                                                                                ),
+                                                                                SizedBox(height: 15),
+                                                                                Center(
+                                                                                    child: Text(
+                                                                                  "Gunakan Voucher ini ?",
+                                                                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                                                                )),
+                                                                                SizedBox(height: 15),
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                                  children: [
+                                                                                    FlatButton(
+                                                                                        minWidth: 120,
+                                                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0), side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))),
+                                                                                        padding: EdgeInsets.all(10),
+                                                                                        onPressed: () {
+                                                                                          Navigator.pop(context, false);
+                                                                                        },
+                                                                                        child: Text(
+                                                                                          "Batal",
+                                                                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                                                                                        )),
+                                                                                    SizedBox(width: 15),
+                                                                                    FlatButton(
+                                                                                        minWidth: 120,
+                                                                                        color: Colors.green,
+                                                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                                                                                        padding: EdgeInsets.all(10),
+                                                                                        onPressed: () {
+                                                                                          Navigator.pop(context, true);
+                                                                                        },
+                                                                                        child: Text(
+                                                                                          "Gunakan",
+                                                                                          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
+                                                                                        )),
+                                                                                  ],
+                                                                                ),
+                                                                              ],
+                                                                              backgroundColor: Colors.white,
+                                                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0), side: BorderSide(color: Colors.transparent)),
+                                                                              contentPadding: EdgeInsets.all(20),
+                                                                            ));
+
+                                                                if (genBarcode ??
+                                                                    false) {
+                                                                  Future
+                                                                      future =
+                                                                      Vouchers()
+                                                                          .useVoucher(
+                                                                              item.LOYALTY_CUST_REWARD_ID);
+                                                                  var res = await utils
+                                                                      .showLoadingFuture(
+                                                                          context,
+                                                                          future);
+                                                                  if (res[
+                                                                      "STATUS"]) {
+                                                                    print(res[
+                                                                        "DATA"]);
+                                                                    await utils.genBarcode(
+                                                                        context,
+                                                                        res["DATA"]
+                                                                            [
+                                                                            "transaction_code"],
+                                                                        res["DATA"]
+                                                                            [
+                                                                            "expired"]);
+                                                                    await Users().refreshUser(
+                                                                        globVar
+                                                                            .user
+                                                                            .CUST_ID,
+                                                                        globVar
+                                                                            .auth
+                                                                            .corp);
+                                                                    setState(
+                                                                        () {});
+                                                                  } else {
+                                                                    utils.toast(
+                                                                        res[
+                                                                            "DATA"],
+                                                                        type:
+                                                                            "ERROR");
+                                                                  }
+                                                                }
+                                                              }
+                                                            },
+                                                            child: Stack(
                                                               children: [
-                                                                Text("POTONGAN",style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 16, ),),),
-                                                                Padding(
-                                                                  padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
-                                                                  child: Row(
+                                                                Container(
+                                                                  margin: EdgeInsets
+                                                                      .symmetric(
+                                                                          horizontal:
+                                                                              10),
+                                                                  height: 152,
+                                                                  width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    border: Border.all(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            0.3),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            20),
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                  child:
+                                                                      CustomPaint(
+                                                                    painter:
+                                                                        VoucherPainter(
+                                                                            item.DESCRIPTION),
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  margin: EdgeInsets
+                                                                      .symmetric(
+                                                                          horizontal:
+                                                                              10),
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              12),
+                                                                  height: 152,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .centerRight,
+                                                                  child: Column(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .end,
                                                                     children: [
-                                                                      Text("${item.REWARD_VALUE??'-'}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Color.fromRGBO(14,60,74,1),fontWeight: FontWeight.w700,fontSize: 14, ),),),
-                                                                      Container(
-                                                                        padding: EdgeInsets.only(left: 5),
-                                                                        child: Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          Column(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.start,
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.start,
+                                                                            children: [
+                                                                              Text(
+                                                                                "VOUCHERS",
+                                                                                style: GoogleFonts.robotoCondensed(
+                                                                                  textStyle: TextStyle(
+                                                                                    color: Colors.white,
+                                                                                    fontWeight: FontWeight.w700,
+                                                                                    fontSize: 20,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              Text(
+                                                                                item.COUPON ?? "-",
+                                                                                style: GoogleFonts.robotoCondensed(
+                                                                                  textStyle: TextStyle(
+                                                                                    color: Colors.amber,
+                                                                                    fontWeight: FontWeight.w700,
+                                                                                    fontSize: 16,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          Column(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.end,
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.end,
+                                                                            children: [
+                                                                              Text(
+                                                                                "POTONGAN",
+                                                                                style: GoogleFonts.robotoCondensed(
+                                                                                  textStyle: TextStyle(
+                                                                                    color: Color.fromRGBO(57, 153, 184, 1),
+                                                                                    fontWeight: FontWeight.w700,
+                                                                                    fontSize: 16,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+                                                                                child: Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      "${item.REWARD_VALUE ?? '-'}",
+                                                                                      style: GoogleFonts.robotoMono(
+                                                                                        textStyle: TextStyle(
+                                                                                          color: Color.fromRGBO(14, 60, 74, 1),
+                                                                                          fontWeight: FontWeight.w700,
+                                                                                          fontSize: 14,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Container(
+                                                                                      padding: EdgeInsets.only(left: 5),
+                                                                                      child: Icon(FontAwesomeIcons.coins, size: 18, color: Colors.amberAccent),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
                                                                       ),
+                                                                      // Text(item.PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 15, ),),),
                                                                     ],
                                                                   ),
                                                                 ),
                                                               ],
                                                             ),
-                                                          ],
-                                                        ),
-                                                        // Text(item.PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 15, ),),),
-
-                                                      ],
-                                                    ),
-
-                                                  ),
-                                                ],
-                                              ),
-                                            )).toList()
-                                        ,
-                                      ),
-                                    ),
-                                    Container(
-                                      height:28,
-                                      padding: EdgeInsets.only(top:10,bottom:10),
-                                      child: ListView.builder(shrinkWrap: true,scrollDirection: Axis.horizontal,itemCount: globVar.myVouchers.length,itemBuilder: (context,index)=>Padding(
-                                        padding: EdgeInsets.only(left:2,right:2),
-                                        child: Container(height: (myVoucherFocus==index)?8:4,width: (myVoucherFocus==index)?8:4,decoration: BoxDecoration(
-                                            color: (myVoucherFocus==index)?Colors.redAccent:Colors.grey,
-                                            shape: BoxShape.circle
-                                        ),),
-                                      ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                            //Supports
-                            (globVar.isLoading==null||globVar.isLoading)
-                                ?Padding(
-                              padding: const EdgeInsets.only(top:15.0),
-                              child: Container(
-                                height:90,
-                                child: ListView.builder(scrollDirection: Axis.horizontal,shrinkWrap:true,itemCount: 2,itemBuilder: (context,indx)=>Container(
-                                  width:MediaQuery.of(context).size.width,
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Container(
-                                        color:Color.fromRGBO(237, 237, 237, 1),
-                                        width:175,
-                                        height:89,
-                                      ),
-                                      Container(
-                                        color: Color.fromRGBO(237, 237, 237, 1),
-                                        width:175,
-                                        height:89,
-                                      )
-                                    ],
-                                  ),
-                                )),
-                              ),
-                            ) :Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 15,right: 18,left: 18),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text("Hubungi Kami",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 18),),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top:15.0),
-                                      child: Container(
-                                        height:90,
-                                        child: Container(
-                                          width:MediaQuery.of(context).size.width,
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              //No Telp WA INSTA DLL
-                                              InkWell(
-                                                onTap:()async{
-                                                  await showDialog(
-                                                      context: context,
-                                                      builder: (context)=>SimpleDialog(
-                                                        children: [
-                                                          Icon(FontAwesomeIcons.phoneSquareAlt,size: 60,),
-                                                          SizedBox(height: 15),
-                                                          Center(child: Text("Kami tersedia dalam",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
-                                                          Divider(),
-                                                          InkWell(
-                                                            onTap:()=>utils.launchBrowserURL('https://wa.me/628117157788'),
-                                                            child: Row(
-                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                              children: [
-                                                                Image(
-                                                                  image:AssetImage("images/wa.png") ,
-                                                                  height: 33,
-                                                                  width: 33,
-                                                                  fit: BoxFit.fitWidth,
-                                                                ),
-                                                                Text("+62 811-7157-788",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400),)
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Divider(),
-                                                          InkWell(
-                                                            onTap: ()=>utils.launchBrowserURL('https://www.facebook.com/Yamaha-Thamrin-Brothers-269533563554676/'),
-                                                            child: Row(
-                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                              children: [
-                                                                Image(
-                                                                  image:AssetImage("images/fb.png") ,
-                                                                  height: 33,
-                                                                  width: 33,
-                                                                  fit: BoxFit.fitWidth,
-                                                                ),
-                                                                Text("Yamaha Thamrin",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400))
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Divider(),
-                                                          InkWell(
-                                                            onTap:()=>utils.launchBrowserURL('https://www.instagram.com/yamaha.thamrin/?hl=en'),
-                                                            child: Row(
-                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                              children: [
-                                                                Image(
-                                                                  image:AssetImage("images/ig.png") ,
-                                                                  height: 33,
-                                                                  width: 33,
-                                                                  fit: BoxFit.fitWidth,
-                                                                ),
-                                                                Text("@yamaha.thamrin",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400))
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                        backgroundColor: Colors.white,
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(25.0),
-                                                            side: BorderSide(color: Colors.transparent)
-                                                        ),
-                                                        contentPadding: EdgeInsets.all(20),
-                                                      )
-                                                  );
-                                                },
-                                                child: Container(
-                                                  width:175,
-                                                  height:89,
-                                                  decoration: BoxDecoration(image: DecorationImage(
-                                                  image: AssetImage('images/cs.png'),
-                                                  fit: BoxFit.fitHeight,
-                                                  )),
+                                                          ))
+                                                      .toList(),
                                                 ),
                                               ),
-                                              //FAQ
-                                              InkWell(
-                                                onTap:()async{
-                                                  await showDialog(
-                                                      context: context,
-                                                      builder: (context)=>SimpleDialog(
-                                                        children: [
-                                                          Icon(FontAwesomeIcons.questionCircle,size: 60,),
-                                                          SizedBox(height: 15),
-                                                          Center(child: Text("Have question?",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),)),
-                                                          Divider(),
+                                              Container(
+                                                height: 28,
+                                                padding: EdgeInsets.only(
+                                                    top: 10, bottom: 10),
+                                                child: ListView.builder(
+                                                  shrinkWrap: true,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount:
+                                                      globVar.myVouchers.length,
+                                                  itemBuilder:
+                                                      (context, index) =>
                                                           Padding(
-                                                            padding: const EdgeInsets.all(8.0),
-                                                            child: Text("I cant redeem Vouchers",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400),),
-                                                          ),
-                                                          Divider(),
-                                                          Padding(
-                                                            padding: const EdgeInsets.all(8.0),
-                                                            child: Text("I can't use My Voucher Code",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400),),
-                                                          ),
-                                                          Divider(),
-                                                          Padding(
-                                                            padding: const EdgeInsets.all(8.0),
-                                                            child: Text("The Vendor scan can't recognize my QRcodes",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400),),
-                                                          )
-                                                        ],
-                                                        backgroundColor: Colors.white,
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(25.0),
-                                                            side: BorderSide(color: Colors.transparent)
-                                                        ),
-                                                        contentPadding: EdgeInsets.all(20),
-                                                      )
-                                                  );
-                                                },
-                                                child: Container(
-                                                  width:175,
-                                                  height:89,
-                                                  decoration: BoxDecoration(image: DecorationImage(
-                                                  image: AssetImage('images/faq.png'),
-                                                  fit: BoxFit.cover,
-                                                  )),
+                                                    padding: EdgeInsets.only(
+                                                        left: 2, right: 2),
+                                                    child: Container(
+                                                      height: (myVoucherFocus ==
+                                                              index)
+                                                          ? 8
+                                                          : 4,
+                                                      width: (myVoucherFocus ==
+                                                              index)
+                                                          ? 8
+                                                          : 4,
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              (myVoucherFocus ==
+                                                                      index)
+                                                                  ? Colors
+                                                                      .redAccent
+                                                                  : Colors.grey,
+                                                          shape:
+                                                              BoxShape.circle),
+                                                    ),
+                                                  ),
                                                 ),
                                               )
                                             ],
                                           ),
-                                        )),
+                                        ],
+                                      ),
+                            //Supports
+                            (globVar.isLoading == null || globVar.isLoading)
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 15.0),
+                                    child: Container(
+                                      height: 90,
+                                      child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          shrinkWrap: true,
+                                          itemCount: 2,
+                                          itemBuilder: (context, indx) =>
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    Container(
+                                                      color: Color.fromRGBO(
+                                                          237, 237, 237, 1),
+                                                      width: 175,
+                                                      height: 89,
+                                                    ),
+                                                    Container(
+                                                      color: Color.fromRGBO(
+                                                          237, 237, 237, 1),
+                                                      width: 175,
+                                                      height: 89,
+                                                    )
+                                                  ],
+                                                ),
+                                              )),
                                     ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                  )
+                                : Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 15, right: 18, left: 18),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "Hubungi Kami",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        fontSize: 18),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 15.0),
+                                            child: Container(
+                                                height: 90,
+                                                child: Container(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      //No Telp WA INSTA DLL
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          await showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (context) =>
+                                                                      SimpleDialog(
+                                                                        children: [
+                                                                          Icon(
+                                                                            FontAwesomeIcons.phoneSquareAlt,
+                                                                            size:
+                                                                                60,
+                                                                          ),
+                                                                          SizedBox(
+                                                                              height: 15),
+                                                                          Center(
+                                                                              child: Text(
+                                                                            "Kami tersedia dalam",
+                                                                            style:
+                                                                                TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                                                          )),
+                                                                          Divider(),
+                                                                          InkWell(
+                                                                            onTap: () =>
+                                                                                utils.launchBrowserURL('https://wa.me/628117157788'),
+                                                                            child:
+                                                                                Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                              children: [
+                                                                                Image(
+                                                                                  image: AssetImage("images/wa.png"),
+                                                                                  height: 33,
+                                                                                  width: 33,
+                                                                                  fit: BoxFit.fitWidth,
+                                                                                ),
+                                                                                Text(
+                                                                                  "+62 811-7157-788",
+                                                                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          Divider(),
+                                                                          InkWell(
+                                                                            onTap: () =>
+                                                                                utils.launchBrowserURL('https://www.facebook.com/Yamaha-Thamrin-Brothers-269533563554676/'),
+                                                                            child:
+                                                                                Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                              children: [
+                                                                                Image(
+                                                                                  image: AssetImage("images/fb.png"),
+                                                                                  height: 33,
+                                                                                  width: 33,
+                                                                                  fit: BoxFit.fitWidth,
+                                                                                ),
+                                                                                Text("Yamaha Thamrin", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400))
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          Divider(),
+                                                                          InkWell(
+                                                                            onTap: () =>
+                                                                                utils.launchBrowserURL('https://www.instagram.com/yamaha.thamrin/?hl=en'),
+                                                                            child:
+                                                                                Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                              children: [
+                                                                                Image(
+                                                                                  image: AssetImage("images/ig.png"),
+                                                                                  height: 33,
+                                                                                  width: 33,
+                                                                                  fit: BoxFit.fitWidth,
+                                                                                ),
+                                                                                Text("@yamaha.thamrin", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400))
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                        backgroundColor:
+                                                                            Colors.white,
+                                                                        shape: RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(25.0),
+                                                                            side: BorderSide(color: Colors.transparent)),
+                                                                        contentPadding:
+                                                                            EdgeInsets.all(20),
+                                                                      ));
+                                                        },
+                                                        child: Container(
+                                                          width: 175,
+                                                          height: 89,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  image:
+                                                                      DecorationImage(
+                                                            image: AssetImage(
+                                                                'images/cs.png'),
+                                                            fit: BoxFit
+                                                                .fitHeight,
+                                                          )),
+                                                        ),
+                                                      ),
+                                                      //FAQ
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          await showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (context) =>
+                                                                      SimpleDialog(
+                                                                        children: [
+                                                                          Icon(
+                                                                            FontAwesomeIcons.questionCircle,
+                                                                            size:
+                                                                                60,
+                                                                          ),
+                                                                          SizedBox(
+                                                                              height: 15),
+                                                                          Center(
+                                                                              child: Text(
+                                                                            "Have question?",
+                                                                            style:
+                                                                                TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                                                          )),
+                                                                          Divider(),
+                                                                          Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                Text(
+                                                                              "I cant redeem Vouchers",
+                                                                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                                                                            ),
+                                                                          ),
+                                                                          Divider(),
+                                                                          Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                Text(
+                                                                              "I can't use My Voucher Code",
+                                                                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                                                                            ),
+                                                                          ),
+                                                                          Divider(),
+                                                                          Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                Text(
+                                                                              "The Vendor scan can't recognize my QRcodes",
+                                                                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                                                                            ),
+                                                                          )
+                                                                        ],
+                                                                        backgroundColor:
+                                                                            Colors.white,
+                                                                        shape: RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(25.0),
+                                                                            side: BorderSide(color: Colors.transparent)),
+                                                                        contentPadding:
+                                                                            EdgeInsets.all(20),
+                                                                      ));
+                                                        },
+                                                        child: Container(
+                                                          width: 175,
+                                                          height: 89,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  image:
+                                                                      DecorationImage(
+                                                            image: AssetImage(
+                                                                'images/faq.png'),
+                                                            fit: BoxFit.cover,
+                                                          )),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                           ],
                         ),
                       ),
@@ -1269,69 +1951,76 @@ class _HomePageState extends State<HomePage> with RouteAware{
           ),
         ),
       ),
-        bottomNavigationBar:
-        BottomAppBar(
-            child: Container(
-              height: 63,
-              child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    InkWell(
-                      onTap:  _onRefresh,
-                      child: Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Icon(Icons.home,size: 26,),
-                      ),
-                    ),
-                    Container(color: Colors.grey.withOpacity(0.2), width: 1,),
-                    InkWell(
-                      onTap: ()async{
-                        await Navigator.pushNamed(context, "/transactions");
-                        await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                        setState(() {
-
-                        });
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Icon(FontAwesomeIcons.receipt,size:26),
-                      ),
-                    ),
-                    Container(color: Colors.grey.withOpacity(0.2), width: 1,),
-                    InkWell(
-                      onTap: ()async{
-                        await Navigator.pushNamed(context, "/vouchers");
-                        await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                        setState(() {
-
-                        });
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Icon(FontAwesomeIcons.gift,size:26),
-                      ),
-                    ),
-                    Container(color: Colors.grey.withOpacity(0.2), width: 1,),
-                    InkWell(
-                      onTap: () async {
-                        await Navigator.pushNamed(context, "/profile");
-                        await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                        setState(() {
-
-                        });
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Icon(FontAwesomeIcons.addressCard,size:24),
-                      ),
-                    ),
-                  ]
+      bottomNavigationBar: BottomAppBar(
+          child: Container(
+        height: 63,
+        child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              InkWell(
+                onTap: _onRefresh,
+                child: Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Icon(
+                    Icons.home,
+                    size: 26,
+                  ),
+                ),
               ),
-            )
-        ),
+              Container(
+                color: Colors.grey.withOpacity(0.2),
+                width: 1,
+              ),
+              InkWell(
+                onTap: () async {
+                  await Navigator.pushNamed(context, "/transactions");
+                  await Users()
+                      .refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                  setState(() {});
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Icon(FontAwesomeIcons.receipt, size: 26),
+                ),
+              ),
+              Container(
+                color: Colors.grey.withOpacity(0.2),
+                width: 1,
+              ),
+              InkWell(
+                onTap: () async {
+                  await Navigator.pushNamed(context, "/vouchers");
+                  await Users()
+                      .refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                  setState(() {});
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Icon(FontAwesomeIcons.gift, size: 26),
+                ),
+              ),
+              Container(
+                color: Colors.grey.withOpacity(0.2),
+                width: 1,
+              ),
+              InkWell(
+                onTap: () async {
+                  await Navigator.pushNamed(context, "/profile");
+                  await Users()
+                      .refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                  setState(() {});
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Icon(FontAwesomeIcons.addressCard, size: 24),
+                ),
+              ),
+            ]),
+      )),
     );
   }
+
   @override
   void dispose() {
     routeObserver.unsubscribe(this);
@@ -1339,7 +2028,7 @@ class _HomePageState extends State<HomePage> with RouteAware{
   }
 
   @override
-  void didPush()async  {
+  void didPush() async {
     //pushed to home
     // final route = ModalRoute.of(context).settings.name;
     // print('didPush route: $route');
@@ -1349,14 +2038,15 @@ class _HomePageState extends State<HomePage> with RouteAware{
   void didPopNext() async {
     //popped to home
     // final route = ModalRoute.of(context).settings.name;
-    if((ModalRoute.of(context).settings.name == '/home'||ModalRoute.of(context).settings.name == '/') ){
-      var agreement = await Users().checkAgreement('LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
-      if(agreement["STATUS"]&&agreement["DATA"]!='y'){
-        var result = await agreementDialog(context,agreement);
-        if(!(result??false)){
+    if ((ModalRoute.of(context).settings.name == '/home' ||
+        ModalRoute.of(context).settings.name == '/')) {
+      var agreement = await Users().checkAgreement(
+          'LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
+      if (agreement["STATUS"] && agreement["DATA"] != 'y') {
+        var result = await agreementDialog(context, agreement);
+        if (!(result ?? false)) {
           // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-            exit(0);
-
+          exit(0);
         }
       }
     }
@@ -1367,12 +2057,14 @@ class _HomePageState extends State<HomePage> with RouteAware{
   void didPushNext() async {
     //pushed from home
     // final route = ModalRoute.of(context).settings.name;
-    if((ModalRoute.of(context).settings.name == '/home'||ModalRoute.of(context).settings.name == '/')){
-      var agreement = await Users().checkAgreement('LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
-      if(agreement["STATUS"]&&agreement["DATA"]!='y'){
-        var result = await agreementDialog(context,agreement);
-        if(!(result??false)){
-            SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    if ((ModalRoute.of(context).settings.name == '/home' ||
+        ModalRoute.of(context).settings.name == '/')) {
+      var agreement = await Users().checkAgreement(
+          'LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
+      if (agreement["STATUS"] && agreement["DATA"] != 'y') {
+        var result = await agreementDialog(context, agreement);
+        if (!(result ?? false)) {
+          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
         }
       }
     }
