@@ -52,7 +52,7 @@ class _ContentListState extends State<ContentList> {
       }
     }
     else{
-      throw('Error fetching banners!');
+      throw('Error fetching News!');
     }
   }
 
@@ -60,8 +60,8 @@ class _ContentListState extends State<ContentList> {
     print("refreshing");
     try{
       await Future.delayed(Duration(milliseconds: 1000));
-      loadNews();
-      loadBanners();
+      await loadNews();
+      await loadBanners();
       _refreshController.refreshCompleted();
     }
     catch(e){
@@ -74,8 +74,8 @@ class _ContentListState extends State<ContentList> {
 
   void initialize ()async{
     try{
-      loadNews();
-      loadBanners();
+      await loadNews();
+      await loadBanners();
     }
     catch(e){
       // utils.toast(e.message??e,type:'ERROR');

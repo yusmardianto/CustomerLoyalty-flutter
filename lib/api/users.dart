@@ -1,14 +1,23 @@
 import 'dart:io';
 import "../main.dart";
 import '../DataType/user.dart';
+import '../DataType/auth.dart';
+
 
 class Users{
   refreshUser(cust_id,corp)async{
-    var res = await utils.post({"cust_id":cust_id,"corp":corp},globVar.hostRest+"/customer/",secure: true);
+    var login_id = globVar.auth.login_id;
+    var res = await utils.post({"cust_id":cust_id,"corp":corp,"login_id":login_id},globVar.hostRest+"/customer/",secure: true);
     if(res["STATUS"]!=1){
       return false;
     }
     globVar.user = User.fromJson(res["DATA"][0]);
+    var force_flag =res["DATA"][0]['force_change_password'];
+    if(force_flag != null){
+      Map<String, dynamic> auth = globVar.auth.toJson();
+      auth["FORCE_CHANGE_PASSWD"] = force_flag;
+      globVar.auth= Auth.fromJson(auth);
+    }
     utils.backupGlobVar();
     return true;
   }

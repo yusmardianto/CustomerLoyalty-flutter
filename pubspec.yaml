@@ -90,7 +90,6 @@ flutter:
     - images/step4.png
     - images/news.png
     - images/thamrin.png
-    - images/Thamrinfull.png
     - images/ThamrinfullBlack.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
