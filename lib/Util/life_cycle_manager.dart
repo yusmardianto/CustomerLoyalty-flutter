@@ -31,7 +31,10 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     else if(state == AppLifecycleState.resumed){
       // await utils.removeBackupGlobVar();
       if(globVar!=null && globVar.user!=null) {
-        await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+        var isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp,check_session: true);
+        if(isFinish== null) {
+          Navigator.pushNamed(context, '/login');
+        }
       }
     }
   }

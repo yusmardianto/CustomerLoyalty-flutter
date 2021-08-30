@@ -5,11 +5,22 @@ import '../DataType/auth.dart';
 
 
 class Users{
-  refreshUser(cust_id,corp)async{
+  refreshUser(cust_id,corp,{check_session:false})async{
     var login_id = globVar.auth.login_id;
     var res = await utils.post({"cust_id":cust_id,"corp":corp,"login_id":login_id},globVar.hostRest+"/customer/",secure: true);
     if(res["STATUS"]!=1){
       return false;
+    }
+    if(res["DATA"].length==0){
+      if(check_session){
+        globVar.user = null;
+        prefs.remove("user");
+        utils.removeBackupGlobVar();
+        globVar.clear();
+        utils.toast("Data Customer sudah tidak valid!",type:"ERROR");
+        return null;
+      }
+      return true;
     }
     globVar.user = User.fromJson(res["DATA"][0]);
     var force_flag =res["DATA"][0]['force_change_password'];

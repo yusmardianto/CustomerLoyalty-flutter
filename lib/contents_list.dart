@@ -125,10 +125,6 @@ class _ContentListState extends State<ContentList> {
                     Container(
                       padding: EdgeInsets.only(top: 15,bottom:20),
                       alignment: Alignment.centerLeft,
-                      // decoration: BoxDecoration(
-                      //     color: Colors.white,
-                      //     borderRadius: BorderRadius.circular(15)
-                      // ),
                       child: Text('Promo & Diskon',style: TextStyle(fontSize: 30,fontWeight: FontWeight.w700,color: Color.fromRGBO(0, 0, 52, 1)),)
                     ),
                     Container(
@@ -164,6 +160,16 @@ class _ContentListState extends State<ContentList> {
                           SizedBox(height: 5,),
                           Container(padding: EdgeInsets.all(2),width: MediaQuery.of(context).size.width,child: LinearProgressIndicator(backgroundColor: Colors.grey,valueColor: new AlwaysStoppedAnimation<Color>(Colors.white))),
                         ],
+                      )
+                      :(BannerList.length==0)?
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 116,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(237, 237, 237, 1)
+                        ),
+                        child: Text("Kosong",style: TextStyle(fontWeight: FontWeight.w700,decoration: TextDecoration.underline,color: Colors.grey),),
                       )
                       :ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -298,7 +304,17 @@ class _ContentListState extends State<ContentList> {
                           ],
                         ),
                       )
-                          :ListView.builder(
+                          :(NewsList.length==0)?
+                      Container(
+                        height: 90,
+                        width: MediaQuery.of(context).size.width,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(237, 237, 237, 1)
+                        ),
+                        child: Text("Kosong",style: TextStyle(fontWeight: FontWeight.w700,decoration: TextDecoration.underline,color: Colors.grey),),
+                      )
+                      :ListView.builder(
                         padding: EdgeInsets.all(0),
                           itemCount: NewsList.length,
                           itemBuilder: (context,indx){

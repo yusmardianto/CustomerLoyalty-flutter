@@ -94,15 +94,21 @@ class _HomePageState extends State<HomePage> with RouteAware{
     print("refreshing");
     try{
       await Future.delayed(Duration(milliseconds: 1000));
-      await loadVoucher();
-      var isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-      if(!isFinish) throw ("Failed refreshing user data");
-      await loadAvailableVoucher();
-      await loadNews();
-      await loadBanners();
+
+      var isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp,check_session: true);
+      if(isFinish==null)Navigator.pushNamed(context, '/login');
+      else{
+        if(!isFinish) throw ("Failed refreshing user data");
+        await loadVoucher();
+        await loadAvailableVoucher();
+        await loadNews();
+        await loadBanners();
+      }
+
       _refreshController.refreshCompleted();
     }
     catch(e){
+      print("error ${e}");
       setState(() {
         globVar.isLoading = false;
       });
@@ -332,12 +338,16 @@ class _HomePageState extends State<HomePage> with RouteAware{
   }
   void initialization()async{
     try{
-      var isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-      if(globVar.auth.force_change=='TRUE'){
-        await forcePasswordChange(context);
-        isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+      var isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp,check_session: true);
+      if (isFinish==null){
+        Navigator.pushNamed(context, '/login');
       }
-      if(!isFinish) throw ("Failed refreshing user data");
+      else{
+        if(globVar.auth.force_change=='TRUE'){
+          await forcePasswordChange(context);
+          isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+        }
+        if(!isFinish) throw ("Failed refreshing user data");
         var agreement = await Users().checkAgreement('LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
         if(agreement["STATUS"]&&agreement["DATA"]!='y'){
           var result = await agreementDialog(context,agreement);
@@ -348,7 +358,7 @@ class _HomePageState extends State<HomePage> with RouteAware{
             await loadBanners();
           }
           else {
-              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+            SystemChannels.platform.invokeMethod('SystemNavigator.pop');
           }
         }
         else{
@@ -357,6 +367,7 @@ class _HomePageState extends State<HomePage> with RouteAware{
           await loadNews();
           await loadBanners();
         }
+      }
     }catch(e){
       // utils.toast(e.message??e,type:'ERROR');
       utils.toast("Error dalam memperbarui data. Cek koneksi internet.",type:'ERROR');
@@ -610,20 +621,25 @@ class _HomePageState extends State<HomePage> with RouteAware{
                                           },
                                           enableInfiniteScroll: BannerList.length!=1 && BannerList.length!=0,disableCenter: true,viewportFraction: 1.0 ,enlargeCenterPage: false,autoPlay: true,autoPlayAnimationDuration: Duration(seconds: 3)),
                                       items: (BannerList.length==0)?[1].map((i){
-                                        return Container(
-                                          alignment: Alignment.center,
-                                          child: (globVar.isLoading)?null:Text("No Banners",style: TextStyle(fontWeight: FontWeight.w700,decoration: TextDecoration.underline,color: Colors.grey),),
-                                          width: MediaQuery.of(context).size.width,
-                                          height: 114,
-                                          decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  offset: Offset(1.0,1.0),
-                                                  color: Colors.grey,
-                                                  blurRadius: 3
-                                              )
-                                            ],
-                                            color: Color.fromRGBO(237, 237, 237, 1),
+                                        return InkWell(
+                                          onTap: ()async {
+                                            await Navigator.pushNamed(context,"/news");
+                                          },
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            child: (globVar.isLoading)?null:Text("Kosong",style: TextStyle(fontWeight: FontWeight.w700,decoration: TextDecoration.underline,color: Colors.grey),),
+                                            width: MediaQuery.of(context).size.width,
+                                            height: 114,
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    offset: Offset(1.0,1.0),
+                                                    color: Colors.grey,
+                                                    blurRadius: 3
+                                                )
+                                              ],
+                                              color: Color.fromRGBO(237, 237, 237, 1),
+                                            ),
                                           ),
                                         );
                                       }).toList():BannerList.map((i) {
@@ -1489,15 +1505,24 @@ class _HomePageState extends State<HomePage> with RouteAware{
     //popped to home
     // final route = ModalRoute.of(context).settings.name;
     if((ModalRoute.of(context).settings.name == '/home'||ModalRoute.of(context).settings.name == '/') ){
-      var agreement = await Users().checkAgreement('LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
-      if(agreement["STATUS"]&&agreement["DATA"]!='y'){
-        var result = await agreementDialog(context,agreement);
-        if(!(result??false)){
-          // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      var isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp,check_session: true);
+      if(isFinish== null)Navigator.pushNamed(context, '/login');
+      else{
+        if(globVar.auth.force_change=='TRUE'){
+          await forcePasswordChange(context);
+          await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+        }
+        var agreement = await Users().checkAgreement('LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
+        if(agreement["STATUS"]&&agreement["DATA"]!='y'){
+          var result = await agreementDialog(context,agreement);
+          if(!(result??false)){
+            // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
             exit(0);
 
+          }
         }
       }
+
     }
     // print('didPopNext route: $route');
   }
@@ -1507,11 +1532,20 @@ class _HomePageState extends State<HomePage> with RouteAware{
     //pushed from home
     // final route = ModalRoute.of(context).settings.name;
     if((ModalRoute.of(context).settings.name == '/home'||ModalRoute.of(context).settings.name == '/')){
-      var agreement = await Users().checkAgreement('LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
-      if(agreement["STATUS"]&&agreement["DATA"]!='y'){
-        var result = await agreementDialog(context,agreement);
-        if(!(result??false)){
+      var isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp,check_session: true);
+      if(isFinish== null) {
+        Navigator.pushNamed(context, '/login');
+      } else{
+        if(globVar.auth.force_change=='TRUE'){
+          await forcePasswordChange(context);
+          await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+        }
+        var agreement = await Users().checkAgreement('LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
+        if(agreement["STATUS"]&&agreement["DATA"]!='y'){
+          var result = await agreementDialog(context,agreement);
+          if(!(result??false)){
             SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+          }
         }
       }
     }
