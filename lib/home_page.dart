@@ -529,7 +529,7 @@ class _HomePageState extends State<HomePage> with RouteAware{
                                                 height:30,
                                                 width: 100,
                                                 child: FittedBox(
-                                                  child:(globVar.user.MEMBERSHIP_IMAGE==null)?Image.asset("images/Thamrinfull.png",
+                                                  child:(globVar.user.MEMBERSHIP_IMAGE==null)?Image.asset("images/ThamrinfullBlack.png",
                                                     filterQuality: FilterQuality.high,
                                                     colorBlendMode: BlendMode.clear,
                                                   ):Image(

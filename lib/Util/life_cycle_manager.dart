@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_thamrin_club/api/users.dart';
 import 'package:flutter/widgets.dart';
+import 'package:my_thamrin_club/login_page.dart';
 import '../main.dart';
 class LifeCycleManager extends StatefulWidget {
   final Widget child;
@@ -33,7 +34,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
       if(globVar!=null && globVar.user!=null) {
         var isFinish = await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp,check_session: true);
         if(isFinish== null) {
-          Navigator.pushNamed(context, '/login');
+          await navKey.currentState.push(MaterialPageRoute(
+            builder: (context) => LoginPage(),
+          ),);
         }
       }
     }
