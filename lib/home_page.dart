@@ -668,7 +668,7 @@ class _HomePageState extends State<HomePage> with RouteAware{
                                                     ],
                                                     color: Color.fromRGBO(237, 237, 237, 1),
                                                     image: (i.message_image==null)?null:DecorationImage(
-                                                      fit: BoxFit.fill,
+                                                      fit: BoxFit.fitHeight,
                                                       image: MemoryImage(i.message_image),
                                                     )
                                                 ),
