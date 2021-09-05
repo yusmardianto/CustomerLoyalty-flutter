@@ -20,17 +20,17 @@ class ContentList extends StatefulWidget {
 
 class _ContentListState extends State<ContentList> {
   final search = new TextEditingController();
-  List<NewsBanner> BannerList= [];
-  List<NewsBanner> NewsList = [];
+  List<Content> BannerList= [];
+  List<Content> NewsList = [];
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
 
   loadBanners()async{
-    var res = await News().getNews("PROMOTIONS");
+    var res = await ContentApi().getContents("PROMOTIONS");
     if(res["STATUS"]==1){
       BannerList.clear();
       for(var i = 0;i<res["DATA"].length;i++){
-        BannerList.add(NewsBanner.fromJson(res["DATA"][i]));
+        BannerList.add(Content.fromJson(res["DATA"][i]));
       }
       setState(() {
         globVar.isLoading = false;
@@ -44,15 +44,15 @@ class _ContentListState extends State<ContentList> {
     setState(() {
       globVar.isLoading = true;
     });
-    var res = await News().getNews("NEWS");
+    var res = await ContentApi().getContents("NEWS");
     if(res["STATUS"]==1){
       NewsList.clear();
       for(var i = 0;i<res["DATA"].length;i++){
-        NewsList.add(NewsBanner.fromJson(res["DATA"][i]));
+        NewsList.add(Content.fromJson(res["DATA"][i]));
       }
     }
     else{
-      throw('Error fetching News!');
+      throw('Error fetching ContentApi!');
     }
   }
 
@@ -95,7 +95,7 @@ class _ContentListState extends State<ContentList> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: ()async{
-        Navigator.pushReplacementNamed(context,"/home");
+        Navigator.of(context).popUntil((route) => route.isFirst);
         return false;
       },
       child: Scaffold(

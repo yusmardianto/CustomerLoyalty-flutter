@@ -1,7 +1,7 @@
 import '../main.dart';
 
-class News{
-  getNews(String news)async{
+class ContentApi{
+  getContents(String news)async{
     var res = await utils.post(
         {
           "corp": globVar.auth.corp,

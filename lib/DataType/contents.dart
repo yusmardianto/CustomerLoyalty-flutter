@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-class NewsBanner{
+class Content{
   String title;
   String short_title;
   int msg_id;
@@ -9,9 +9,9 @@ class NewsBanner{
   Uint8List message_image;
   DateTime date;
 
-  NewsBanner(this.title,this.short_title,this.msg_id,this.message_body,this.message_image,this.date);
+  Content(this.title,this.short_title,this.msg_id,this.message_body,this.message_image,this.date);
 
-  NewsBanner.fromJson(Map<String, dynamic> json){
+  Content.fromJson(Map<String, dynamic> json){
     var jsonKeys = json.keys.toList();
     this.title = json[jsonKeys[0]];
     this.short_title = json[jsonKeys[1]];
