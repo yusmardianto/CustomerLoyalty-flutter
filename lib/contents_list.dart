@@ -95,7 +95,7 @@ class _ContentListState extends State<ContentList> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: ()async{
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.of(context).popUntil((route) => route.settings.name == '/home' || route.settings.name == '/');
         return false;
       },
       child: Scaffold(
@@ -168,11 +168,34 @@ class _ContentListState extends State<ContentList> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: 116,
-                      alignment: Alignment.center,
                       decoration: BoxDecoration(
-                          color: Color.fromRGBO(237, 237, 237, 1)
+                          // color: Color.fromRGBO(237, 237, 237, 1),
+                          image: DecorationImage(
+                                image: AssetImage("images/empty_banner.png"),
+                              fit: BoxFit.scaleDown
+                          ),
                       ),
-                      child: Text("Kosong",style: TextStyle(fontWeight: FontWeight.w700,decoration: TextDecoration.underline,color: Colors.grey),),
+                      padding: EdgeInsets.only(left: 15,top: 45),
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width*0.4,
+                        child :Text(
+                          "Tidak Ada Promo Untuk Saat Ini",
+                          style: TextStyle(
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 3,
+                                  color: Colors.grey.withOpacity(0.5),
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                              color: Color.fromRGBO(0, 0, 54, 1),
+                              fontSize: 14,
+                              letterSpacing: 0,
+                              fontWeight: FontWeight.w700,
+                              height: 1.5),
+                        )
+                      ),
                     )
                     :ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -310,14 +333,68 @@ class _ContentListState extends State<ContentList> {
                       ),
                     )
                         :(NewsList.length==0)?
-                    Container(
-                      height: 90,
-                      width: MediaQuery.of(context).size.width,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(237, 237, 237, 1)
+                    Padding(
+                      padding: EdgeInsets.only(top: 15),
+                      child: Container(
+                        height: 114,
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 4,
+                              child: Container(
+                                padding: EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(0, 0, 54, 1),
+                                    borderRadius: BorderRadius.circular(5.0)
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Image(
+                                      height:30,
+                                      width:120,
+                                      fit: BoxFit.fitWidth,
+                                      image: AssetImage("images/ThamrinfullBlack.png"),
+                                    ),
+                                    Expanded(
+                                      child: Center(
+                                        child: Text("Belum ada berita baru, nih",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Color.fromRGBO(255, 255, 255, 1),
+                                              fontSize: 12,
+                                              letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
+                                              fontWeight: FontWeight.w700,
+                                              height: 1
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                                flex: 5,
+                                child:Container(
+                                  padding: const EdgeInsets.all(5.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(5.0),
+                                      topRight: Radius.circular(5.0),
+                                    ),
+                                  ),
+                                  child: Image(
+                                    fit: BoxFit.fitHeight,
+                                    image: AssetImage("images/empty_news.png"),
+                                    gaplessPlayback: true,
+                                  ),
+                                )
+                            ),
+                          ],
+                        ),
                       ),
-                      child: Text("Kosong",style: TextStyle(fontWeight: FontWeight.w700,decoration: TextDecoration.underline,color: Colors.grey),),
                     )
                     :ListView.builder(
                       padding: EdgeInsets.all(0),

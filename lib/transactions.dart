@@ -60,7 +60,7 @@ class _TransactionsState extends State<Transactions> {
       resizeToAvoidBottomInset: false,
       body: WillPopScope(
         onWillPop: ()async{
-          Navigator.of(context).popUntil((route) => route.isFirst);
+          Navigator.of(context).popUntil((route) => route.settings.name == '/home' || route.settings.name == '/');
           return false;
         },
         child: Container(

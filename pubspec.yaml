@@ -81,7 +81,6 @@ flutter:
     - images/wa.png
     - images/faq.png
     - images/cs.png
-    - images/header_yamaha.jpg
     - images/splash.jpg
     - images/step1.png
     - images/step2.png
@@ -91,6 +90,10 @@ flutter:
     - images/news.png
     - images/thamrin.png
     - images/ThamrinfullBlack.png
+    - images/empty_banner.png
+    - images/empty_news.png
+    - images/empty_myvoucher.png
+    - images/empty_avail.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
