@@ -343,7 +343,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
               ),
               (voucherList.length == 0)
                   ? Padding(
-                padding: EdgeInsets.only(top: 15),
+                padding: EdgeInsets.only(top: 15,left:15,right:15),
                 child: Container(
                   decoration: BoxDecoration(
                     color: Color.fromRGBO(238, 238, 238, 1),
@@ -355,7 +355,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                     ],
                     borderRadius: BorderRadius.circular(5.0),
                   ),
-                  height: 114,
+                  height: 97,
                   width: MediaQuery.of(context).size.width,
                   child: Row(
                     children: [
@@ -711,7 +711,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
         ),
         (NewsList.length == 0)
             ? Padding(
-          padding: EdgeInsets.only(top: 15),
+          padding: EdgeInsets.only(top: 15,left:15,right:15),
           child: Container(
             decoration: BoxDecoration(
               color: Color.fromRGBO(238, 238, 238, 1),
@@ -723,7 +723,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
               ],
               borderRadius: BorderRadius.circular(5.0),
             ),
-            height: 114,
+            height: 97,
             width: MediaQuery.of(context).size.width,
             child: Row(
               children: [
@@ -956,7 +956,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
             ),
             (globVar.myVouchers.length == 0)
                 ? Padding(
-              padding: EdgeInsets.only(top: 15),
+              padding: EdgeInsets.only(top: 15,left: 15,right: 15),
               child: Container(
                 decoration: BoxDecoration(
                   color: Color.fromRGBO(238, 238, 238, 1),
@@ -968,7 +968,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                   ],
                   borderRadius: BorderRadius.circular(5.0),
                 ),
-                height: 114,
+                height: 97,
                 width: MediaQuery.of(context).size.width,
                 child: Row(
                   children: [
@@ -1622,8 +1622,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
   }
 
   Widget merchant() {
-    double width = 122;
-    double height = 134;
+    double width = 123;
+    double height = 159;
     return Column(
       children: [
         Padding(
@@ -1725,7 +1725,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                           child: Column(children: <Widget>[
                             Container(
                               width: width,
-                              height: height * 0.78,
+                              height: height * 0.61,
                               decoration: BoxDecoration(
                                 image: (i.message_image == null)
                                     ? null
@@ -1735,20 +1735,43 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               ),
                             ),
                             Container(
-                                padding: EdgeInsets.only(left: 10, right: 10),
+                                padding: EdgeInsets.all(8),
                                 width: width,
-                                alignment: Alignment.center,
-                                height: height * 0.22,
-                                child: Text(
-                                  i.short_title ?? '-',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(0, 0, 54, 1),
-                                      fontSize: 13,
-                                      letterSpacing:
-                                          0 /*percentages not used in flutter. defaulting to zero*/,
-                                      fontWeight: FontWeight.normal,
-                                      height: 1),
+                                height: height * 0.39,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width:width,
+                                      child: Text(
+                                        i.short_title ?? '-',
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            color: Color.fromRGBO(0, 0, 54, 1),
+                                            fontSize: 13,
+                                            letterSpacing:
+                                                0 /*percentages not used in flutter. defaulting to zero*/,
+                                            fontWeight: FontWeight.w700,
+                                            height: 1),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        alignment: Alignment.bottomRight,
+                                        width:width,
+                                        child: Text(
+                                          "Lihat detail",
+                                          textAlign: TextAlign.right,
+                                          style: TextStyle(
+                                              decoration: TextDecoration.underline,
+                                              color: Color.fromRGBO(117, 83, 83, 0.81),
+                                              fontSize: 10,
+                                              letterSpacing: 0 ,
+                                              fontWeight: FontWeight.w700,
+                                              height: 1),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 )),
                           ])),
                     );

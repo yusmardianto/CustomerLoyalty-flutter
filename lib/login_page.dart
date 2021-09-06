@@ -874,12 +874,13 @@ class _LoginPageState extends State<LoginPage> {
                                                                 utils.toast(res["DATA"],type:(res["STATUS"])?"REGULAR":"ERROR");
                                                                 if(res["STATUS"]) {
                                                                   // print([mapUser["email"], mapUser["pass"]]);
-                                                                  Future future = Auths().login(mapUser["email"], mapUser["pass"]);
-                                                                  var res = await utils.showLoadingFuture(context,future);
+                                                                  // Future future = Auths().login(mapUser["email"], mapUser["pass"]);
+                                                                  // var res = await utils.showLoadingFuture(context,future);
                                                                   Navigator.pop(context);
-                                                                  if(res["STATUS"]){
-                                                                    Navigator.pushReplacementNamed(context, "/home");
-                                                                  }
+                                                                  // utils.toast("Akun berhasil terdaftar. Harap menunggu konfirmasi akun dari admin.",type:"REGULAR");
+                                                                  // if(res["STATUS"]){
+                                                                  //   Navigator.pushReplacementNamed(context, "/home");
+                                                                  // }
                                                                 }
                                                               } else {
                                                                 utils.toast("Data belum lengkap. Silakan cek kembali",type:"ERROR");
