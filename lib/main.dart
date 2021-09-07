@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'DataType/contents.dart';
+import 'api/contents.dart';
 import 'login_page.dart';
 import 'home_page.dart';
 import 'profile.dart';
@@ -24,7 +26,7 @@ double preLoadPercentage;
 NumberFormat numberFormat = NumberFormat.decimalPattern('id');
 GlobalKey<NavigatorState> navKey = new GlobalKey<NavigatorState>();
 RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
-
+List<Content> featureList = [];
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,6 +56,21 @@ _check_Update(context)async{
     print(e);
   }
 }
+fetchFeatures()async{
+  try{
+    var res = await ContentApi().getContents("FEATURES");
+    if (res["STATUS"] == 1) {
+      featureList.clear();
+      for (var i = 0; i < res["DATA"].length; i++) {
+        featureList.add(Content.fromJson(res["DATA"][i]));
+      }
+    } else {
+      throw ('Error fetching features!');
+    }
+  }catch(e){
+    print("error $e");
+  }
+}
 preload()async{
     try{
       if(prefs==null)prefs = await SharedPreferences.getInstance();
@@ -64,6 +81,9 @@ preload()async{
     if(globVar==null){
     globVar = new GlobVar();
     await utils.restoreGlobVar();
+    if(prefs.getBool("first_time")??true){
+      await fetchFeatures();
+    }
     await Future.delayed(Duration(seconds: 2));
     }
 }
@@ -94,11 +114,7 @@ class MyApp extends StatelessWidget {
             } else {
               // Loading is done, return the app:
               _check_Update(context);
-              return (prefs.getBool("first_time")??true)?FirstPage():(globVar.user!=null)?HomePage():LoginPage();
-              // if(prefs.getBool("first_time")??true){
-              //   return FirstPage();
-              // }
-              // else return (globVar.user!=null)?HomePage():LoginPage();
+              return ((prefs.getBool("first_time")??true)&&featureList.length!=0)?FirstPage(featureList):(globVar.user!=null)?HomePage():LoginPage();
             }
           },
         ),

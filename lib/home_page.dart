@@ -34,6 +34,9 @@ class _HomePageState extends State<HomePage> with RouteAware {
   List<Content> NewsList = [];
   List<Content> MerchantList = [];
   List<Voucher> voucherList = [];
+  List<Content> CSList = [];
+  List<Content> FAQList = [];
+
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   int bannerFocus, myVoucherFocus, availVoucherFocus;
@@ -1356,6 +1359,121 @@ class _HomePageState extends State<HomePage> with RouteAware {
   }
 
   Widget supports() {
+    List<Widget> CS = [
+      Icon(
+      FontAwesomeIcons.phoneSquareAlt,
+      size: 60,
+    ),
+      SizedBox(height: 15),
+      Center(
+          child: Text(
+            "Kami tersedia dalam",
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight:
+                FontWeight.w400),
+          ))
+    ];
+    List<Widget> FAQ = [
+      Icon(
+        FontAwesomeIcons.questionCircle,
+        size: 60,
+      ),
+      SizedBox(height: 15),
+      Center(
+          child: Text(
+            "Have question?",
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight:
+                FontWeight.w400),
+          )),
+    ];
+    CSList.forEach((element) {
+      String url = (element.message_body!=null||element.message_body.contains('<'))?element.message_body.substring(element.message_body.indexOf('>')+1,element.message_body.lastIndexOf('</')):null;
+      CS.add(Divider());
+      CS.add(InkWell(
+        onTap: () => utils.launchBrowserURL(url.trim()),
+        child: Row(
+          mainAxisAlignment:
+          MainAxisAlignment
+              .spaceBetween,
+          children: [
+            Image(
+              image: MemoryImage(element.message_image),
+              height: 33,
+              width: 33,
+              fit: BoxFit.fitWidth,
+            ),
+            Text(
+              element.short_title,
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight:
+                  FontWeight.w400),
+            )
+          ],
+        ),
+      ));
+    });
+    if(CSList.length==0){
+      CS.add(Divider());
+      CS.add(
+          Row(
+            mainAxisAlignment:
+            MainAxisAlignment
+                .center,
+            children: [
+              Text(
+                "Informasi ini belum tersedia",
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight:
+                    FontWeight.w400),
+              )
+            ],
+          )
+      );
+    }
+    FAQList.forEach((element) {
+      FAQ.add(Divider());
+      FAQ.add(InkWell(
+        onTap: ()=>Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => NewsDetail(element))),
+        child: Padding(
+          padding:
+          const EdgeInsets.all(8.0),
+          child: Text(
+            element.short_title,
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight:
+                FontWeight.w400),
+          ),
+        ),
+      ));
+    });
+    if(FAQList.length==0){
+      FAQ.add(Divider());
+      FAQ.add(
+          Row(
+            mainAxisAlignment:
+            MainAxisAlignment
+                .center,
+            children: [
+              Text(
+                "Informasi ini belum tersedia",
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight:
+                    FontWeight.w400),
+              )
+            ],
+          )
+      );
+    }
     return (globVar.isLoading ?? true)
         ? Padding(
             padding: const EdgeInsets.only(top: 15.0),
@@ -1425,97 +1543,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                   await showDialog(
                                       context: context,
                                       builder: (context) => SimpleDialog(
-                                            children: [
-                                              Icon(
-                                                FontAwesomeIcons.phoneSquareAlt,
-                                                size: 60,
-                                              ),
-                                              SizedBox(height: 15),
-                                              Center(
-                                                  child: Text(
-                                                "Kami tersedia dalam",
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              )),
-                                              Divider(),
-                                              InkWell(
-                                                onTap: () => utils.launchBrowserURL(
-                                                    'https://wa.me/628117157788'),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Image(
-                                                      image: AssetImage(
-                                                          "images/wa.png"),
-                                                      height: 33,
-                                                      width: 33,
-                                                      fit: BoxFit.fitWidth,
-                                                    ),
-                                                    Text(
-                                                      "+62 811-7157-788",
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w400),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              Divider(),
-                                              InkWell(
-                                                onTap: () => utils.launchBrowserURL(
-                                                    'https://www.facebook.com/Yamaha-Thamrin-Brothers-269533563554676/'),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Image(
-                                                      image: AssetImage(
-                                                          "images/fb.png"),
-                                                      height: 33,
-                                                      width: 33,
-                                                      fit: BoxFit.fitWidth,
-                                                    ),
-                                                    Text("Yamaha Thamrin",
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400))
-                                                  ],
-                                                ),
-                                              ),
-                                              Divider(),
-                                              InkWell(
-                                                onTap: () => utils.launchBrowserURL(
-                                                    'https://www.instagram.com/yamaha.thamrin/?hl=en'),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Image(
-                                                      image: AssetImage(
-                                                          "images/ig.png"),
-                                                      height: 33,
-                                                      width: 33,
-                                                      fit: BoxFit.fitWidth,
-                                                    ),
-                                                    Text("@yamaha.thamrin",
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400))
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
+                                            children:CS,
                                             backgroundColor: Colors.white,
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -1541,57 +1569,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                   await showDialog(
                                       context: context,
                                       builder: (context) => SimpleDialog(
-                                            children: [
-                                              Icon(
-                                                FontAwesomeIcons.questionCircle,
-                                                size: 60,
-                                              ),
-                                              SizedBox(height: 15),
-                                              Center(
-                                                  child: Text(
-                                                "Have question?",
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              )),
-                                              Divider(),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  "I cant redeem Vouchers",
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                              ),
-                                              Divider(),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  "I can't use Voucher Saya Code",
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                              ),
-                                              Divider(),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  "The Vendor scan can't recognize my QRcodes",
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                              )
-                                            ],
+                                            children: FAQ,
                                             backgroundColor: Colors.white,
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -1784,6 +1762,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    if(globVar.user==null) return Container(color:Colors.white);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: WillPopScope(
@@ -1818,7 +1797,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                         news(),
                         availVouchers(),
                         merchant(),
-                        // supports(),
+                        supports(),
                       ],
                     ),
                   ),
@@ -1885,25 +1864,26 @@ class _HomePageState extends State<HomePage> with RouteAware {
   @override
   void didPushNext() async {
     //pushed from home
-    // final route = ModalRoute.of(context).settings.name;
-    if ((ModalRoute.of(context).settings.name == '/home' ||
-        ModalRoute.of(context).settings.name == '/')) {
-      var isFinish = await Users().refreshUser(
-          globVar.user.CUST_ID, globVar.auth.corp,
-          check_session: true);
-      if (isFinish == null) {
-        Navigator.pushNamed(context, '/login');
-      } else {
-        if (globVar.auth.force_change == 'TRUE') {
-          await forcePasswordChange(context);
-          await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-        }
-        var agreement = await Users().checkAgreement(
-            'LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
-        if (agreement["STATUS"] && agreement["DATA"] != 'y') {
-          var result = await agreementDialog(context, agreement);
-          if (!(result ?? false)) {
-            SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    if(globVar.user!= null){
+      if ((ModalRoute.of(context).settings.name == '/home' ||
+          ModalRoute.of(context).settings.name == '/')) {
+        var isFinish = await Users().refreshUser(
+            globVar.user.CUST_ID, globVar.auth.corp,
+            check_session: true);
+        if (isFinish == null) {
+          Navigator.pushNamed(context, '/login');
+        } else {
+          if (globVar.auth.force_change == 'TRUE') {
+            await forcePasswordChange(context);
+            await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+          }
+          var agreement = await Users().checkAgreement(
+              'LEGAL_AGREEMENT', globVar.user.CUST_ID, globVar.auth.corp);
+          if (agreement["STATUS"] && agreement["DATA"] != 'y') {
+            var result = await agreementDialog(context, agreement);
+            if (!(result ?? false)) {
+              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+            }
           }
         }
       }
@@ -2391,6 +2371,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
             await loadAvailableVoucher();
             await loadNews();
             await loadMerchants();
+            await loadCS();
+            await loadFAQ();
             await loadBanners();
           } else {
             SystemChannels.platform.invokeMethod('SystemNavigator.pop');
@@ -2400,6 +2382,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
           await loadAvailableVoucher();
           await loadNews();
           await loadMerchants();
+          await loadCS();
+          await loadFAQ();
           await loadBanners();
         }
       }
@@ -2463,6 +2447,30 @@ class _HomePageState extends State<HomePage> with RouteAware {
     }
   }
 
+  loadCS() async {
+    var res = await ContentApi().getContents("CUSTOMER_SERVICE");
+    if (res["STATUS"] == 1) {
+      CSList.clear();
+      for (var i = 0; i < res["DATA"].length; i++) {
+        CSList.add(Content.fromJson(res["DATA"][i]));
+      }
+    } else {
+      throw ('Error fetching CS!');
+    }
+  }
+
+  loadFAQ() async {
+    var res = await ContentApi().getContents("FAQ");
+    if (res["STATUS"] == 1) {
+      FAQList.clear();
+      for (var i = 0; i < res["DATA"].length; i++) {
+        FAQList.add(Content.fromJson(res["DATA"][i]));
+      }
+    } else {
+      throw ('Error fetching FAQ!');
+    }
+  }
+
   loadMerchants() async {
     var res = await ContentApi().getContents("MERCHANT");
     if (res["STATUS"] == 1) {
@@ -2506,6 +2514,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
         await loadAvailableVoucher();
         await loadNews();
         await loadMerchants();
+        await loadCS();
+        await loadFAQ();
         await loadBanners();
       }
       _refreshController.refreshCompleted();

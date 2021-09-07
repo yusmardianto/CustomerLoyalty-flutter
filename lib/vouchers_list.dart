@@ -59,21 +59,26 @@ class _VouchersListState extends State<VouchersList>  with SingleTickerProviderS
     });
   }
   loadMyVoucher()async{
-    setState(() {
-      globVar.isLoading = true;
-    });
-    var res = await Vouchers().getMyVoucherList();
-    if(res["STATUS"]==1){
-      List<MyVoucher> myVoucherList = [];
-      for(var i = 0;i<res["DATA"].length;i++){
-        myVoucherList.add(MyVoucher.fromJson(res["DATA"][i]));
+    try{
+      setState(() {
+        globVar.isLoading = true;
+      });
+      var res = await Vouchers().getMyVoucherList();
+      if(res["STATUS"]==1){
+        List<MyVoucher> myVoucherList = [];
+        for(var i = 0;i<res["DATA"].length;i++){
+          myVoucherList.add(MyVoucher.fromJson(res["DATA"][i]));
+        }
+        globVar.myVouchers = myVoucherList;
       }
-      globVar.myVouchers = myVoucherList;
+      await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+      setState(() {
+        globVar.isLoading = false;
+      });
     }
-    await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-    setState(() {
-      globVar.isLoading = false;
-    });
+    catch(e){
+      print("error $e");
+    }
     // if(widget.checkMyVoucher??false)showMyVoucher();
   }
 
@@ -291,8 +296,10 @@ class _VouchersListState extends State<VouchersList>  with SingleTickerProviderS
 
   @override
   void initState() {
-    loadAvailableVoucher();
-    loadMyVoucher();
+    if(globVar.user!=null){
+      loadAvailableVoucher();
+      loadMyVoucher();
+    }
     _controller = TabController(length: 2, vsync: this,initialIndex: widget.checkMyVoucher?1:0);
     super.initState();
   }
@@ -388,7 +395,7 @@ class _VouchersListState extends State<VouchersList>  with SingleTickerProviderS
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("${utils.thousandSeperator(globVar.user.CUST_POINT??0)}",style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.w400),),
+                                Text("${utils.thousandSeperator(globVar.user==null?0:globVar.user.CUST_POINT??0)}",style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.w400),),
                                 SizedBox(width: 10,),
                                 Icon(FontAwesomeIcons.coins,size: 18,color:Colors.amberAccent),
                               ],

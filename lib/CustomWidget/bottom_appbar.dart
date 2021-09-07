@@ -53,7 +53,6 @@ class _BottomAppbarState extends State<BottomAppbar> {
                       await Navigator.pushNamed(context, "/transactions");
                       await Users()
                           .refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                      setState(() {});
                     }
                   },
                   child: Padding(
@@ -74,7 +73,6 @@ class _BottomAppbarState extends State<BottomAppbar> {
                       await Navigator.pushNamed(context, "/vouchers");
                       await Users()
                           .refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                      setState(() {});
                     }
                   },
                   child: Padding(
@@ -95,7 +93,6 @@ class _BottomAppbarState extends State<BottomAppbar> {
                       await Navigator.pushNamed(context, "/profile");
                       await Users()
                           .refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                      setState(() {});
                     }
                   },
                   child: Padding(
