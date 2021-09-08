@@ -102,6 +102,12 @@ class MyApp extends StatelessWidget {
           bottomSheetTheme: BottomSheetThemeData(
             backgroundColor: Colors.transparent,
           ),
+          pageTransitionsTheme: PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+              }
+          ),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: FutureBuilder(
