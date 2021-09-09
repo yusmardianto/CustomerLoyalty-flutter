@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../DataType/contents.dart';
@@ -36,11 +37,25 @@ class _NewsDetailState extends State<NewsDetail> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image(
-                      fit: BoxFit.fitWidth,
-                      isAntiAlias: true,
-                      width: MediaQuery.of(context).size.width,
-                      image: MemoryImage(widget.ContentApi.message_image),
+                    CachedNetworkImage(
+                      httpHeaders: {
+                        "Authorization":"bearer ${globVar.tokenRest.token}"
+                      },
+                      imageUrl: widget.ContentApi.message_image,
+                      imageBuilder: (context, imageProvider) => Image(
+                        fit: BoxFit.fitWidth,
+                        isAntiAlias: true,
+                        width: MediaQuery.of(context).size.width,
+                        image: imageProvider,
+                      ),
+                      placeholder: (context, url) => Container(
+                          padding: EdgeInsets.all(2),
+                          width: 20,
+                          child: LinearProgressIndicator(
+                            backgroundColor: Colors.grey,
+                            valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                          )),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
                     Container(
                       padding: EdgeInsets.all(10),

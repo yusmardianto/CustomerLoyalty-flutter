@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'CustomShape/circle_tab_indicator.dart';
 import 'DataType/contents.dart';
@@ -81,16 +82,40 @@ class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMix
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(
-                                height: 194,
-                                width: 358,
-                                decoration: e.message_image==null?null:BoxDecoration(
-                                    image: DecorationImage(
-                                        image: MemoryImage(e.message_image),
-                                        fit: BoxFit.fitHeight
-                                    )
+                              CachedNetworkImage(
+                                httpHeaders: {
+                                  "Authorization":"bearer ${globVar.tokenRest.token}"
+                                },
+                                imageUrl: e.message_image,
+                                imageBuilder: (context, imageProvider) => Container(
+                                  height: 194,
+                                  width: 358,
+                                  decoration: e.message_image==null?null:BoxDecoration(
+                                      image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.fitHeight
+                                      )
+                                  ),
                                 ),
+                                placeholder: (context, url) => Container(
+                                    padding: EdgeInsets.all(2),
+                                    width: 20,
+                                    child: LinearProgressIndicator(
+                                      backgroundColor: Colors.grey,
+                                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                                    )),
+                                errorWidget: (context, url, error) => Icon(Icons.error),
                               ),
+                              // Container(
+                              //   height: 194,
+                              //   width: 358,
+                              //   decoration: e.message_image==null?null:BoxDecoration(
+                              //       image: DecorationImage(
+                              //           image: MemoryImage(e.message_image),
+                              //           fit: BoxFit.fitHeight
+                              //       )
+                              //   ),
+                              // ),
                               Container(
                                   padding: EdgeInsets.all(25),
                                   child:Text(e.short_title??'-',style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontWeight: FontWeight.w700,fontSize: 35,shadows: [

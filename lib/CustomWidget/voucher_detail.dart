@@ -211,8 +211,8 @@ class VoucherDialog{
   //     },
   //   ));
   // }
-  showVoucherDetails(Voucher voucher,context,{rewardId=null}){
-    showModalBottomSheet(context: context, isScrollControlled: true, builder: (context){
+  showVoucherDetails(Voucher voucher,context,{rewardId=null})async {
+    await showModalBottomSheet(context: context, isScrollControlled: true, builder: (context){
       return ConstrainedBox(
         constraints: new BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height*0.96,

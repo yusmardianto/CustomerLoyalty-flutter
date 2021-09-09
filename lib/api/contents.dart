@@ -7,8 +7,10 @@ class ContentApi{
           "corp": (globVar.auth==null)?null:globVar.auth.corp,
           "cust_id": (globVar.user==null)?null:globVar.user.CUST_ID,
           "type": news,
+          "dataOnly":'TRUE',
         },
-        globVar.hostRest + "/contents/", secure: true, many: true);
+        globVar.hostRest + "/contents/",
+        secure: true, many: true);
     // print("res ${{
     //   "corp": globVar.auth.corp,
     //   "cust_id": globVar.user.CUST_ID,

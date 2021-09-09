@@ -39,7 +39,7 @@ class Util{
       await backupGlobVar();
     }
   }
-  post(Map jsonData, String url,{secure:false,timeout:false,second:5,many=false,Map customHeader}) async{
+  post(Map jsonData, String url,{secure:false,timeout:true,second:5,many=false,Map customHeader}) async{
     const JsonDecoder decoder = const JsonDecoder();
     try {
       var headers = {'Content-type': 'application/json'};
@@ -188,7 +188,7 @@ class Util{
       return {"STATUS":0,"DATA":"Not Connected to Server"};
     }
   }
-  get(String url,{secure:false,timeout:false,second:5}) async{
+  get(String url,{secure:false,timeout:true,second:5}) async{
     const JsonDecoder decoder = const JsonDecoder();
     try {
       var headers = {'Content-type': 'application/json'};

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -213,18 +214,44 @@ class _ContentListState extends State<ContentList> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
+                                  CachedNetworkImage(
+                                    httpHeaders: {
+                                      "Authorization":"bearer ${globVar.tokenRest.token}"
+                                    },
+                                    imageUrl: BannerList[indx].message_image,
+                                    imageBuilder: (context, imageProvider) => Container(
                                       height: 116,
                                       width: 280,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(25),
-                                        image: DecorationImage(
-                                          fit: BoxFit.fitHeight,
-                                          alignment: Alignment.center,
-                                          image: MemoryImage(BannerList[indx].message_image)
-                                        )
+                                          borderRadius: BorderRadius.circular(25),
+                                          image: DecorationImage(
+                                              fit: BoxFit.fitHeight,
+                                              alignment: Alignment.center,
+                                              image: imageProvider,
+                                          )
                                       ),
+                                    ),
+                                    placeholder: (context, url) => Container(
+                                        padding: EdgeInsets.all(2),
+                                        width: 20,
+                                        child: LinearProgressIndicator(
+                                          backgroundColor: Colors.grey,
+                                          valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                                        )),
+                                    errorWidget: (context, url, error) => Icon(Icons.error),
                                   ),
+                                  // Container(
+                                  //     height: 116,
+                                  //     width: 280,
+                                  //     decoration: BoxDecoration(
+                                  //       borderRadius: BorderRadius.circular(25),
+                                  //       image: DecorationImage(
+                                  //         fit: BoxFit.fitHeight,
+                                  //         alignment: Alignment.center,
+                                  //         image: MemoryImage(BannerList[indx].message_image)
+                                  //       )
+                                  //     ),
+                                  // ),
                                   Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Text(BannerList[indx].title??"-",style: TextStyle(color: Color.fromRGBO(0, 0, 52, 1),fontSize: 15,fontWeight: FontWeight.w700),),
@@ -409,18 +436,44 @@ class _ContentListState extends State<ContentList> {
                               padding: const EdgeInsets.only(top: 19),
                               child: Row(
                                 children: [
-                                  Container(
-                                    width: 150,
-                                    height: 90,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        image: DecorationImage(
-                                            fit: BoxFit.fitHeight,
-                                            alignment: Alignment.center,
-                                            image: MemoryImage(NewsList[indx].message_image)
-                                        )
+                                  CachedNetworkImage(
+                                    httpHeaders: {
+                                      "Authorization":"bearer ${globVar.tokenRest.token}"
+                                    },
+                                    imageUrl: NewsList[indx].message_image,
+                                    imageBuilder: (context, imageProvider) => Container(
+                                      width: 150,
+                                      height: 90,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(15),
+                                          image: DecorationImage(
+                                              fit: BoxFit.fitHeight,
+                                              alignment: Alignment.center,
+                                              image: imageProvider
+                                          )
+                                      ),
                                     ),
+                                    placeholder: (context, url) => Container(
+                                        padding: EdgeInsets.all(2),
+                                        width: 20,
+                                        child: LinearProgressIndicator(
+                                          backgroundColor: Colors.grey,
+                                          valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                                        )),
+                                    errorWidget: (context, url, error) => Icon(Icons.error),
                                   ),
+                                  // Container(
+                                  //   width: 150,
+                                  //   height: 90,
+                                  //   decoration: BoxDecoration(
+                                  //       borderRadius: BorderRadius.circular(15),
+                                  //       image: DecorationImage(
+                                  //           fit: BoxFit.fitHeight,
+                                  //           alignment: Alignment.center,
+                                  //           image: MemoryImage(NewsList[indx].message_image)
+                                  //       )
+                                  //   ),
+                                  // ),
                                   Expanded(
                                     child: Container(
                                       padding: EdgeInsets.only(left:25),

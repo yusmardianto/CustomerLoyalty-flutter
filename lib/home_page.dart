@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -208,24 +209,55 @@ class _HomePageState extends State<HomePage> with RouteAware {
                       .refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                   setState(() {});
                 },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 114,
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            offset: Offset(1.0, 1.0),
-                            color: Colors.grey,
-                            blurRadius: 3)
-                      ],
-                      color: Color.fromRGBO(237, 237, 237, 1),
-                      image: (i.message_image == null)
-                          ? null
-                          : DecorationImage(
-                              fit: BoxFit.fitHeight,
-                              image: MemoryImage(i.message_image),
-                            )),
+                child:
+                CachedNetworkImage(
+                  httpHeaders: {
+                    "Authorization":"bearer ${globVar.tokenRest.token}"
+                  },
+                  imageUrl: i.message_image,
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 114,
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              offset: Offset(1.0, 1.0),
+                              color: Colors.grey,
+                              blurRadius: 3)
+                        ],
+                        color: Color.fromRGBO(237, 237, 237, 1),
+                        image:DecorationImage(
+                          fit: BoxFit.fitHeight,
+                          image: imageProvider,
+                        )),
+                  ),
+                  placeholder: (context, url) => Container(
+                      padding: EdgeInsets.all(2),
+                      width: 20,
+                      child: LinearProgressIndicator(
+                        backgroundColor: Colors.grey,
+                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                      )),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
+                // Container(
+                //   width: MediaQuery.of(context).size.width,
+                //   height: 114,
+                //   decoration: BoxDecoration(
+                //       boxShadow: [
+                //         BoxShadow(
+                //             offset: Offset(1.0, 1.0),
+                //             color: Colors.grey,
+                //             blurRadius: 3)
+                //       ],
+                //       color: Color.fromRGBO(237, 237, 237, 1),
+                //       image: (i.message_image == null)
+                //           ? null
+                //           : DecorationImage(
+                //               fit: BoxFit.fitHeight,
+                //               image: MemoryImage(i.message_image),
+                //             )),
+                // ),
               );
             },
           );
@@ -443,7 +475,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                         var refresh = await VoucherDialog()
                                             .showVoucherDetails(item, context);
                                         // var refresh = await showVoucherDetails(item);
-                                        if (refresh ?? false) _onRefresh();
+                                        if (refresh ?? false) await loadAvailableVoucher();
                                       },
                                       child: Container(
                                         margin: EdgeInsets.symmetric(
@@ -813,27 +845,62 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                           NewsDetail(
                                               NewsList[indx * 2])));
                             },
-                            child: Container(
-                              decoration:
-                              (NewsList[indx * 2].message_image !=
-                                  null)
-                                  ? BoxDecoration(
-                                  image: DecorationImage(
-                                      image: MemoryImage(
-                                          NewsList[indx * 2]
-                                              .message_image),
-                                      fit: BoxFit.fitWidth))
-                                  : null,
-                              width: 175,
-                              height: 89,
-                              child:
-                              (NewsList[indx * 2].message_image ==
-                                  null)
-                                  ? Center(
-                                child: Text("No Image"),
-                              )
-                                  : null,
+                            child:
+                            CachedNetworkImage(
+                              httpHeaders: {
+                                "Authorization":"bearer ${globVar.tokenRest.token}"
+                              },
+                              imageUrl: NewsList[indx * 2]
+                                  .message_image,
+                              imageBuilder: (context, imageProvider) => Container(
+                                decoration:
+                                (NewsList[indx * 2].message_image !=
+                                    null)
+                                    ? BoxDecoration(
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.fitWidth))
+                                    : null,
+                                width: 175,
+                                height: 89,
+                                child:
+                                (NewsList[indx * 2].message_image ==
+                                    null)
+                                    ? Center(
+                                  child: Text("No Image"),
+                                )
+                                    : null,
+                              ),
+                              placeholder: (context, url) => Container(
+                                  padding: EdgeInsets.all(2),
+                                  width: 20,
+                                  child: LinearProgressIndicator(
+                                    backgroundColor: Colors.grey,
+                                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                                  )),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
                             ),
+                            // Container(
+                            //   decoration:
+                            //   (NewsList[indx * 2].message_image !=
+                            //       null)
+                            //       ? BoxDecoration(
+                            //       image: DecorationImage(
+                            //           image: MemoryImage(
+                            //               NewsList[indx * 2]
+                            //                   .message_image),
+                            //           fit: BoxFit.fitWidth))
+                            //       : null,
+                            //   width: 175,
+                            //   height: 89,
+                            //   child:
+                            //   (NewsList[indx * 2].message_image ==
+                            //       null)
+                            //       ? Center(
+                            //     child: Text("No Image"),
+                            //   )
+                            //       : null,
+                            // ),
                           ),
                           ((indx * 2 + 1) <= (NewsList.length - 1))
                               ? InkWell(
@@ -845,30 +912,68 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                           NewsDetail(NewsList[
                                           indx * 2 + 1])));
                             },
-                            child: Container(
-                              width: 175,
-                              height: 89,
-                              decoration: (NewsList[
-                              indx * 2 + 1]
-                                  .message_image !=
-                                  null)
-                                  ? BoxDecoration(
-                                  image: DecorationImage(
-                                      image: MemoryImage(
-                                          NewsList[
-                                          indx * 2 +
-                                              1]
-                                              .message_image),
-                                      fit: BoxFit.fitWidth))
-                                  : null,
-                              child: (NewsList[indx * 2 + 1]
-                                  .message_image ==
-                                  null)
-                                  ? Center(
-                                child: Text("No Image"),
-                              )
-                                  : null,
+                            child:
+                            CachedNetworkImage(
+                              httpHeaders: {
+                                "Authorization":"bearer ${globVar.tokenRest.token}"
+                              },
+                              imageUrl: NewsList[
+                              indx * 2 +
+                                  1]
+                                  .message_image,
+                              imageBuilder: (context, imageProvider) => Container(
+                                width: 175,
+                                height: 89,
+                                decoration: (NewsList[
+                                indx * 2 + 1]
+                                    .message_image !=
+                                    null)
+                                    ? BoxDecoration(
+                                    image: DecorationImage(
+                                        image:imageProvider,
+                                        fit: BoxFit.fitWidth))
+                                    : null,
+                                child: (NewsList[indx * 2 + 1]
+                                    .message_image ==
+                                    null)
+                                    ? Center(
+                                  child: Text("No Image"),
+                                )
+                                    : null,
+                              ),
+                              placeholder: (context, url) => Container(
+                                  padding: EdgeInsets.all(2),
+                                  width: 20,
+                                  child: LinearProgressIndicator(
+                                    backgroundColor: Colors.grey,
+                                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                                  )),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
                             ),
+                            // Container(
+                            //   width: 175,
+                            //   height: 89,
+                            //   decoration: (NewsList[
+                            //   indx * 2 + 1]
+                            //       .message_image !=
+                            //       null)
+                            //       ? BoxDecoration(
+                            //       image: DecorationImage(
+                            //           image: MemoryImage(
+                            //               NewsList[
+                            //               indx * 2 +
+                            //                   1]
+                            //                   .message_image),
+                            //           fit: BoxFit.fitWidth))
+                            //       : null,
+                            //   child: (NewsList[indx * 2 + 1]
+                            //       .message_image ==
+                            //       null)
+                            //       ? Center(
+                            //     child: Text("No Image"),
+                            //   )
+                            //       : null,
+                            // ),
                           )
                               : Container(
                             width: 175,
@@ -1064,7 +1169,10 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                   details, context,
                                   rewardId: item
                                       .LOYALTY_CUST_REWARD_ID);
-                              _onRefresh();
+                              await loadVoucher();
+                              setState(() {
+
+                              });
                             } else {
                               bool genBarcode = await showDialog(
                                   context: context,
@@ -1399,12 +1507,32 @@ class _HomePageState extends State<HomePage> with RouteAware {
           MainAxisAlignment
               .spaceBetween,
           children: [
-            Image(
-              image: MemoryImage(element.message_image),
-              height: 33,
-              width: 33,
-              fit: BoxFit.fitWidth,
+            CachedNetworkImage(
+              httpHeaders: {
+                "Authorization":"bearer ${globVar.tokenRest.token}"
+              },
+              imageUrl: element.message_image,
+              imageBuilder: (context, imageProvider) => Image(
+                image: imageProvider,
+                height: 33,
+                width: 33,
+                fit: BoxFit.fitWidth,
+              ),
+              placeholder: (context, url) => Container(
+                  padding: EdgeInsets.all(2),
+                  width: 20,
+                  child: LinearProgressIndicator(
+                    backgroundColor: Colors.grey,
+                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                  )),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
+            // Image(
+            //   image: MemoryImage(element.message_image),
+            //   height: 33,
+            //   width: 33,
+            //   fit: BoxFit.fitWidth,
+            // ),
             Text(
               element.short_title,
               style: TextStyle(
@@ -1701,17 +1829,42 @@ class _HomePageState extends State<HomePage> with RouteAware {
                             color: Color.fromRGBO(255, 255, 255, 1),
                           ),
                           child: Column(children: <Widget>[
-                            Container(
-                              width: width,
-                              height: height * 0.61,
-                              decoration: BoxDecoration(
-                                image: (i.message_image == null)
-                                    ? null
-                                    : DecorationImage(
-                                        image: MemoryImage(i.message_image),
-                                        fit: BoxFit.fill),
+                            CachedNetworkImage(
+                              httpHeaders: {
+                                "Authorization":"bearer ${globVar.tokenRest.token}"
+                              },
+                              imageUrl: i.message_thumbnail,
+                              imageBuilder: (context, imageProvider) => Container(
+                                width: width,
+                                height: height * 0.61,
+                                decoration: BoxDecoration(
+                                  image: (i.message_image == null)
+                                      ? null
+                                      : DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.fill),
+                                ),
                               ),
+                              placeholder: (context, url) => Container(
+                                  padding: EdgeInsets.all(2),
+                                  width: 20,
+                                  child: LinearProgressIndicator(
+                                    backgroundColor: Colors.grey,
+                                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                                  )),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
                             ),
+                            // Container(
+                            //   width: width,
+                            //   height: height * 0.61,
+                            //   decoration: BoxDecoration(
+                            //     image: (i.message_image == null)
+                            //         ? null
+                            //         : DecorationImage(
+                            //             image: MemoryImage(i.message_image),
+                            //             fit: BoxFit.fill),
+                            //   ),
+                            // ),
                             Container(
                                 padding: EdgeInsets.all(8),
                                 width: width,
@@ -2502,7 +2655,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
       setState(() {
         globVar.isLoading = true;
       });
-      await Future.delayed(Duration(milliseconds: 1000));
+      // await Future.delayed(Duration(milliseconds: 1000));
       var isFinish = await Users().refreshUser(
           globVar.user.CUST_ID, globVar.auth.corp,
           check_session: true);
