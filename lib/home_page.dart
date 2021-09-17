@@ -185,9 +185,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
             height: 114,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("images/empty_banner.png"),
-                fit: BoxFit.scaleDown
-              ),
+                  image: AssetImage("images/empty_banner.png"),
+                  fit: BoxFit.scaleDown),
               boxShadow: [
                 BoxShadow(
                     offset: Offset(1.0, 1.0), color: Colors.grey, blurRadius: 3)
@@ -209,10 +208,9 @@ class _HomePageState extends State<HomePage> with RouteAware {
                       .refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
                   setState(() {});
                 },
-                child:
-                CachedNetworkImage(
+                child: CachedNetworkImage(
                   httpHeaders: {
-                    "Authorization":"bearer ${globVar.tokenRest.token}"
+                    "Authorization": "bearer ${globVar.tokenRest.token}"
                   },
                   imageUrl: i.message_image,
                   imageBuilder: (context, imageProvider) => Container(
@@ -226,7 +224,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               blurRadius: 3)
                         ],
                         color: Color.fromRGBO(237, 237, 237, 1),
-                        image:DecorationImage(
+                        image: DecorationImage(
                           fit: BoxFit.fitHeight,
                           image: imageProvider,
                         )),
@@ -236,7 +234,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
                       width: 20,
                       child: LinearProgressIndicator(
                         backgroundColor: Colors.grey,
-                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                        valueColor:
+                            new AlwaysStoppedAnimation<Color>(Colors.white),
                       )),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
@@ -378,78 +377,79 @@ class _HomePageState extends State<HomePage> with RouteAware {
               ),
               (voucherList.length == 0)
                   ? Padding(
-                padding: EdgeInsets.only(top: 15,left:15,right:15),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(238, 238, 238, 1),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 2,
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  height: 97,
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: Container(
-                          padding: EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(0, 0, 54, 1),
-                              borderRadius: BorderRadius.circular(5.0)
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image(
-                                height:30,
-                                width:120,
-                                fit: BoxFit.fitWidth,
-                                image: AssetImage("images/ThamrinfullBlack.png"),
-                              ),
-                              Expanded(
-                                child: Center(
-                                  child: Text("Belum ada Reward yang bisa ditukar, nih",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Color.fromRGBO(255, 255, 255, 1),
-                                        fontSize: 12,
-                                        letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                        fontWeight: FontWeight.w700,
-                                        height: 1
+                      padding: EdgeInsets.only(top: 15, left: 15, right: 15),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(238, 238, 238, 1),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 2,
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        height: 97,
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 4,
+                              child: Container(
+                                padding: EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(0, 0, 54, 1),
+                                    borderRadius: BorderRadius.circular(5.0)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Image(
+                                      height: 30,
+                                      width: 120,
+                                      fit: BoxFit.fitWidth,
+                                      image: AssetImage(
+                                          "images/ThamrinfullBlack.png"),
                                     ),
-                                  ),
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "Belum ada Reward yang bisa ditukar, nih",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Color.fromRGBO(
+                                                  255, 255, 255, 1),
+                                              fontSize: 12,
+                                              letterSpacing:
+                                                  0 /*percentages not used in flutter. defaulting to zero*/,
+                                              fontWeight: FontWeight.w700,
+                                              height: 1),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                            Expanded(
+                                flex: 5,
+                                child: Container(
+                                  padding: const EdgeInsets.all(5.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(5.0),
+                                      topRight: Radius.circular(5.0),
+                                    ),
+                                  ),
+                                  child: Image(
+                                    fit: BoxFit.fitHeight,
+                                    image: AssetImage("images/empty_avail.png"),
+                                    gaplessPlayback: true,
+                                  ),
+                                )),
+                          ],
                         ),
                       ),
-                      Expanded(
-                          flex: 5,
-                          child:Container(
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                bottomRight: Radius.circular(5.0),
-                                topRight: Radius.circular(5.0),
-                              ),
-                            ),
-                            child: Image(
-                              fit: BoxFit.fitHeight,
-                              image: AssetImage("images/empty_avail.png"),
-                              gaplessPlayback: true,
-                            ),
-                          )
-                      ),
-                    ],
-                  ),
-                ),
-              )
+                    )
                   : Column(
                       children: [
                         Padding(
@@ -475,7 +475,8 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                         var refresh = await VoucherDialog()
                                             .showVoucherDetails(item, context);
                                         // var refresh = await showVoucherDetails(item);
-                                        if (refresh ?? false) await loadAvailableVoucher();
+                                        if (refresh ?? false)
+                                          await loadAvailableVoucher();
                                       },
                                       child: Container(
                                         margin: EdgeInsets.symmetric(
@@ -700,296 +701,318 @@ class _HomePageState extends State<HomePage> with RouteAware {
             ),
           )
         : Column(
-      children: [
-        Padding(
-          padding:
-          const EdgeInsets.only(top: 15, right: 18, left: 18),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
+              Padding(
+                padding: const EdgeInsets.only(top: 15, right: 18, left: 18),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "Kabar Terbaru dari Thamrin ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400, fontSize: 18),
+                    Container(
+                      child: Row(
+                        children: [
+                          Text(
+                            "Kabar Terbaru dari Thamrin ",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400, fontSize: 18),
+                          ),
+                          // (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${globVar.myVouchers.length}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18),),
+                          // Text(" voucher",style: TextStyle(
+                          // fontWeight: FontWeight.w500,fontSize: 18),),
+                        ],
+                      ),
                     ),
-                    // (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${globVar.myVouchers.length}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18),),
-                    // Text(" voucher",style: TextStyle(
-                    // fontWeight: FontWeight.w500,fontSize: 18),),
+                    InkWell(
+                      onTap: () async {
+                        // Navigator.pushNamed(context, "/vouchers",);
+                        await Navigator.pushNamed(context, "/news");
+                        await Users().refreshUser(
+                            globVar.user.CUST_ID, globVar.auth.corp);
+                        setState(() {});
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(right: 15),
+                        child: Text(
+                          "Semua",
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: Color.fromRGBO(65, 57, 57, 0.81),
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
-              InkWell(
-                onTap: () async {
-                  // Navigator.pushNamed(context, "/vouchers",);
-                  await Navigator.pushNamed(context, "/news");
-                  await Users().refreshUser(
-                      globVar.user.CUST_ID, globVar.auth.corp);
-                  setState(() {});
-                },
-                child: Container(
-                  padding: EdgeInsets.only(right: 15),
-                  child: Text(
-                    "Semua",
-                    style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Color.fromRGBO(65, 57, 57, 0.81),
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        (NewsList.length == 0)
-            ? Padding(
-          padding: EdgeInsets.only(top: 15,left:15,right:15),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(238, 238, 238, 1),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  blurRadius: 2,
-                ),
-              ],
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            height: 97,
-            width: MediaQuery.of(context).size.width,
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: Container(
-                    padding: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(0, 0, 54, 1),
-                        borderRadius: BorderRadius.circular(5.0)
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Image(
-                          height:30,
-                          width:120,
-                          fit: BoxFit.fitWidth,
-                          image: AssetImage("images/ThamrinfullBlack.png"),
+              (NewsList.length == 0)
+                  ? Padding(
+                      padding: EdgeInsets.only(top: 15, left: 15, right: 15),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(238, 238, 238, 1),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 2,
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(5.0),
                         ),
-                        Expanded(
-                          child: Center(
-                            child: Text("Belum ada berita baru, nih",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Color.fromRGBO(255, 255, 255, 1),
-                                  fontSize: 12,
-                                  letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                  fontWeight: FontWeight.w700,
-                                  height: 1
+                        height: 97,
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 4,
+                              child: Container(
+                                padding: EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(0, 0, 54, 1),
+                                    borderRadius: BorderRadius.circular(5.0)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Image(
+                                      height: 30,
+                                      width: 120,
+                                      fit: BoxFit.fitWidth,
+                                      image: AssetImage(
+                                          "images/ThamrinfullBlack.png"),
+                                    ),
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "Belum ada berita baru, nih",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Color.fromRGBO(
+                                                  255, 255, 255, 1),
+                                              fontSize: 12,
+                                              letterSpacing:
+                                                  0 /*percentages not used in flutter. defaulting to zero*/,
+                                              fontWeight: FontWeight.w700,
+                                              height: 1),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
+                            ),
+                            Expanded(
+                                flex: 5,
+                                child: Container(
+                                  padding: const EdgeInsets.all(5.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(5.0),
+                                      topRight: Radius.circular(5.0),
+                                    ),
+                                  ),
+                                  child: Image(
+                                    fit: BoxFit.fitHeight,
+                                    image: AssetImage("images/empty_news.png"),
+                                    gaplessPlayback: true,
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15.0),
+                          child: Container(
+                            height: 90,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: (NewsList.length / 2).ceil(),
+                              itemBuilder: (context, indx) {
+                                return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      InkWell(
+                                        onTap: () async {
+                                          await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      NewsDetail(
+                                                          NewsList[indx * 2])));
+                                        },
+                                        child: CachedNetworkImage(
+                                          httpHeaders: {
+                                            "Authorization":
+                                                "bearer ${globVar.tokenRest.token}"
+                                          },
+                                          imageUrl:
+                                              NewsList[indx * 2].message_image,
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Container(
+                                            decoration: (NewsList[indx * 2]
+                                                        .message_image !=
+                                                    null)
+                                                ? BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.fitWidth))
+                                                : null,
+                                            width: 175,
+                                            height: 89,
+                                            child: (NewsList[indx * 2]
+                                                        .message_image ==
+                                                    null)
+                                                ? Center(
+                                                    child: Text("No Image"),
+                                                  )
+                                                : null,
+                                          ),
+                                          placeholder: (context, url) =>
+                                              Container(
+                                                  padding: EdgeInsets.all(2),
+                                                  width: 20,
+                                                  child:
+                                                      LinearProgressIndicator(
+                                                    backgroundColor:
+                                                        Colors.grey,
+                                                    valueColor:
+                                                        new AlwaysStoppedAnimation<
+                                                                Color>(
+                                                            Colors.white),
+                                                  )),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
+                                        ),
+                                        // Container(
+                                        //   decoration:
+                                        //   (NewsList[indx * 2].message_image !=
+                                        //       null)
+                                        //       ? BoxDecoration(
+                                        //       image: DecorationImage(
+                                        //           image: MemoryImage(
+                                        //               NewsList[indx * 2]
+                                        //                   .message_image),
+                                        //           fit: BoxFit.fitWidth))
+                                        //       : null,
+                                        //   width: 175,
+                                        //   height: 89,
+                                        //   child:
+                                        //   (NewsList[indx * 2].message_image ==
+                                        //       null)
+                                        //       ? Center(
+                                        //     child: Text("No Image"),
+                                        //   )
+                                        //       : null,
+                                        // ),
+                                      ),
+                                      ((indx * 2 + 1) <= (NewsList.length - 1))
+                                          ? InkWell(
+                                              onTap: () async {
+                                                await Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            NewsDetail(NewsList[
+                                                                indx * 2 +
+                                                                    1])));
+                                              },
+                                              child: CachedNetworkImage(
+                                                httpHeaders: {
+                                                  "Authorization":
+                                                      "bearer ${globVar.tokenRest.token}"
+                                                },
+                                                imageUrl: NewsList[indx * 2 + 1]
+                                                    .message_image,
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
+                                                  width: 175,
+                                                  height: 89,
+                                                  decoration: (NewsList[
+                                                                  indx * 2 + 1]
+                                                              .message_image !=
+                                                          null)
+                                                      ? BoxDecoration(
+                                                          image: DecorationImage(
+                                                              image:
+                                                                  imageProvider,
+                                                              fit: BoxFit
+                                                                  .fitWidth))
+                                                      : null,
+                                                  child: (NewsList[indx * 2 + 1]
+                                                              .message_image ==
+                                                          null)
+                                                      ? Center(
+                                                          child:
+                                                              Text("No Image"),
+                                                        )
+                                                      : null,
+                                                ),
+                                                placeholder: (context, url) =>
+                                                    Container(
+                                                        padding:
+                                                            EdgeInsets.all(2),
+                                                        width: 20,
+                                                        child:
+                                                            LinearProgressIndicator(
+                                                          backgroundColor:
+                                                              Colors.grey,
+                                                          valueColor:
+                                                              new AlwaysStoppedAnimation<
+                                                                      Color>(
+                                                                  Colors.white),
+                                                        )),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
+                                              ),
+                                              // Container(
+                                              //   width: 175,
+                                              //   height: 89,
+                                              //   decoration: (NewsList[
+                                              //   indx * 2 + 1]
+                                              //       .message_image !=
+                                              //       null)
+                                              //       ? BoxDecoration(
+                                              //       image: DecorationImage(
+                                              //           image: MemoryImage(
+                                              //               NewsList[
+                                              //               indx * 2 +
+                                              //                   1]
+                                              //                   .message_image),
+                                              //           fit: BoxFit.fitWidth))
+                                              //       : null,
+                                              //   child: (NewsList[indx * 2 + 1]
+                                              //       .message_image ==
+                                              //       null)
+                                              //       ? Center(
+                                              //     child: Text("No Image"),
+                                              //   )
+                                              //       : null,
+                                              // ),
+                                            )
+                                          : Container(
+                                              width: 175,
+                                              height: 89,
+                                            ),
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                    flex: 5,
-                    child:Container(
-                      padding: const EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(5.0),
-                          topRight: Radius.circular(5.0),
-                        ),
-                      ),
-                      child: Image(
-                        fit: BoxFit.fitHeight,
-                        image: AssetImage("images/empty_news.png"),
-                        gaplessPlayback: true,
-                      ),
                     )
-                ),
-              ],
-            ),
-          ),
-        )
-            : Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 15.0),
-              child: Container(
-                height: 90,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: (NewsList.length / 2).ceil(),
-                  itemBuilder: (context, indx) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceEvenly,
-                        children: [
-                          InkWell(
-                            onTap: () async {
-                              await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          NewsDetail(
-                                              NewsList[indx * 2])));
-                            },
-                            child:
-                            CachedNetworkImage(
-                              httpHeaders: {
-                                "Authorization":"bearer ${globVar.tokenRest.token}"
-                              },
-                              imageUrl: NewsList[indx * 2]
-                                  .message_image,
-                              imageBuilder: (context, imageProvider) => Container(
-                                decoration:
-                                (NewsList[indx * 2].message_image !=
-                                    null)
-                                    ? BoxDecoration(
-                                    image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.fitWidth))
-                                    : null,
-                                width: 175,
-                                height: 89,
-                                child:
-                                (NewsList[indx * 2].message_image ==
-                                    null)
-                                    ? Center(
-                                  child: Text("No Image"),
-                                )
-                                    : null,
-                              ),
-                              placeholder: (context, url) => Container(
-                                  padding: EdgeInsets.all(2),
-                                  width: 20,
-                                  child: LinearProgressIndicator(
-                                    backgroundColor: Colors.grey,
-                                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
-                                  )),
-                              errorWidget: (context, url, error) => Icon(Icons.error),
-                            ),
-                            // Container(
-                            //   decoration:
-                            //   (NewsList[indx * 2].message_image !=
-                            //       null)
-                            //       ? BoxDecoration(
-                            //       image: DecorationImage(
-                            //           image: MemoryImage(
-                            //               NewsList[indx * 2]
-                            //                   .message_image),
-                            //           fit: BoxFit.fitWidth))
-                            //       : null,
-                            //   width: 175,
-                            //   height: 89,
-                            //   child:
-                            //   (NewsList[indx * 2].message_image ==
-                            //       null)
-                            //       ? Center(
-                            //     child: Text("No Image"),
-                            //   )
-                            //       : null,
-                            // ),
-                          ),
-                          ((indx * 2 + 1) <= (NewsList.length - 1))
-                              ? InkWell(
-                            onTap: () async {
-                              await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          NewsDetail(NewsList[
-                                          indx * 2 + 1])));
-                            },
-                            child:
-                            CachedNetworkImage(
-                              httpHeaders: {
-                                "Authorization":"bearer ${globVar.tokenRest.token}"
-                              },
-                              imageUrl: NewsList[
-                              indx * 2 +
-                                  1]
-                                  .message_image,
-                              imageBuilder: (context, imageProvider) => Container(
-                                width: 175,
-                                height: 89,
-                                decoration: (NewsList[
-                                indx * 2 + 1]
-                                    .message_image !=
-                                    null)
-                                    ? BoxDecoration(
-                                    image: DecorationImage(
-                                        image:imageProvider,
-                                        fit: BoxFit.fitWidth))
-                                    : null,
-                                child: (NewsList[indx * 2 + 1]
-                                    .message_image ==
-                                    null)
-                                    ? Center(
-                                  child: Text("No Image"),
-                                )
-                                    : null,
-                              ),
-                              placeholder: (context, url) => Container(
-                                  padding: EdgeInsets.all(2),
-                                  width: 20,
-                                  child: LinearProgressIndicator(
-                                    backgroundColor: Colors.grey,
-                                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
-                                  )),
-                              errorWidget: (context, url, error) => Icon(Icons.error),
-                            ),
-                            // Container(
-                            //   width: 175,
-                            //   height: 89,
-                            //   decoration: (NewsList[
-                            //   indx * 2 + 1]
-                            //       .message_image !=
-                            //       null)
-                            //       ? BoxDecoration(
-                            //       image: DecorationImage(
-                            //           image: MemoryImage(
-                            //               NewsList[
-                            //               indx * 2 +
-                            //                   1]
-                            //                   .message_image),
-                            //           fit: BoxFit.fitWidth))
-                            //       : null,
-                            //   child: (NewsList[indx * 2 + 1]
-                            //       .message_image ==
-                            //       null)
-                            //       ? Center(
-                            //     child: Text("No Image"),
-                            //   )
-                            //       : null,
-                            // ),
-                          )
-                              : Container(
-                            width: 175,
-                            height: 89,
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
-        )
-      ],
-    );
+            ],
+          );
   }
 
   Widget myVouchers() {
@@ -1014,473 +1037,497 @@ class _HomePageState extends State<HomePage> with RouteAware {
             ],
           )
         : Column(
-          children: [
-            Padding(
-              padding:
-              const EdgeInsets.only(right: 18, left: 18),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    child: Row(
-                      children: [
-                        Text(
-                          "Voucher Saya ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 18),
-                        ),
-                        // (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${globVar.myVouchers.length}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18),),
-                        // Text(" voucher",style: TextStyle(
-                        // fontWeight: FontWeight.w500,fontSize: 18),),
-                      ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => VouchersList(
-                                checkMyVoucher: true,
-                              )));
-                      await Users().refreshUser(
-                          globVar.user.CUST_ID, globVar.auth.corp);
-                      setState(() {});
-                    },
-                    child: Container(
-                      padding: EdgeInsets.only(right: 15),
-                      child: Text(
-                        "Semua",
-                        style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.w700,
-                            color: Color.fromRGBO(117, 83, 83, 0.81),
-                            fontSize: 14),
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 18, left: 18),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      child: Row(
+                        children: [
+                          Text(
+                            'Voucher Saya',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Color.fromRGBO(0, 0, 54, 1),
+                                fontFamily: 'Roboto',
+                                fontSize: 18,
+                                letterSpacing:
+                                    0 /*percentages not used in flutter. defaulting to zero*/,
+                                fontWeight: FontWeight.w400,
+                                height: 1),
+                          )
+                          // (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${globVar.myVouchers.length}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18),),
+                          // Text(" voucher",style: TextStyle(
+                          // fontWeight: FontWeight.w500,fontSize: 18),),
+                        ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            (globVar.myVouchers.length == 0)
-                ? Padding(
-              padding: EdgeInsets.only(top: 15,left: 15,right: 15),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(238, 238, 238, 1),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 2,
+                    InkWell(
+                      onTap: () async {
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => VouchersList(
+                                      checkMyVoucher: true,
+                                    )));
+                        await Users().refreshUser(
+                            globVar.user.CUST_ID, globVar.auth.corp);
+                        setState(() {});
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(right: 15),
+                        child: Text(
+                          "Semua",
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.w700,
+                              color: Color.fromRGBO(117, 83, 83, 0.81),
+                              fontSize: 14),
+                        ),
+                      ),
                     ),
                   ],
-                  borderRadius: BorderRadius.circular(5.0),
                 ),
-                height: 97,
-                width: MediaQuery.of(context).size.width,
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 4,
+              ),
+              (globVar.myVouchers.length == 0)
+                  ? Padding(
+                      padding: EdgeInsets.only(top: 15, left: 15, right: 15),
                       child: Container(
-                        padding: EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(0, 0, 54, 1),
-                            borderRadius: BorderRadius.circular(5.0)
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image(
-                              height:30,
-                              width:120,
-                              fit: BoxFit.fitWidth,
-                              image: AssetImage("images/ThamrinfullBlack.png"),
-                            ),
-                            Expanded(
-                              child: Center(
-                                child: Text("Kamu belum punya voucher, nih",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(255, 255, 255, 1),
-                                      fontSize: 12,
-                                      letterSpacing: 0 /*percentages not used in flutter. defaulting to zero*/,
-                                      fontWeight: FontWeight.w700,
-                                      height: 1
-                                  ),
-                                ),
-                              ),
+                          color: Color.fromRGBO(238, 238, 238, 1),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 2,
                             ),
                           ],
+                          borderRadius: BorderRadius.circular(5.0),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                        flex: 5,
-                        child:Container(
-                          padding: const EdgeInsets.all(5.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(5.0),
-                              topRight: Radius.circular(5.0),
-                            ),
-                          ),
-                          child: Image(
-                            fit: BoxFit.fitHeight,
-                            image: AssetImage("images/empty_myvoucher.png"),
-                            gaplessPlayback: true,
-                          ),
-                        )
-                    ),
-                  ],
-                ),
-              ),
-            )
-                : Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: CarouselSlider(
-                        options: CarouselOptions(
-                          viewportFraction:
-                          1 - (62 / MediaQuery.of(context).size.width),
-                          height: 96,
-                          enableInfiniteScroll: true,
-                          autoPlay: false,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              myVoucherFocus = index;
-                            });
-                          },
-                          // autoPlayAnimationDuration: Duration(seconds: 3)
-                        ),
-                        items: globVar.myVouchers
-                            .map((item) => InkWell(
-                          onTap: () async {
-                            var result = await Vouchers()
-                                .voucherDetails(
-                                item.LOYALTY_CAMPAIGN_ID);
-                            if (result["STATUS"] == 1 &&
-                                result["DATA"].length > 0) {
-                              var details = new Voucher.fromJson(
-                                  result["DATA"][0]);
-                              await VoucherDialog()
-                                  .showVoucherDetails(
-                                  details, context,
-                                  rewardId: item
-                                      .LOYALTY_CUST_REWARD_ID);
-                              await loadVoucher();
-                              setState(() {
-
-                              });
-                            } else {
-                              bool genBarcode = await showDialog(
-                                  context: context,
-                                  builder: (context) => SimpleDialog(
-                                    children: [
-                                      Icon(
-                                        FontAwesomeIcons.gifts,
-                                        size: 60,
-                                      ),
-                                      SizedBox(height: 15),
-                                      Center(
-                                          child: Text(
-                                            "Gunakan Voucher ini ?",
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight:
-                                                FontWeight.w400),
-                                          )),
-                                      SizedBox(height: 15),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .center,
-                                        children: [
-                                          FlatButton(
-                                              minWidth: 120,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                  BorderRadius
-                                                      .circular(
-                                                      15.0),
-                                                  side: BorderSide(
-                                                      color: Color
-                                                          .fromRGBO(
-                                                          64,
-                                                          64,
-                                                          222,
-                                                          1))),
-                                              padding:
-                                              EdgeInsets.all(
-                                                  10),
-                                              onPressed: () {
-                                                Navigator.pop(
-                                                    context,
-                                                    false);
-                                              },
-                                              child: Text(
-                                                "Batal",
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .w500),
-                                              )),
-                                          SizedBox(width: 15),
-                                          FlatButton(
-                                              minWidth: 120,
-                                              color: Colors.green,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                  BorderRadius
-                                                      .circular(
-                                                      15.0)),
-                                              padding:
-                                              EdgeInsets.all(
-                                                  10),
-                                              onPressed: () {
-                                                Navigator.pop(
-                                                    context,
-                                                    true);
-                                              },
-                                              child: Text(
-                                                "Gunakan",
-                                                style: TextStyle(
-                                                    color: Colors
-                                                        .white,
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .w500),
-                                              )),
-                                        ],
-                                      ),
-                                    ],
-                                    backgroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            25.0),
-                                        side: BorderSide(
-                                            color: Colors
-                                                .transparent)),
-                                    contentPadding:
-                                    EdgeInsets.all(20),
-                                  ));
-
-                              if (genBarcode ?? false) {
-                                Future future = Vouchers().useVoucher(
-                                    item.LOYALTY_CUST_REWARD_ID);
-                                var res =
-                                await utils.showLoadingFuture(
-                                    context, future);
-                                if (res["STATUS"]) {
-                                  print(res["DATA"]);
-                                  await utils.genBarcode(
-                                      context,
-                                      res["DATA"]["transaction_code"],
-                                      res["DATA"]["expired"]);
-                                  await Users().refreshUser(
-                                      globVar.user.CUST_ID,
-                                      globVar.auth.corp);
-                                  setState(() {});
-                                } else {
-                                  utils.toast(res["DATA"],
-                                      type: "ERROR");
-                                }
-                              }
-                            }
-                          },
-                          child: Stack(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 10),
-                                height: 152,
-                                width:
-                                MediaQuery.of(context).size.width,
+                        height: 97,
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 4,
+                              child: Container(
+                                padding: EdgeInsets.all(8.0),
                                 decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.grey, width: 0.3),
-                                  borderRadius:
-                                  BorderRadius.circular(20),
-                                  color: Colors.white,
-                                ),
-                                child: CustomPaint(
-                                  painter: VoucherPainter(
-                                      item.DESCRIPTION),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 10),
-                                padding: EdgeInsets.all(12),
-                                height: 152,
-                                alignment: Alignment.centerRight,
+                                    color: Color.fromRGBO(0, 0, 54, 1),
+                                    borderRadius: BorderRadius.circular(5.0)),
                                 child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment
-                                          .spaceBetween,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment
-                                              .start,
-                                          children: [
-                                            Text(
-                                              "VOUCHERS",
-                                              style: GoogleFonts
-                                                  .robotoCondensed(
-                                                textStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight:
-                                                  FontWeight.w700,
-                                                  fontSize: 20,
-                                                ),
-                                              ),
-                                            ),
-                                            Text(
-                                              item.COUPON ?? "-",
-                                              style: GoogleFonts
-                                                  .robotoCondensed(
-                                                textStyle: TextStyle(
-                                                  color: Colors.amber,
-                                                  fontWeight:
-                                                  FontWeight.w700,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.end,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              "POTONGAN",
-                                              style: GoogleFonts
-                                                  .robotoCondensed(
-                                                textStyle: TextStyle(
-                                                  color:
-                                                  Color.fromRGBO(
-                                                      57,
-                                                      153,
-                                                      184,
-                                                      1),
-                                                  fontWeight:
-                                                  FontWeight.w700,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets
-                                                  .only(
-                                                  top: 15.0,
-                                                  bottom: 15.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    "${item.REWARD_VALUE ?? '-'}",
-                                                    style: GoogleFonts
-                                                        .robotoMono(
-                                                      textStyle:
-                                                      TextStyle(
-                                                        color: Color
-                                                            .fromRGBO(
-                                                            14,
-                                                            60,
-                                                            74,
-                                                            1),
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .w700,
-                                                        fontSize: 14,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    padding: EdgeInsets
-                                                        .only(
-                                                        left: 5),
-                                                    child: Icon(
-                                                        FontAwesomeIcons
-                                                            .coins,
-                                                        size: 18,
-                                                        color: Colors
-                                                            .amberAccent),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                    Image(
+                                      height: 30,
+                                      width: 120,
+                                      fit: BoxFit.fitWidth,
+                                      image: AssetImage(
+                                          "images/ThamrinfullBlack.png"),
                                     ),
-                                    // Text(item.PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 15, ),),),
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          "Kamu belum punya voucher, nih",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Color.fromRGBO(
+                                                  255, 255, 255, 1),
+                                              fontSize: 12,
+                                              letterSpacing:
+                                                  0 /*percentages not used in flutter. defaulting to zero*/,
+                                              fontWeight: FontWeight.w700,
+                                              height: 1),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ))
-                            .toList(),
-                      ),
-                    ),
-                    Container(
-                      height: 28,
-                      padding: EdgeInsets.only(top: 10, bottom: 10),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: globVar.myVouchers.length,
-                        itemBuilder: (context, index) => Padding(
-                          padding: EdgeInsets.only(left: 2, right: 2),
-                          child: Container(
-                            height: (myVoucherFocus == index) ? 8 : 4,
-                            width: (myVoucherFocus == index) ? 8 : 4,
-                            decoration: BoxDecoration(
-                                color: (myVoucherFocus == index)
-                                    ? Colors.redAccent
-                                    : Colors.grey,
-                                shape: BoxShape.circle),
-                          ),
+                            ),
+                            Expanded(
+                                flex: 5,
+                                child: Container(
+                                  padding: const EdgeInsets.all(5.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(5.0),
+                                      topRight: Radius.circular(5.0),
+                                    ),
+                                  ),
+                                  child: Image(
+                                    fit: BoxFit.fitHeight,
+                                    image: AssetImage(
+                                        "images/empty_myvoucher.png"),
+                                    gaplessPlayback: true,
+                                  ),
+                                )),
+                          ],
                         ),
                       ),
                     )
-                  ],
-                )
-          ],
-    );
+                  : Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: CarouselSlider(
+                            options: CarouselOptions(
+                              viewportFraction:
+                                  1 - (62 / MediaQuery.of(context).size.width),
+                              height: 96,
+                              enableInfiniteScroll: true,
+                              autoPlay: false,
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  myVoucherFocus = index;
+                                });
+                              },
+                              // autoPlayAnimationDuration: Duration(seconds: 3)
+                            ),
+                            items: globVar.myVouchers
+                                .map((item) => InkWell(
+                                      onTap: () async {
+                                        var result = await Vouchers()
+                                            .voucherDetails(
+                                                item.LOYALTY_CAMPAIGN_ID);
+                                        if (result["STATUS"] == 1 &&
+                                            result["DATA"].length > 0) {
+                                          var details = new Voucher.fromJson(
+                                              result["DATA"][0]);
+                                          await VoucherDialog()
+                                              .showVoucherDetails(
+                                                  details, context,
+                                                  rewardId: item
+                                                      .LOYALTY_CUST_REWARD_ID);
+                                          await loadVoucher();
+                                          setState(() {});
+                                        } else {
+                                          bool genBarcode = await showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  SimpleDialog(
+                                                    children: [
+                                                      Icon(
+                                                        FontAwesomeIcons.gifts,
+                                                        size: 60,
+                                                      ),
+                                                      SizedBox(height: 15),
+                                                      Center(
+                                                          child: Text(
+                                                        "Gunakan Voucher ini ?",
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      )),
+                                                      SizedBox(height: 15),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          FlatButton(
+                                                              minWidth: 120,
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              15.0),
+                                                                  side: BorderSide(
+                                                                      color: Color.fromRGBO(
+                                                                          64,
+                                                                          64,
+                                                                          222,
+                                                                          1))),
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(10),
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context,
+                                                                    false);
+                                                              },
+                                                              child: Text(
+                                                                "Batal",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        18,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500),
+                                                              )),
+                                                          SizedBox(width: 15),
+                                                          FlatButton(
+                                                              minWidth: 120,
+                                                              color:
+                                                                  Colors.green,
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              15.0)),
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(10),
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context,
+                                                                    true);
+                                                              },
+                                                              child: Text(
+                                                                "Gunakan",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        18,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500),
+                                                              )),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25.0),
+                                                        side: BorderSide(
+                                                            color: Colors
+                                                                .transparent)),
+                                                    contentPadding:
+                                                        EdgeInsets.all(20),
+                                                  ));
+
+                                          if (genBarcode ?? false) {
+                                            Future future = Vouchers()
+                                                .useVoucher(item
+                                                    .LOYALTY_CUST_REWARD_ID);
+                                            var res =
+                                                await utils.showLoadingFuture(
+                                                    context, future);
+                                            if (res["STATUS"]) {
+                                              print(res["DATA"]);
+                                              await utils.genBarcode(
+                                                  context,
+                                                  res["DATA"]
+                                                      ["transaction_code"],
+                                                  res["DATA"]["expired"]);
+                                              await Users().refreshUser(
+                                                  globVar.user.CUST_ID,
+                                                  globVar.auth.corp);
+                                              setState(() {});
+                                            } else {
+                                              utils.toast(res["DATA"],
+                                                  type: "ERROR");
+                                            }
+                                          }
+                                        }
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            height: 152,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.grey,
+                                                  width: 0.3),
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              color: Colors.white,
+                                            ),
+                                            child: CustomPaint(
+                                              painter: VoucherPainter(
+                                                  item.DESCRIPTION),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            padding: EdgeInsets.all(12),
+                                            height: 152,
+                                            alignment: Alignment.centerRight,
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          "VOUCHERS",
+                                                          style: GoogleFonts
+                                                              .robotoCondensed(
+                                                            textStyle:
+                                                                TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              fontSize: 20,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          item.COUPON ?? "-",
+                                                          style: GoogleFonts
+                                                              .robotoCondensed(
+                                                            textStyle:
+                                                                TextStyle(
+                                                              color:
+                                                                  Colors.amber,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              fontSize: 16,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      children: [
+                                                        Text(
+                                                          "POTONGAN",
+                                                          style: GoogleFonts
+                                                              .robotoCondensed(
+                                                            textStyle:
+                                                                TextStyle(
+                                                              color: Color
+                                                                  .fromRGBO(
+                                                                      57,
+                                                                      153,
+                                                                      184,
+                                                                      1),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              fontSize: 16,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 15.0,
+                                                                  bottom: 15.0),
+                                                          child: Row(
+                                                            children: [
+                                                              Text(
+                                                                "${item.REWARD_VALUE ?? '-'}",
+                                                                style: GoogleFonts
+                                                                    .robotoMono(
+                                                                  textStyle:
+                                                                      TextStyle(
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            14,
+                                                                            60,
+                                                                            74,
+                                                                            1),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    fontSize:
+                                                                        14,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Container(
+                                                                padding: EdgeInsets
+                                                                    .only(
+                                                                        left:
+                                                                            5),
+                                                                child: Icon(
+                                                                    FontAwesomeIcons
+                                                                        .coins,
+                                                                    size: 18,
+                                                                    color: Colors
+                                                                        .amberAccent),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                // Text(item.PERIOD,style: GoogleFonts.robotoCondensed(textStyle: TextStyle(color: Color.fromRGBO(57,153,184,1),fontWeight: FontWeight.w700,fontSize: 15, ),),),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ))
+                                .toList(),
+                          ),
+                        ),
+                        Container(
+                          height: 28,
+                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: globVar.myVouchers.length,
+                            itemBuilder: (context, index) => Padding(
+                              padding: EdgeInsets.only(left: 2, right: 2),
+                              child: Container(
+                                height: (myVoucherFocus == index) ? 8 : 4,
+                                width: (myVoucherFocus == index) ? 8 : 4,
+                                decoration: BoxDecoration(
+                                    color: (myVoucherFocus == index)
+                                        ? Colors.redAccent
+                                        : Colors.grey,
+                                    shape: BoxShape.circle),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+            ],
+          );
   }
 
   Widget supports() {
     List<Widget> CS = [
       Icon(
-      FontAwesomeIcons.phoneSquareAlt,
-      size: 60,
-    ),
+        FontAwesomeIcons.phoneSquareAlt,
+        size: 60,
+      ),
       SizedBox(height: 15),
       Center(
           child: Text(
-            "Kami tersedia dalam",
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight:
-                FontWeight.w400),
-          ))
+        "Kami tersedia dalam",
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+      ))
     ];
     List<Widget> FAQ = [
       Icon(
@@ -1490,26 +1537,26 @@ class _HomePageState extends State<HomePage> with RouteAware {
       SizedBox(height: 15),
       Center(
           child: Text(
-            "Have question?",
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight:
-                FontWeight.w400),
-          )),
+        "Have question?",
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+      )),
     ];
     CSList.forEach((element) {
-      String url = (element.message_body!=null||element.message_body.contains('<'))?element.message_body.substring(element.message_body.indexOf('>')+1,element.message_body.lastIndexOf('</')):null;
+      String url =
+          (element.message_body != null || element.message_body.contains('<'))
+              ? element.message_body.substring(
+                  element.message_body.indexOf('>') + 1,
+                  element.message_body.lastIndexOf('</'))
+              : null;
       CS.add(Divider());
       CS.add(InkWell(
         onTap: () => utils.launchBrowserURL(url.trim()),
         child: Row(
-          mainAxisAlignment:
-          MainAxisAlignment
-              .spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CachedNetworkImage(
               httpHeaders: {
-                "Authorization":"bearer ${globVar.tokenRest.token}"
+                "Authorization": "bearer ${globVar.tokenRest.token}"
               },
               imageUrl: element.message_image,
               imageBuilder: (context, imageProvider) => Image(
@@ -1535,72 +1582,49 @@ class _HomePageState extends State<HomePage> with RouteAware {
             // ),
             Text(
               element.short_title,
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight:
-                  FontWeight.w400),
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
             )
           ],
         ),
       ));
     });
-    if(CSList.length==0){
+    if (CSList.length == 0) {
       CS.add(Divider());
-      CS.add(
-          Row(
-            mainAxisAlignment:
-            MainAxisAlignment
-                .center,
-            children: [
-              Text(
-                "Informasi ini belum tersedia",
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight:
-                    FontWeight.w400),
-              )
-            ],
+      CS.add(Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Informasi ini belum tersedia",
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
           )
-      );
+        ],
+      ));
     }
     FAQList.forEach((element) {
       FAQ.add(Divider());
       FAQ.add(InkWell(
-        onTap: ()=>Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => NewsDetail(element))),
+        onTap: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => NewsDetail(element))),
         child: Padding(
-          padding:
-          const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Text(
             element.short_title,
-            style: TextStyle(
-                fontSize: 14,
-                fontWeight:
-                FontWeight.w400),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
           ),
         ),
       ));
     });
-    if(FAQList.length==0){
+    if (FAQList.length == 0) {
       FAQ.add(Divider());
-      FAQ.add(
-          Row(
-            mainAxisAlignment:
-            MainAxisAlignment
-                .center,
-            children: [
-              Text(
-                "Informasi ini belum tersedia",
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight:
-                    FontWeight.w400),
-              )
-            ],
+      FAQ.add(Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Informasi ini belum tersedia",
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
           )
-      );
+        ],
+      ));
     }
     return (globVar.isLoading ?? true)
         ? Padding(
@@ -1645,7 +1669,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                           Text(
                             "Hubungi Kami",
                             style: TextStyle(
-                                fontWeight: FontWeight.w300, fontSize: 18),
+                                fontWeight: FontWeight.w400, fontSize: 18),
                           ),
                         ],
                       ),
@@ -1671,7 +1695,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                   await showDialog(
                                       context: context,
                                       builder: (context) => SimpleDialog(
-                                            children:CS,
+                                            children: CS,
                                             backgroundColor: Colors.white,
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -1741,9 +1765,9 @@ class _HomePageState extends State<HomePage> with RouteAware {
                 child: Row(
                   children: [
                     Text(
-                      "Siap melayani anda di",
+                      "Siap Melayani Anda",
                       style:
-                          TextStyle(fontWeight: FontWeight.w300, fontSize: 18),
+                          TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
                     ),
                     // (globVar.isLoading)?Container(height: 15,width: 15,child: CircularProgressIndicator()):Text("${globVar.myVouchers.length}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18),),
                     // Text(" voucher",style: TextStyle(
@@ -1831,28 +1855,37 @@ class _HomePageState extends State<HomePage> with RouteAware {
                           child: Column(children: <Widget>[
                             CachedNetworkImage(
                               httpHeaders: {
-                                "Authorization":"bearer ${globVar.tokenRest.token}"
+                                "Authorization":
+                                    "bearer ${globVar.tokenRest.token}"
                               },
-                              imageUrl: i.message_thumbnail,
-                              imageBuilder: (context, imageProvider) => Container(
-                                width: width,
-                                height: height * 0.61,
-                                decoration: BoxDecoration(
-                                  image: (i.message_image == null)
-                                      ? null
-                                      : DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.fill),
-                                ),
+                              imageUrl: i.message_image,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: (i.message_image != null)
+                                    ? BoxDecoration(
+                                        image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.fitWidth))
+                                    : null,
+                                width: 175,
+                                height: 89,
+                                child: (i.message_image == null)
+                                    ? Center(
+                                        child: Text("No Image"),
+                                      )
+                                    : null,
                               ),
                               placeholder: (context, url) => Container(
                                   padding: EdgeInsets.all(2),
                                   width: 20,
                                   child: LinearProgressIndicator(
                                     backgroundColor: Colors.grey,
-                                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                                    valueColor:
+                                        new AlwaysStoppedAnimation<Color>(
+                                            Colors.white),
                                   )),
-                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
                             ),
                             // Container(
                             //   width: width,
@@ -1872,7 +1905,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                 child: Column(
                                   children: [
                                     Container(
-                                      width:width,
+                                      width: width,
                                       child: Text(
                                         i.short_title ?? '-',
                                         textAlign: TextAlign.left,
@@ -1888,15 +1921,17 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                     Expanded(
                                       child: Container(
                                         alignment: Alignment.bottomRight,
-                                        width:width,
+                                        width: width,
                                         child: Text(
                                           "Lihat detail",
                                           textAlign: TextAlign.right,
                                           style: TextStyle(
-                                              decoration: TextDecoration.underline,
-                                              color: Color.fromRGBO(117, 83, 83, 0.81),
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              color: Color.fromRGBO(
+                                                  117, 83, 83, 0.81),
                                               fontSize: 10,
-                                              letterSpacing: 0 ,
+                                              letterSpacing: 0,
                                               fontWeight: FontWeight.w700,
                                               height: 1),
                                         ),
@@ -1915,7 +1950,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    if(globVar.user==null) return Container(color:Colors.white);
+    if (globVar.user == null) return Container(color: Colors.white);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: WillPopScope(
@@ -2017,7 +2052,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
   @override
   void didPushNext() async {
     //pushed from home
-    if(globVar.user!= null){
+    if (globVar.user != null) {
       if ((ModalRoute.of(context).settings.name == '/home' ||
           ModalRoute.of(context).settings.name == '/')) {
         var isFinish = await Users().refreshUser(
@@ -2627,7 +2662,6 @@ class _HomePageState extends State<HomePage> with RouteAware {
   loadMerchants() async {
     var res = await ContentApi().getContents("MERCHANT");
     if (res["STATUS"] == 1) {
-      MerchantList.clear();
       for (var i = 0; i < res["DATA"].length; i++) {
         MerchantList.add(Content.fromJson(res["DATA"][i]));
       }
