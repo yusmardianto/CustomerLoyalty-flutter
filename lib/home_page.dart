@@ -1990,6 +1990,13 @@ class _HomePageState extends State<HomePage> with RouteAware {
                         availVouchers(),
                         merchant(),
                         supports(),
+                        (globVar.isLoading??true)?Container():Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Align(
+                            alignment:Alignment.centerRight,
+                            child: Text("Ver. $currentVer",style:TextStyle(fontSize: 13,color: Colors.grey,fontWeight:FontWeight.w600)),
+                          ),
+                        ),
                       ],
                     ),
                   ),

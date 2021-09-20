@@ -100,11 +100,16 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
+                alignment:Alignment.bottomRight,
                 decoration: BoxDecoration(
                     image:DecorationImage(
                         image: AssetImage("images/splash.jpg"),
                         fit: BoxFit.fill
                     )
+                ),
+                child:Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text("Ver. $currentVer",style:TextStyle(fontSize:13,color:Colors.white,fontWeight:FontWeight.w600)),
                 ),
               ),
               Column(

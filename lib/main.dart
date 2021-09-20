@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'DataType/contents.dart';
 import 'api/contents.dart';
 import 'login_page.dart';
@@ -27,7 +28,7 @@ NumberFormat numberFormat = NumberFormat.decimalPattern('id');
 GlobalKey<NavigatorState> navKey = new GlobalKey<NavigatorState>();
 RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 List<Content> featureList = [];
-
+String currentVer ='-';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   // SharedPreferences.setMockInitialValues({});
@@ -78,6 +79,8 @@ preload()async{
     catch(e){
       print("error, $e");
     }
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    currentVer = info.version;
     if(globVar==null){
     globVar = new GlobVar();
     await utils.restoreGlobVar();
@@ -86,6 +89,7 @@ preload()async{
     }
     await Future.delayed(Duration(seconds: 2));
     }
+
 }
 
 class MyApp extends StatelessWidget {
