@@ -109,7 +109,7 @@ class Util{
         "bearer ${globVar.tokenRest.token}";
       }
       Future<http.Response> futureResponse = http.post(
-          '$url', headers: headers,
+          Uri.parse('$url'), headers: headers,
           body: file.readAsBytesSync());
       if (timeout)
         futureResponse.timeout(
@@ -153,7 +153,7 @@ class Util{
         "bearer ${globVar.tokenRest.token}";
       }
       Future<http.Response> futureResponse = http.put(
-          '$url', headers: headers,
+          Uri.parse('$url'), headers: headers,
           body: json.encode(jsonData));;
       if (timeout)
         futureResponse.timeout(
@@ -198,7 +198,7 @@ class Util{
             "bearer ${globVar.tokenRest.token}";
       }
       Future<http.Response> futureResponse = http.get(
-          '$url', headers: headers);
+          Uri.parse('$url'), headers: headers);
       if (timeout)
         futureResponse.timeout(
             Duration(seconds: second));
@@ -268,6 +268,7 @@ class Util{
         number = input;
       }
       else{
+        if(input.includes('%')) return input;
         number = int.parse(input);
       }
       return NumberFormat.currency(locale: "id",decimalDigits: 0,symbol: '').format(number);

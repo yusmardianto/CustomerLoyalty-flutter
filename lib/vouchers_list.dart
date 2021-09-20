@@ -86,27 +86,6 @@ class _VouchersListState extends State<VouchersList>  with SingleTickerProviderS
     List<Widget> myVoucher = [];
     myVoucher.addAll(globVar.myVouchers.map((e) => InkWell(
       onTap: ()async {
-        // showDialog(
-        //     context: context,
-        //     builder:(context)=>AlertDialog(
-        //       content: Text("Gunakan Voucher ini ?"),
-        //       actions: [
-        //         TextButton(
-        //           onPressed: (){
-        //             Navigator.pop(context);
-        //           },
-        //           child: Text("Batal"),
-        //         ),
-        //         TextButton(
-        //           onPressed: (){
-        //             Navigator.pop(context);
-        //           },
-        //           child: Text("Gunakan"),
-        //         ),
-        //       ],
-        //     )
-        // );
-
         bool genBarcode = await showDialog(
             context: context,
             builder: (context)=>SimpleDialog(

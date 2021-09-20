@@ -6,7 +6,7 @@ class Voucher{
   String PUSH_NOTIF_TEXT;
   String PERIOD;
   int COST_IN_POINT;
-  int REWARD_VALUE;
+  String REWARD_VALUE;
   int LOYALTY_CAMPAIGN_ID;
   String SHORT_DESC;
   String CONDITION_DESC;
@@ -37,7 +37,7 @@ class Voucher{
         PUSH_NOTIF_TEXT = json["PUSH_NOTIF_TEXT"],
         PERIOD = json["PERIOD"],
         COST_IN_POINT = json["COST_IN_POINT"],
-        REWARD_VALUE = json["REWARD_VALUE"],
+        REWARD_VALUE = json["REWARD_VALUE_P"],
         LOYALTY_CAMPAIGN_ID = json["LOYALTY_CAMPAIGN_ID"],
         SHORT_DESC = json["SHORT_DESC"],
         CONDITION_DESC = json["CONDITION_DESC"],
@@ -81,7 +81,7 @@ class MyVoucher{
   String COUPON;
   String PERIOD;
   DateTime CREATED_DATE;
-  int REWARD_VALUE;
+  String REWARD_VALUE;
   int LOYALTY_CUST_REWARD_ID;
   int LOYALTY_CAMPAIGN_ID;
 
@@ -104,7 +104,7 @@ class MyVoucher{
         COUPON = json["COUPON"],
         PERIOD = json["PERIOD"],
         CREATED_DATE = DateTime.parse(json["CREATED_DATE"]).toLocal(),
-        REWARD_VALUE = json["REWARD_VALUE"],
+        REWARD_VALUE = json["REWARD_VALUE_P"],
         LOYALTY_CUST_REWARD_ID = json["LOYALTY_CUST_REWARD_ID"],
         LOYALTY_CAMPAIGN_ID = json["LOYALTY_CAMPAIGN_ID"]
   ;

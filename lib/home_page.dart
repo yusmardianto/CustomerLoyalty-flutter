@@ -204,9 +204,10 @@ class _HomePageState extends State<HomePage> with RouteAware {
                 onTap: () async {
                   await Navigator.push(context,
                       MaterialPageRoute(builder: (context) => NewsDetail(i)));
-                  await Users()
-                      .refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                  setState(() {});
+                  // await Users()
+                  //     .refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                  // loadBanners(dontWait:true);
+                  // setState(() {});
                 },
                 child: CachedNetworkImage(
                   httpHeaders: {
@@ -229,14 +230,17 @@ class _HomePageState extends State<HomePage> with RouteAware {
                           image: imageProvider,
                         )),
                   ),
-                  placeholder: (context, url) => Container(
-                      padding: EdgeInsets.all(2),
-                      width: 20,
-                      child: LinearProgressIndicator(
-                        backgroundColor: Colors.grey,
-                        valueColor:
-                            new AlwaysStoppedAnimation<Color>(Colors.white),
-                      )),
+                  placeholder: (context, url) => Padding(
+                    padding: const EdgeInsets.only(top:50.0,bottom:50.0,left:150,right:150),
+                    child: Container(
+                        width: 50,
+                        height:20,
+                        child: LinearProgressIndicator(
+                          backgroundColor: Colors.grey,
+                          valueColor:
+                              new AlwaysStoppedAnimation<Color>(Colors.white),
+                        )),
+                  ),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
                 // Container(
@@ -2015,6 +2019,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
   @override
   void didPopNext() async {
     //popped to home
+    print('poped to home');
     // final route = ModalRoute.of(context).settings.name;
     if ((ModalRoute.of(context).settings.name == '/home' ||
         ModalRoute.of(context).settings.name == '/')) {
@@ -2037,6 +2042,11 @@ class _HomePageState extends State<HomePage> with RouteAware {
             exit(0);
           }
         }
+        loadVoucher();
+        loadAvailableVoucher();
+        loadNews();
+        loadMerchants();
+        loadBanners(dontWait:true);
       }
     }
     // print('didPopNext route: $route');
@@ -2578,6 +2588,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
     } catch (e) {
       utils.toast("Error dalam memperbarui data. Cek koneksi internet.",
           type: 'ERROR');
+      print(e);
       setState(() {
         globVar.isLoading = false;
       });
@@ -2605,7 +2616,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
     }
   }
 
-  loadBanners() async {
+  loadBanners({dontWait: false}) async {
     var res = await ContentApi().getContents("PROMOTIONS");
     if (res["STATUS"] == 1) {
       BannerList.clear();
@@ -2616,7 +2627,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
         myVoucherFocus = 0;
         availVoucherFocus = 0;
         bannerFocus = 0;
-        globVar.isLoading = false;
+        if(!dontWait)globVar.isLoading = false;
       });
     } else {
       throw ('Error fetching banners!');
@@ -2662,6 +2673,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
   loadMerchants() async {
     var res = await ContentApi().getContents("MERCHANT");
     if (res["STATUS"] == 1) {
+      MerchantList.clear();
       for (var i = 0; i < res["DATA"].length; i++) {
         MerchantList.add(Content.fromJson(res["DATA"][i]));
       }
