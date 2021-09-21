@@ -124,41 +124,17 @@ class _TransactionsState extends State<Transactions> {
                       child: Stack(
                         children: [
                           Positioned.fill(child: Container(color: Colors.white,)),
-                          Positioned.fill(child: (transList.length==0)
-                              ?SmartRefresher(enablePullDown: true,
-                              header: WaterDropHeader(),
-                              controller: _refreshController,
-                              onRefresh: _onRefresh,
-                              child: Center(child: (globVar.isLoading)?CircularProgressIndicator():Text("Data kosong",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Colors.black54),)))
-                              :Column(
+                          Positioned.fill(child: Column(
                             children: [
-                              // Container(
-                              //   padding: EdgeInsets.only(left: 18,right:18,top: 11,bottom: 11),
-                              //   decoration: BoxDecoration(
-                              //       color: Colors.white,
-                              //       borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))
-                              //   ),
-                              //   child: Row(
-                              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              //     children: [
-                              //       Text("Total Pembelian",style: TextStyle(fontSize: 18,fontStyle: FontStyle.normal,fontWeight: FontWeight.w400),),
-                              //       Row(
-                              //         mainAxisSize: MainAxisSize.min,
-                              //         children: [
-                              //           Text("45.000.000",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black54,fontSize: 18,fontWeight: FontWeight.w300,fontStyle: FontStyle.normal)),),
-                              //           Text(" IDR",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,fontStyle: FontStyle.normal))
-                              //         ],
-                              //       ),
-                              //     ],
-                              //   ),
-                              // ),
                               Expanded(
                                 child: SmartRefresher(
                                   enablePullDown: true,
-                                  header: WaterDropHeader(),
+                                  // header: WaterDropHeader(),
                                   controller: _refreshController,
                                   onRefresh: _onRefresh,
-                                  child: ListView.builder(padding: EdgeInsets.all(0.0),itemCount: transList.map((i)=>DateFormat('dd-MMM-yyyy').format(i.TRANSACTION_DATE)).toSet().length,itemBuilder: (context,index)
+                                  child: (transList.length==0)
+                                      ?Center(child: (globVar.isLoading)?CircularProgressIndicator():Text("Data kosong",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Colors.black54),))
+                                      :ListView.builder(padding: EdgeInsets.all(0.0),itemCount: transList.map((i)=>DateFormat('dd-MMM-yyyy').format(i.TRANSACTION_DATE)).toSet().length,itemBuilder: (context,index)
                                   {
                                     var date = transList.map((i)=>DateFormat('dd-MMM-yyyy').format(i.TRANSACTION_DATE)).toSet().toList();
                                     var transaction = transList.where((i) => DateFormat('dd-MMM-yyyy').format(i.TRANSACTION_DATE)==date[index]);
@@ -187,7 +163,7 @@ class _TransactionsState extends State<Transactions> {
                                                           ?Icon(FontAwesomeIcons.angleDoubleUp,size: 17,color: Color.fromRGBO(34, 168, 56, 1),)
                                                           :Icon(FontAwesomeIcons.angleDoubleDown,size: 17,color: Colors.redAccent,),
                                                       Text(
-                                                         "${utils.thousandSeperator(i.POINT_EARN) ?? 0}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.w300,fontSize: 14,fontStyle: FontStyle.normal)),),
+                                                        "${utils.thousandSeperator(i.POINT_EARN) ?? 0}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.w300,fontSize: 14,fontStyle: FontStyle.normal)),),
                                                       SizedBox(width: 2,),
                                                       Icon(FontAwesomeIcons.coins,size: 17,color: Colors.amber,),
                                                     ],
@@ -215,7 +191,99 @@ class _TransactionsState extends State<Transactions> {
                                 ),
                               ),
                             ],
-                          ))
+                          )),
+                          // Positioned.fill(child: (transList.length==0)
+                          //     ?SmartRefresher(enablePullDown: true,
+                          //     header: WaterDropHeader(),
+                          //     controller: _refreshController,
+                          //     onRefresh: _onRefresh,
+                          //     child: Center(child: (globVar.isLoading)?CircularProgressIndicator():Text("Data kosong",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Colors.black54),)))
+                          //     :Column(
+                          //   children: [
+                          //     // Container(
+                          //     //   padding: EdgeInsets.only(left: 18,right:18,top: 11,bottom: 11),
+                          //     //   decoration: BoxDecoration(
+                          //     //       color: Colors.white,
+                          //     //       borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))
+                          //     //   ),
+                          //     //   child: Row(
+                          //     //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     //     children: [
+                          //     //       Text("Total Pembelian",style: TextStyle(fontSize: 18,fontStyle: FontStyle.normal,fontWeight: FontWeight.w400),),
+                          //     //       Row(
+                          //     //         mainAxisSize: MainAxisSize.min,
+                          //     //         children: [
+                          //     //           Text("45.000.000",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black54,fontSize: 18,fontWeight: FontWeight.w300,fontStyle: FontStyle.normal)),),
+                          //     //           Text(" IDR",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,fontStyle: FontStyle.normal))
+                          //     //         ],
+                          //     //       ),
+                          //     //     ],
+                          //     //   ),
+                          //     // ),
+                          //     Expanded(
+                          //       child: SmartRefresher(
+                          //         enablePullDown: true,
+                          //         header: WaterDropHeader(),
+                          //         controller: _refreshController,
+                          //         onRefresh: _onRefresh,
+                          //         child: ListView.builder(padding: EdgeInsets.all(0.0),itemCount: transList.map((i)=>DateFormat('dd-MMM-yyyy').format(i.TRANSACTION_DATE)).toSet().length,itemBuilder: (context,index)
+                          //         {
+                          //           var date = transList.map((i)=>DateFormat('dd-MMM-yyyy').format(i.TRANSACTION_DATE)).toSet().toList();
+                          //           var transaction = transList.where((i) => DateFormat('dd-MMM-yyyy').format(i.TRANSACTION_DATE)==date[index]);
+                          //           List<Widget> children = transaction.map((i) => Padding(
+                          //             padding: const EdgeInsets.only(bottom: 2.0),
+                          //             child: Container(
+                          //                 padding: EdgeInsets.only(left:11, right:11,top:15,bottom:15),
+                          //                 color: Colors.white,
+                          //                 child:Column(
+                          //                   children: [
+                          //                     Row(
+                          //                       mainAxisAlignment: MainAxisAlignment.start,
+                          //                       children: [
+                          //                         Text("${i.POS_NAME??'-'}",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w700),)
+                          //                       ],
+                          //                     ),
+                          //                     SizedBox(height: 10,),
+                          //                     Row(
+                          //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //                       children: [
+                          //                         Text("${i.DESCRIPTION??'#'}",style: TextStyle(fontWeight: FontWeight.w300,fontSize: 13),),
+                          //                         Row(
+                          //                           mainAxisSize: MainAxisSize.min,
+                          //                           children: [
+                          //                             i.POINT_EARN>=0
+                          //                                 ?Icon(FontAwesomeIcons.angleDoubleUp,size: 17,color: Color.fromRGBO(34, 168, 56, 1),)
+                          //                                 :Icon(FontAwesomeIcons.angleDoubleDown,size: 17,color: Colors.redAccent,),
+                          //                             Text(
+                          //                                "${utils.thousandSeperator(i.POINT_EARN) ?? 0}",style: GoogleFonts.robotoMono(textStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.w300,fontSize: 14,fontStyle: FontStyle.normal)),),
+                          //                             SizedBox(width: 2,),
+                          //                             Icon(FontAwesomeIcons.coins,size: 17,color: Colors.amber,),
+                          //                           ],
+                          //                         )
+                          //                       ],
+                          //                     ),
+                          //                   ],
+                          //                 )
+                          //             ),
+                          //           )).toList();
+                          //           return  Container(
+                          //               color: Color.fromRGBO(223,223,223,1),
+                          //               child:Column(
+                          //                 crossAxisAlignment: CrossAxisAlignment.start,
+                          //                 children: [
+                          //                   Container(padding: EdgeInsets.all(4.0), child: Text(date[index],style: TextStyle(color: Color.fromRGBO(117,117,117,1),fontWeight: FontWeight.w700,fontSize: 13,),)),
+                          //                   Column(
+                          //                     children: children,
+                          //                   ), // Loop pakek map agek ini
+                          //                 ],
+                          //               )
+                          //           );
+                          //         }
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ))
                         ],
                       ),
                     ),

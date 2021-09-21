@@ -29,6 +29,7 @@ class Vouchers{
           "loyalty_campaign_id" : loyalty_campaign_id
         },
         globVar.hostRest + "/voucher/", secure: true, many: true);
+    print([loyalty_campaign_id,res]);
     return res;
   }
 

@@ -25,6 +25,8 @@ class _VouchersListState extends State<VouchersList>  with SingleTickerProviderS
   TabController _controller;
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
+  RefreshController _refreshController2 =
+  RefreshController(initialRefresh: false);
 
   void _onRefresh() async{
     print("refreshing");
@@ -32,7 +34,12 @@ class _VouchersListState extends State<VouchersList>  with SingleTickerProviderS
       await Future.delayed(Duration(milliseconds: 1000));
       loadAvailableVoucher();
       loadMyVoucher();
-      _refreshController.refreshCompleted();
+      if(_controller.index == 0){
+        _refreshController.refreshCompleted();
+      }
+      else{
+        _refreshController2.refreshCompleted();
+      }
     }
     catch(e){
       setState(() {
@@ -500,7 +507,7 @@ class _VouchersListState extends State<VouchersList>  with SingleTickerProviderS
                             ),
                           )
                               :SmartRefresher(
-                                controller: _refreshController,
+                                controller: _refreshController2,
                                 onRefresh: _onRefresh,
                                 child: ListView.builder(
                             itemCount: globVar.myVouchers.length,
