@@ -39,7 +39,7 @@ class Util{
       await backupGlobVar();
     }
   }
-  post(Map jsonData, String url,{secure:false,timeout:true,second:5,many=false,Map customHeader}) async{
+  post(Map jsonData, String url,{secure:false,timeout:true,second:8,many=false,Map customHeader}) async{
     const JsonDecoder decoder = const JsonDecoder();
     try {
       var headers = {'Content-type': 'application/json'};
@@ -48,6 +48,7 @@ class Util{
           headers[element] = customHeader[element];
         });
       }
+
       if(secure) {
         await tokenFetch();
         headers["Authorization"] =
@@ -67,6 +68,7 @@ class Util{
         return {"STATUS":(response.statusCode != 200)?0:1,"DATA":htmlErrorTitle(response.body.toString())};
       }
       else{
+        // print("post response => ${response.body.toString()}");
         final Map data = decoder.convert(response.body);
         if(data["STATUS"]==200){
           final Map res = {};
@@ -85,6 +87,7 @@ class Util{
         }
       }
     } on TimeoutException catch(e){
+      // print(e);
       return {"STATUS":0,"DATA":"Request Timeout"};
     }
     on Exception catch(exception){

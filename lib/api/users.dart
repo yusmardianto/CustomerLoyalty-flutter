@@ -7,7 +7,7 @@ import '../DataType/auth.dart';
 class Users{
   refreshUser(cust_id,corp,{check_session:false})async{
     var login_id = globVar.auth.login_id;
-    var res = await utils.post({"cust_id":cust_id,"corp":corp,"login_id":login_id},globVar.hostRest+"/customer/",secure: true);
+    var res = await utils.post({"cust_id":cust_id,"corp":corp,"login_id":login_id,"urlOnly":'TRUE'},globVar.hostRest+"/customer/",secure: true);
     if(res["STATUS"]!=1){
       return false;
     }

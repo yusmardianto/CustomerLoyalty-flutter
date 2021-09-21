@@ -20,10 +20,10 @@ class User {
   String IDENTITY_NUMBER;
   String CITY;
   String PROVINCE;
-  Uint8List LOYALTY_LEVEL_IMAGE;
-  Uint8List CUST_PROFILE_IMAGE;
+  String LOYALTY_LEVEL_IMAGE;
+  String CUST_PROFILE_IMAGE;
   String MEMBERSHIP;
-  Uint8List MEMBERSHIP_IMAGE;
+  String MEMBERSHIP_IMAGE;
 
   User(
       this.CUST_ID,
@@ -66,10 +66,13 @@ class User {
     this.LOYALTY_LEVEL = json[jsonKeys[13]];
     this.CITY = json[jsonKeys[14]];
     this.PROVINCE = json[jsonKeys[15]];
-    this.LOYALTY_LEVEL_IMAGE = (json[jsonKeys[16]]==null||json[jsonKeys[16]]=='null')?null:Base64Decoder().convert(json[jsonKeys[16]]);
-    this.CUST_PROFILE_IMAGE = (json[jsonKeys[17]]==null||json[jsonKeys[17]]=='null')?null:Base64Decoder().convert(json[jsonKeys[17]]);
+    this.LOYALTY_LEVEL_IMAGE = json[jsonKeys[16]];
+    this.CUST_PROFILE_IMAGE = json[jsonKeys[17]];
+    // this.LOYALTY_LEVEL_IMAGE = (json[jsonKeys[16]]==null||json[jsonKeys[16]]=='null')?null:Base64Decoder().convert(json[jsonKeys[16]]);
+    // this.CUST_PROFILE_IMAGE = (json[jsonKeys[17]]==null||json[jsonKeys[17]]=='null')?null:Base64Decoder().convert(json[jsonKeys[17]]);
     this.MEMBERSHIP = json[jsonKeys[18]];
-    this.MEMBERSHIP_IMAGE =  (json[jsonKeys[19]]==null||json[jsonKeys[19]]=='null')?null:Base64Decoder().convert(json[jsonKeys[19]]);
+    this.MEMBERSHIP_IMAGE = json[jsonKeys[19]];
+    // this.MEMBERSHIP_IMAGE =  (json[jsonKeys[19]]==null||json[jsonKeys[19]]=='null')?null:Base64Decoder().convert(json[jsonKeys[19]]);
   }
 
   // User.fromJson(Map<String, dynamic> json)
@@ -109,10 +112,13 @@ class User {
     "LOYALTY_LEVEL":LOYALTY_LEVEL,
     "CITY" : CITY,
     "PROVINCE" : PROVINCE,
-    "LOYALTY_LEVEL_IMAGE":LOYALTY_LEVEL_IMAGE==null?null:Base64Encoder().convert(LOYALTY_LEVEL_IMAGE),
-    "CUST_PROFILE_IMAGE" :CUST_PROFILE_IMAGE==null?null: Base64Encoder().convert(CUST_PROFILE_IMAGE),
+    // "LOYALTY_LEVEL_IMAGE":LOYALTY_LEVEL_IMAGE==null?null:Base64Encoder().convert(LOYALTY_LEVEL_IMAGE),
+    // "CUST_PROFILE_IMAGE" :CUST_PROFILE_IMAGE==null?null: Base64Encoder().convert(CUST_PROFILE_IMAGE),
+    "LOYALTY_LEVEL_IMAGE": LOYALTY_LEVEL_IMAGE,
+    "CUST_PROFILE_IMAGE" : CUST_PROFILE_IMAGE,
     "MEMBERSHIP" :MEMBERSHIP,
-    "MEMBERSHIP_IMAGE" :MEMBERSHIP_IMAGE==null?null: Base64Encoder().convert(MEMBERSHIP_IMAGE),
+    // "MEMBERSHIP_IMAGE" :MEMBERSHIP_IMAGE==null?null: Base64Encoder().convert(MEMBERSHIP_IMAGE),
+    "MEMBERSHIP_IMAGE" : MEMBERSHIP_IMAGE
   };
 
   Map<String, dynamic> toJsonDisplay()=>{

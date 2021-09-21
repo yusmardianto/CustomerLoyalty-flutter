@@ -11,11 +11,19 @@ class ContentApi{
         },
         globVar.hostRest + "/contents/",
         secure: true, many: true);
-    // print("res ${{
-    //   "corp": globVar.auth.corp,
-    //   "cust_id": globVar.user.CUST_ID,
-    //   "type": news,
-    // }}");
+    return res;
+  }
+
+  getAllContents()async{
+    var res = await utils.post(
+        {
+          "cust_id": (globVar.user==null)?null:globVar.user.CUST_ID,
+          "corp": (globVar.auth==null)?null:globVar.auth.corp,
+          "type": "PROMOTIONS,NEWS,MERCHANT,FAQ,CUSTOMER_SERVICE"
+        },
+        globVar.hostRest + "/page/homepage",
+        secure: true, many: true);
+
     return res;
   }
 }

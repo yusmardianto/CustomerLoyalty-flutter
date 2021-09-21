@@ -83,12 +83,12 @@ preload()async{
     currentVer = info.version;
     if(globVar==null){
     globVar = new GlobVar();
+    }
     await utils.restoreGlobVar();
     if(prefs.getBool("first_time")??true){
       await fetchFeatures();
     }
     await Future.delayed(Duration(seconds: 2));
-    }
 
 }
 

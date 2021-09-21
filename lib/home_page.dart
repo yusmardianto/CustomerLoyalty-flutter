@@ -10,7 +10,6 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 import 'CustomShape/voucher_shape.dart';
 import 'CustomWidget/bottom_appbar.dart';
 import 'CustomWidget/news_detail.dart';
@@ -23,6 +22,7 @@ import 'api/users.dart';
 import 'api/vouchers.dart';
 import 'main.dart';
 import 'vouchers_list.dart';
+import 'api/Pages/homePage.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -2049,11 +2049,12 @@ class _HomePageState extends State<HomePage> with RouteAware {
             exit(0);
           }
         }
-        loadVoucher();
-        loadAvailableVoucher();
-        loadNews();
-        loadMerchants();
-        loadBanners(dontWait:true);
+        // loadVoucher();
+        // loadAvailableVoucher();
+        // loadNews();
+        // loadMerchants();
+        // loadBanners(dontWait:true);
+        getAllSections(dontWait:true);
       }
     }
     // print('didPopNext route: $route');
@@ -2437,15 +2438,21 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               filterQuality: FilterQuality.high,
                               colorBlendMode: BlendMode.clear,
                             )
-                          : Image(
+                          :
+                          CachedNetworkImage(
+                            httpHeaders: {
+                            "Authorization": "bearer ${globVar.tokenRest.token}"
+                            },
+                            imageUrl: globVar.user.MEMBERSHIP_IMAGE,
+                            imageBuilder: (context, imageProvider) =>
+                                Image(
                               height: 18,
                               gaplessPlayback: true,
-                              // width: 60,
                               fit: BoxFit.fitWidth,
-                              // errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
-                              // image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
-                              image: MemoryImage(globVar.user.MEMBERSHIP_IMAGE),
+                              image: imageProvider,
                             ),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
+                          ),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -2529,15 +2536,29 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                 size: 18,
                                 color: Colors.white,
                               )
-                            : Image(
-                                height: 12.07,
-                                fit: BoxFit.fitHeight,
-                                gaplessPlayback: true,
-                                // errorBuilder: (context,error,stackTrace)=>Icon(FontAwesomeIcons.solidImage,size: 18,color: Colors.white,),
-                                // image: NetworkImage(globVar.hostRest+"/binary/${globVar.user.LOYALTY_LEVEL_PHOTO}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"}),
-                                image: MemoryImage(
-                                    globVar.user.LOYALTY_LEVEL_IMAGE),
-                              ),
+                            :
+                        CachedNetworkImage(
+                          httpHeaders: {
+                            "Authorization": "bearer ${globVar.tokenRest.token}"
+                          },
+                          imageUrl: globVar.user.LOYALTY_LEVEL_IMAGE,
+                          imageBuilder: (context, imageProvider) => Image(
+                            height: 12.07,
+                            fit: BoxFit.fitHeight,
+                            gaplessPlayback: true,
+                            image: imageProvider,
+                            ),
+                          placeholder: (context, url) => Container(
+                            width:30,
+                            height:10,
+                            child: LinearProgressIndicator(
+                              backgroundColor: Colors.grey,
+                              valueColor:
+                              new AlwaysStoppedAnimation<Color>(Colors.grey.withOpacity(0.3)),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        )
                       ),
                     ],
                   ),
@@ -2549,7 +2570,56 @@ class _HomePageState extends State<HomePage> with RouteAware {
       ],
     ));
   }
-
+  getAllSections ({dontWait:false}) async{
+    var res = await HomeApi().getAllSections();
+    if (res["STATUS"] == 1) {
+      var contents = res["DATA"][0]['CONTENTS'];
+      var available = res["DATA"][0]['AVAILABLE'];
+      var redeemed = res["DATA"][0]['REDEEMED'];
+      BannerList.clear();
+      var bannerArr = contents.where((element) => element["MESSAGE_TYPE"]=='PROMOTIONS').toList();
+      for (var i = 0; i < bannerArr.length; i++) {
+        BannerList.add(Content.fromJson(bannerArr[i]));
+      }
+      NewsList.clear();
+      var newsArr = contents.where((element) => element["MESSAGE_TYPE"]=='NEWS').toList();
+      for (var i = 0; i < newsArr.length; i++) {
+        NewsList.add(Content.fromJson(newsArr[i]));
+      }
+      MerchantList.clear();
+      var merchantArr = contents.where((element) => element["MESSAGE_TYPE"]=='MERCHANT').toList();
+      for (var i = 0; i < merchantArr.length; i++) {
+        MerchantList.add(Content.fromJson(merchantArr[i]));
+      }
+      FAQList.clear();
+      var faqArr = contents.where((element) => element["MESSAGE_TYPE"]=='FAQ').toList();
+      for (var i = 0; i < faqArr.length; i++) {
+        FAQList.add(Content.fromJson(faqArr[i]));
+      }
+      CSList.clear();
+      var csArr = contents.where((element) => element["MESSAGE_TYPE"]=='CUSTOMER_SERVICE').toList();
+      for (var i = 0; i < csArr.length; i++) {
+        CSList.add(Content.fromJson(csArr[i]));
+      }
+      voucherList.clear();
+      for (var i = 0; i < available.length; i++) {
+        voucherList.add(Voucher.fromJson(available[i]));
+      }
+      List<MyVoucher> myVoucherList = [];
+      for (var i = 0; i <redeemed.length; i++) {
+        myVoucherList.add(MyVoucher.fromJson(redeemed[i]));
+      }
+      globVar.myVouchers = myVoucherList;
+      setState(() {
+        myVoucherFocus = 0;
+        availVoucherFocus = 0;
+        bannerFocus = 0;
+        if(!dontWait)globVar.isLoading = false;
+      });
+    } else {
+      throw ('Error fetching banners!');
+    }
+  }
   void initialization() async {
     try {
       setState(() {
@@ -2572,24 +2642,26 @@ class _HomePageState extends State<HomePage> with RouteAware {
         if (agreement["STATUS"] && agreement["DATA"] != 'y') {
           var result = await agreementDialog(context, agreement);
           if (result ?? false) {
-            await loadVoucher();
-            await loadAvailableVoucher();
-            await loadNews();
-            await loadMerchants();
-            await loadCS();
-            await loadFAQ();
-            await loadBanners();
+            // await loadVoucher();
+            // await loadAvailableVoucher();
+            // await loadNews();
+            // await loadMerchants();
+            // await loadCS();
+            // await loadFAQ();
+            // await loadBanners();
+            await getAllSections();
           } else {
             SystemChannels.platform.invokeMethod('SystemNavigator.pop');
           }
         } else {
-          await loadVoucher();
-          await loadAvailableVoucher();
-          await loadNews();
-          await loadMerchants();
-          await loadCS();
-          await loadFAQ();
-          await loadBanners();
+          // await loadVoucher();
+          // await loadAvailableVoucher();
+          await getAllSections();
+          // await loadNews();
+          // await loadMerchants();
+          // await loadCS();
+          // await loadFAQ();
+          // await loadBanners();
         }
       }
     } catch (e) {
@@ -2716,13 +2788,14 @@ class _HomePageState extends State<HomePage> with RouteAware {
         Navigator.pushNamed(context, '/login');
       else {
         if (!isFinish) throw ("Failed refreshing user data");
-        await loadVoucher();
-        await loadAvailableVoucher();
-        await loadNews();
-        await loadMerchants();
-        await loadCS();
-        await loadFAQ();
-        await loadBanners();
+        // await loadVoucher();
+        // await loadAvailableVoucher();
+        // await loadNews();
+        // await loadMerchants();
+        // await loadCS();
+        // await loadFAQ();
+        // await loadBanners();
+        await getAllSections();
       }
       _refreshController.refreshCompleted();
     } catch (e) {

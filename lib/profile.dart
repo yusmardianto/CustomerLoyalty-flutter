@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:my_thamrin_club/home_page.dart';
 
 import 'CustomWidget/bottom_appbar.dart';
@@ -27,7 +28,7 @@ class _ProfileState extends State<Profile> {
   Map<String,dynamic> userData;
   final _formKey = GlobalKey<FormBuilderState>();
   var gender;
-  Image profileImage;
+  // Image profileImage;
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
 
@@ -37,7 +38,7 @@ class _ProfileState extends State<Profile> {
     userData = new Map<String,dynamic>.from(globVar.user.toJsonDisplay());
     if(userData["Tanggal_Lahir"]!= null)userData.update("Tanggal_Lahir", (value) => DateFormat("dd-MMM-yyyy").parse(value));
     gender = userData["Gender"];
-    if(globVar.user.CUST_PROFILE_IMAGE!=null)profileImage = Image.memory(globVar.user.CUST_PROFILE_IMAGE);
+    // if(globVar.user.CUST_PROFILE_IMAGE!=null)profileImage = Image.network(globVar.user.CUST_PROFILE_IMAGE);
     setState(() {
 
     });
@@ -289,11 +290,25 @@ class _ProfileState extends State<Profile> {
                               child: CircleAvatar(
                                 radius: 73,
                                 backgroundColor: Colors.white,
-                                child: CircleAvatar(
+                                child:
+                                (globVar.user!=null &&globVar.user.CUST_PROFILE_IMAGE==null)?
+                                CircleAvatar(
                                   backgroundColor: Colors.grey,
                                   radius: 70,
-                                  backgroundImage: (globVar.user!=null &&globVar.user.CUST_PROFILE_IMAGE==null)?null:profileImage.image,
-                                  child: (globVar.user!=null &&globVar.user.CUST_PROFILE_IMAGE==null)?Icon(Icons.person,color: Colors.white,size: 150,):null,
+                                  child: Icon(Icons.person,color: Colors.white,size: 150,),
+                                )
+                                :CachedNetworkImage(
+                                  httpHeaders: {
+                                    "Authorization": "bearer ${globVar.tokenRest.token}"
+                                  },
+                                  imageUrl: globVar.user.CUST_PROFILE_IMAGE,
+                                  imageBuilder: (context, imageProvider) =>
+                                  CircleAvatar(
+                                    backgroundColor: Colors.grey,
+                                    radius: 70,
+                                    backgroundImage: imageProvider,
+                                  ),
+                                  errorWidget: (context, url, error) => Icon(Icons.error),
                                 ),
                               ),
                             ),
