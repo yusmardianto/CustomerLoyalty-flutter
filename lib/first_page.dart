@@ -93,7 +93,7 @@ class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMix
                                   decoration: e.message_image==null?null:BoxDecoration(
                                       image: DecorationImage(
                                           image: imageProvider,
-                                          fit: BoxFit.fitHeight
+                                          fit: BoxFit.scaleDown
                                       )
                                   ),
                                 ),
