@@ -279,17 +279,16 @@ class _HomePageState extends State<HomePage> with RouteAware {
           Container(
             height: 28,
             padding: EdgeInsets.only(top: 10, bottom: 10),
-            child: (BannerList.length == 0)
+            child: (globVar.isLoading ?? false)
                 ? Container(
                     padding: EdgeInsets.all(2),
                     width: 20,
-                    child: (globVar.isLoading ?? false)
-                        ? LinearProgressIndicator(
+                    child: LinearProgressIndicator(
                             backgroundColor: Colors.grey,
                             valueColor:
                                 new AlwaysStoppedAnimation<Color>(Colors.white),
                           )
-                        : null)
+            )
                 : ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
