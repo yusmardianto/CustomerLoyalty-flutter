@@ -28,6 +28,7 @@ class _ProfileState extends State<Profile> {
   Map<String,dynamic> userData;
   final _formKey = GlobalKey<FormBuilderState>();
   var gender;
+
   // Image profileImage;
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
@@ -38,11 +39,9 @@ class _ProfileState extends State<Profile> {
     userData = new Map<String,dynamic>.from(globVar.user.toJsonDisplay());
     if(userData["Tanggal_Lahir"]!= null)userData.update("Tanggal_Lahir", (value) => DateFormat("dd-MMM-yyyy").parse(value));
     gender = userData["Gender"];
-    // if(globVar.user.CUST_PROFILE_IMAGE!=null)profileImage = Image.network(globVar.user.CUST_PROFILE_IMAGE);
     setState(() {
-
     });
-    // profileImage = Image.network(globVar.hostRest+"/binary/${globVar.user.CUST_DISPLAY_PICTURE}",headers: {"Authorization":"bearer ${globVar.tokenRest.token}"});
+
   }
 
   void _onRefresh() async{
@@ -104,13 +103,6 @@ class _ProfileState extends State<Profile> {
                       ],
                     )
                 ),
-                // Container(
-                //   height: MediaQuery.of(context).size.height,
-                //   width: MediaQuery.of(context).size.width,
-                //   child: CustomPaint(
-                //     painter: WavePainter(),
-                //   ),
-                // ),
                 Column(
                   children: [
                     Container(width: MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height*0.15,
@@ -259,18 +251,6 @@ class _ProfileState extends State<Profile> {
                                               ),
                                             ),
                                           ),
-                                          // Divider(),
-                                          // Padding(
-                                          //   padding: EdgeInsets.only(top:10,right: 10,left: 10,bottom: 20),
-                                          //   child: Row(
-                                          //     crossAxisAlignment: CrossAxisAlignment.center,
-                                          //     children: [
-                                          //       Icon(FontAwesomeIcons.solidWindowRestore),
-                                          //       SizedBox(width: 25,),
-                                          //       Text("Lihat foto profile layar penuh"),
-                                          //     ],
-                                          //   ),
-                                          // ),
                                         ],
                                       ),
                                     ),
@@ -598,7 +578,7 @@ class _ProfileState extends State<Profile> {
                         autovalidateMode: AutovalidateMode.disabled,
                         initialValue: userData,
                         child: ListView.builder(
-                            padding: EdgeInsets.all(0),
+                            padding: EdgeInsets.only(bottom:10),
                           // padding: EdgeInsets.all(left: 25,right: 25,),
                           itemCount: globVar.user != null ?globVar.user.toJsonDisplay().keys.length:0,
                             itemBuilder: (context,idx)

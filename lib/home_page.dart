@@ -243,24 +243,6 @@ class _HomePageState extends State<HomePage> with RouteAware {
                   ),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
-                // Container(
-                //   width: MediaQuery.of(context).size.width,
-                //   height: 114,
-                //   decoration: BoxDecoration(
-                //       boxShadow: [
-                //         BoxShadow(
-                //             offset: Offset(1.0, 1.0),
-                //             color: Colors.grey,
-                //             blurRadius: 3)
-                //       ],
-                //       color: Color.fromRGBO(237, 237, 237, 1),
-                //       image: (i.message_image == null)
-                //           ? null
-                //           : DecorationImage(
-                //               fit: BoxFit.fitHeight,
-                //               image: MemoryImage(i.message_image),
-                //             )),
-                // ),
               );
             },
           );

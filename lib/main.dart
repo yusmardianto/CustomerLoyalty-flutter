@@ -47,7 +47,7 @@ _check_Update(context)async{
     }
     AppUpdateInfo _updateInfo;
     _updateInfo = await InAppUpdate.checkForUpdate();
-    if(_updateInfo?.updateAvailability == 2){
+    if(_updateInfo?.updateAvailability == UpdateAvailability.updateAvailable){
       utils.toast("Mendownload Aplikasi terbaru");
       await utils.showLoadingFuture(context,InAppUpdate.startFlexibleUpdate());
       await installUpdate();

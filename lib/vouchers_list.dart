@@ -93,69 +93,87 @@ class _VouchersListState extends State<VouchersList>  with SingleTickerProviderS
     List<Widget> myVoucher = [];
     myVoucher.addAll(globVar.myVouchers.map((e) => InkWell(
       onTap: ()async {
-        bool genBarcode = await showDialog(
-            context: context,
-            builder: (context)=>SimpleDialog(
-              children: [
-                Icon(FontAwesomeIcons.gifts,size: 60,),
-                SizedBox(height: 15),
-                Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 16,fontWeight: FontWeight.w400),)),
-                SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FlatButton(
-                        minWidth: 120,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                            side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
-                        ),
-                        padding: EdgeInsets.all(10),
-                        onPressed: (){
-                          Navigator.pop(context,false);
-                        },
-                        child: Text("Batal",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
-                    ),
-                    SizedBox(width: 15),
-                    FlatButton(
-                        minWidth: 120,
-                        color: Colors.green,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0)
-                        ),
-                        padding: EdgeInsets.all(10),
-                        onPressed: (){
-                          Navigator.pop(context,true);
-                        },
-                        child: Text("Gunakan",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
-                    ),
-                  ],
+        var item = e;
+        var result = await Vouchers()
+            .voucherDetails(
+            item.LOYALTY_CAMPAIGN_ID);
+        if (result["STATUS"] == 1 &&
+            result["DATA"].length > 0) {
+          var details = new Voucher.fromJson(
+              result["DATA"][0]);
+          await VoucherDialog()
+              .showVoucherDetails(
+              details, context,
+              rewardId: item
+                  .LOYALTY_CUST_REWARD_ID);
+          setState(() {});
+        }
+        else{
+          bool genBarcode = await showDialog(
+              context: context,
+              builder: (context)=>SimpleDialog(
+                children: [
+                  Icon(FontAwesomeIcons.gifts,size: 60,),
+                  SizedBox(height: 15),
+                  Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 16,fontWeight: FontWeight.w400),)),
+                  SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FlatButton(
+                          minWidth: 120,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                          ),
+                          padding: EdgeInsets.all(10),
+                          onPressed: (){
+                            Navigator.pop(context,false);
+                          },
+                          child: Text("Batal",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
+                      ),
+                      SizedBox(width: 15),
+                      FlatButton(
+                          minWidth: 120,
+                          color: Colors.green,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0)
+                          ),
+                          padding: EdgeInsets.all(10),
+                          onPressed: (){
+                            Navigator.pop(context,true);
+                          },
+                          child: Text("Gunakan",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
+                      ),
+                    ],
+                  ),
+                ],
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    side: BorderSide(color: Colors.transparent)
                 ),
-              ],
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0),
-                  side: BorderSide(color: Colors.transparent)
-              ),
-              contentPadding: EdgeInsets.all(20),
-            )
-        );
+                contentPadding: EdgeInsets.all(20),
+              )
+          );
 
-        if(genBarcode??false){
-          Future future = Vouchers().useVoucher(e.LOYALTY_CUST_REWARD_ID);
-          var res = await utils.showLoadingFuture(context,future);
-          if(res["STATUS"]){
-            print(res["DATA"]);
-            await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
-            // await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-            setState(() {
+          if(genBarcode??false){
+            Future future = Vouchers().useVoucher(e.LOYALTY_CUST_REWARD_ID);
+            var res = await utils.showLoadingFuture(context,future);
+            if(res["STATUS"]){
+              print(res["DATA"]);
+              await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
+              // await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+              setState(() {
 
-            });
-          }
-          else{
-            utils.toast(res["DATA"],type: "ERROR");
+              });
+            }
+            else{
+              utils.toast(res["DATA"],type: "ERROR");
+            }
           }
         }
+
       },
       child: Padding(
         padding: EdgeInsets.only(top:15),
@@ -513,69 +531,86 @@ class _VouchersListState extends State<VouchersList>  with SingleTickerProviderS
                             itemCount: globVar.myVouchers.length,
                             itemBuilder: (context,index)=>InkWell(
                                 onTap: ()async{
-                                  bool genBarcode = await showDialog(
-                                      context: context,
-                                      builder: (context)=>SimpleDialog(
-                                        children: [
-                                          Icon(FontAwesomeIcons.gifts,size: 60,),
-                                          SizedBox(height: 15),
-                                          Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 16,fontWeight: FontWeight.w400),)),
-                                          SizedBox(height: 15),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              FlatButton(
-                                                  minWidth: 120,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(15.0),
-                                                      side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
-                                                  ),
-                                                  padding: EdgeInsets.all(10),
-                                                  onPressed: (){
-                                                    Navigator.pop(context,false);
-                                                  },
-                                                  child: Text("Batal",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
-                                              ),
-                                              SizedBox(width: 15),
-                                              FlatButton(
-                                                  minWidth: 120,
-                                                  color: Colors.green,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(15.0)
-                                                  ),
-                                                  padding: EdgeInsets.all(10),
-                                                  onPressed: (){
-                                                    Navigator.pop(context,true);
-                                                  },
-                                                  child: Text("Gunakan",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
-                                              ),
-                                            ],
+                                  var item = globVar.myVouchers[index];
+                                  var result = await Vouchers()
+                                      .voucherDetails(
+                                      item.LOYALTY_CAMPAIGN_ID);
+                                  if (result["STATUS"] == 1 &&
+                                      result["DATA"].length > 0) {
+                                    var details = new Voucher.fromJson(
+                                        result["DATA"][0]);
+                                    await VoucherDialog()
+                                        .showVoucherDetails(
+                                        details, context,
+                                        rewardId: item
+                                            .LOYALTY_CUST_REWARD_ID);
+                                    setState(() {});
+                                  }else{
+                                    bool genBarcode = await showDialog(
+                                        context: context,
+                                        builder: (context)=>SimpleDialog(
+                                          children: [
+                                            Icon(FontAwesomeIcons.gifts,size: 60,),
+                                            SizedBox(height: 15),
+                                            Center(child: Text("Gunakan Voucher ini ?",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 16,fontWeight: FontWeight.w400),)),
+                                            SizedBox(height: 15),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                FlatButton(
+                                                    minWidth: 120,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(15.0),
+                                                        side: BorderSide(color: Color.fromRGBO(64, 64, 222, 1))
+                                                    ),
+                                                    padding: EdgeInsets.all(10),
+                                                    onPressed: (){
+                                                      Navigator.pop(context,false);
+                                                    },
+                                                    child: Text("Batal",style: TextStyle(fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
+                                                ),
+                                                SizedBox(width: 15),
+                                                FlatButton(
+                                                    minWidth: 120,
+                                                    color: Colors.green,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(15.0)
+                                                    ),
+                                                    padding: EdgeInsets.all(10),
+                                                    onPressed: (){
+                                                      Navigator.pop(context,true);
+                                                    },
+                                                    child: Text("Gunakan",style: TextStyle(color: Colors.white,fontStyle: FontStyle.normal,fontSize: 18,fontWeight: FontWeight.w500),)
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                          backgroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(25.0),
+                                              side: BorderSide(color: Colors.transparent)
                                           ),
-                                        ],
-                                        backgroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(25.0),
-                                            side: BorderSide(color: Colors.transparent)
-                                        ),
-                                        contentPadding: EdgeInsets.all(20),
-                                      )
-                                  );
+                                          contentPadding: EdgeInsets.all(20),
+                                        )
+                                    );
 
-                                  if(genBarcode??false){
-                                    Future future = Vouchers().useVoucher(globVar.myVouchers[index].LOYALTY_CUST_REWARD_ID);
-                                    var res = await utils.showLoadingFuture(context,future);
-                                    if(res["STATUS"]){
-                                      print(res["DATA"]);
-                                      await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
-                                      // await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
-                                      setState(() {
+                                    if(genBarcode??false){
+                                      Future future = Vouchers().useVoucher(globVar.myVouchers[index].LOYALTY_CUST_REWARD_ID);
+                                      var res = await utils.showLoadingFuture(context,future);
+                                      if(res["STATUS"]){
+                                        print(res["DATA"]);
+                                        await utils.genBarcode(context,res["DATA"]["transaction_code"],res["DATA"]["expired"]);
+                                        // await Users().refreshUser(globVar.user.CUST_ID, globVar.auth.corp);
+                                        setState(() {
 
-                                      });
-                                    }
-                                    else{
-                                      utils.toast(res["DATA"],type: "ERROR");
+                                        });
+                                      }
+                                      else{
+                                        utils.toast(res["DATA"],type: "ERROR");
+                                      }
                                     }
                                   }
+
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.only(top:15),
