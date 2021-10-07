@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,8 @@ import 'api/contents.dart';
 import 'main.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:simple_moment/simple_moment.dart';
-
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:http/io_client.dart';
 
 
 class ContentList extends StatefulWidget {
@@ -215,6 +218,14 @@ class _ContentListState extends State<ContentList> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CachedNetworkImage(
+                                    cacheManager: CacheManager(
+                                      Config(
+                                        'testCache',
+                                        fileService: HttpFileService(
+                                          httpClient: http,
+                                        ),
+                                      ),
+                                    ),
                                     httpHeaders: {
                                       "Authorization":"bearer ${globVar.tokenRest.token}"
                                     },
@@ -238,7 +249,17 @@ class _ContentListState extends State<ContentList> {
                                           backgroundColor: Colors.grey,
                                           valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
                                         )),
-                                    errorWidget: (context, url, error) => Icon(Icons.error),
+                                    errorWidget: (context, url, error){
+                                      if(error == HandshakeException){
+                                        if(!useLocal){
+                                          setState(() {
+                                            useLocal = true;
+                                            http = IOClient(HttpClient(context: clientContext));
+                                          });
+                                        }
+                                      }
+                                      return Icon(Icons.error);
+                                    },
                                   ),
                                   // Container(
                                   //     height: 116,
@@ -437,6 +458,14 @@ class _ContentListState extends State<ContentList> {
                               child: Row(
                                 children: [
                                   CachedNetworkImage(
+                                    cacheManager: CacheManager(
+                                      Config(
+                                        'testCache',
+                                        fileService: HttpFileService(
+                                          httpClient: http,
+                                        ),
+                                      ),
+                                    ),
                                     httpHeaders: {
                                       "Authorization":"bearer ${globVar.tokenRest.token}"
                                     },
@@ -460,7 +489,17 @@ class _ContentListState extends State<ContentList> {
                                           backgroundColor: Colors.grey,
                                           valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
                                         )),
-                                    errorWidget: (context, url, error) => Icon(Icons.error),
+                                    errorWidget: (context, url, error){
+                                      if(error == HandshakeException){
+                                        if(!useLocal){
+                                          setState(() {
+                                            useLocal = true;
+                                            http = IOClient(HttpClient(context: clientContext));
+                                          });
+                                        }
+                                      }
+                                      return Icon(Icons.error);
+                                    },
                                   ),
                                   // Container(
                                   //   width: 150,

@@ -1,5 +1,6 @@
 import 'dart:io';
-
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:http/io_client.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -210,6 +211,14 @@ class _HomePageState extends State<HomePage> with RouteAware {
                   // setState(() {});
                 },
                 child: CachedNetworkImage(
+                  cacheManager: CacheManager(
+                    Config(
+                      'testCache',
+                      fileService: HttpFileService(
+                        httpClient: http,
+                      ),
+                    ),
+                  ),
                   httpHeaders: {
                     "Authorization": "bearer ${globVar.tokenRest.token}"
                   },
@@ -241,7 +250,17 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               new AlwaysStoppedAnimation<Color>(Colors.white),
                         )),
                   ),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error){
+                    if(error == HandshakeException){
+                      if(!useLocal){
+                        setState(() {
+                          useLocal = true;
+                          http = IOClient(HttpClient(context: clientContext));
+                        });
+                      }
+                    }
+                    return Icon(Icons.error);
+                  },
                 ),
               );
             },
@@ -832,6 +851,14 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                                           NewsList[indx * 2])));
                                         },
                                         child: CachedNetworkImage(
+                                          cacheManager: CacheManager(
+                                            Config(
+                                              'testCache',
+                                              fileService: HttpFileService(
+                                                httpClient: http,
+                                              ),
+                                            ),
+                                          ),
                                           httpHeaders: {
                                             "Authorization":
                                                 "bearer ${globVar.tokenRest.token}"
@@ -872,8 +899,17 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                                                 Color>(
                                                             Colors.white),
                                                   )),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
+                                          errorWidget: (context, url, error){
+                                            if(error == HandshakeException){
+                                              if(!useLocal){
+                                                setState(() {
+                                                  useLocal = true;
+                                                  http = IOClient(HttpClient(context: clientContext));
+                                                });
+                                              }
+                                            }
+                                            return Icon(Icons.error);
+                                          },
                                         ),
                                         // Container(
                                         //   decoration:
@@ -909,6 +945,14 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                                                     1])));
                                               },
                                               child: CachedNetworkImage(
+                                                cacheManager: CacheManager(
+                                                  Config(
+                                                    'testCache',
+                                                    fileService: HttpFileService(
+                                                      httpClient: http,
+                                                    ),
+                                                  ),
+                                                ),
                                                 httpHeaders: {
                                                   "Authorization":
                                                       "bearer ${globVar.tokenRest.token}"
@@ -954,9 +998,17 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                                                       Color>(
                                                                   Colors.white),
                                                         )),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Icon(Icons.error),
+                                                errorWidget: (context, url, error){
+                                                  if(error == HandshakeException){
+                                                    if(!useLocal){
+                                                      setState(() {
+                                                        useLocal = true;
+                                                        http = IOClient(HttpClient(context: clientContext));
+                                                      });
+                                                    }
+                                                  }
+                                                  return Icon(Icons.error);
+                                                },
                                               ),
                                               // Container(
                                               //   width: 175,
@@ -1540,6 +1592,14 @@ class _HomePageState extends State<HomePage> with RouteAware {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CachedNetworkImage(
+              cacheManager: CacheManager(
+                Config(
+                  'testCache',
+                  fileService: HttpFileService(
+                    httpClient: http,
+                  ),
+                ),
+              ),
               httpHeaders: {
                 "Authorization": "bearer ${globVar.tokenRest.token}"
               },
@@ -1557,7 +1617,17 @@ class _HomePageState extends State<HomePage> with RouteAware {
                     backgroundColor: Colors.grey,
                     valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
                   )),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+              errorWidget: (context, url, error){
+                if(error == HandshakeException){
+                  if(!useLocal){
+                    setState(() {
+                      useLocal = true;
+                      http = IOClient(HttpClient(context: clientContext));
+                    });
+                  }
+                }
+                return Icon(Icons.error);
+              },
             ),
             // Image(
             //   image: MemoryImage(element.message_image),
@@ -1839,6 +1909,14 @@ class _HomePageState extends State<HomePage> with RouteAware {
                           ),
                           child: Column(children: <Widget>[
                             CachedNetworkImage(
+                              cacheManager: CacheManager(
+                                Config(
+                                  'testCache',
+                                  fileService: HttpFileService(
+                                    httpClient: http,
+                                  ),
+                                ),
+                              ),
                               httpHeaders: {
                                 "Authorization":
                                     "bearer ${globVar.tokenRest.token}"
@@ -1869,8 +1947,17 @@ class _HomePageState extends State<HomePage> with RouteAware {
                                         new AlwaysStoppedAnimation<Color>(
                                             Colors.white),
                                   )),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                              errorWidget: (context, url, error){
+                                if(error == HandshakeException){
+                                  if(!useLocal){
+                                    setState(() {
+                                      useLocal = true;
+                                      http = IOClient(HttpClient(context: clientContext));
+                                    });
+                                  }
+                                }
+                                return Icon(Icons.error);
+                              },
                             ),
                             // Container(
                             //   width: width,
@@ -2421,6 +2508,14 @@ class _HomePageState extends State<HomePage> with RouteAware {
                             )
                           :
                           CachedNetworkImage(
+                            cacheManager: CacheManager(
+                              Config(
+                                'testCache',
+                                fileService: HttpFileService(
+                                  httpClient: http,
+                                ),
+                              ),
+                            ),
                             httpHeaders: {
                             "Authorization": "bearer ${globVar.tokenRest.token}"
                             },
@@ -2432,7 +2527,17 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               fit: BoxFit.fitWidth,
                               image: imageProvider,
                             ),
-                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            errorWidget: (context, url, error){
+                              if(error == HandshakeException){
+                                if(!useLocal){
+                                  setState(() {
+                                    useLocal = true;
+                                    http = IOClient(HttpClient(context: clientContext));
+                                  });
+                                }
+                              }
+                              return Icon(Icons.error);
+                            },
                           ),
                       fit: BoxFit.fill,
                     ),
@@ -2519,6 +2624,14 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               )
                             :
                         CachedNetworkImage(
+                          cacheManager: CacheManager(
+                            Config(
+                              'testCache',
+                              fileService: HttpFileService(
+                                httpClient: http,
+                              ),
+                            ),
+                          ),
                           httpHeaders: {
                             "Authorization": "bearer ${globVar.tokenRest.token}"
                           },
@@ -2538,7 +2651,17 @@ class _HomePageState extends State<HomePage> with RouteAware {
                               new AlwaysStoppedAnimation<Color>(Colors.grey.withOpacity(0.3)),
                             ),
                           ),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
+                          errorWidget: (context, url, error){
+                            if(error == HandshakeException){
+                              if(!useLocal){
+                                setState(() {
+                                  useLocal = true;
+                                  http = IOClient(HttpClient(context: clientContext));
+                                });
+                              }
+                            }
+                            return Icon(Icons.error);
+                          },
                         )
                       ),
                     ],

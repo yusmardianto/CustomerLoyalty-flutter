@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'DataType/contents.dart';
@@ -29,8 +32,19 @@ GlobalKey<NavigatorState> navKey = new GlobalKey<NavigatorState>();
 RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 List<Content> featureList = [];
 String currentVer ='-';
+Client http = new Client();
+SecurityContext clientContext;
+bool useLocal = false;
+registerCert()async{
+  ByteData bytes = await rootBundle.load('cert/isrgrootx1.pem');
+  print("bytes ${bytes.lengthInBytes}");
+  clientContext = new SecurityContext()
+    ..setTrustedCertificatesBytes(bytes.buffer.asUint8List());
+}
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await registerCert();
   // SharedPreferences.setMockInitialValues({});
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_)async {

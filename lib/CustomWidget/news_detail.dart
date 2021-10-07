@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../DataType/contents.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import '../main.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:http/io_client.dart';
 
 class NewsDetail extends StatefulWidget {
   final Content ContentApi;
@@ -38,6 +42,14 @@ class _NewsDetailState extends State<NewsDetail> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CachedNetworkImage(
+                      cacheManager: CacheManager(
+                        Config(
+                          'testCache',
+                          fileService: HttpFileService(
+                            httpClient: http,
+                          ),
+                        ),
+                      ),
                       httpHeaders: {
                         "Authorization":"bearer ${globVar.tokenRest.token}"
                       },
@@ -55,7 +67,17 @@ class _NewsDetailState extends State<NewsDetail> {
                             backgroundColor: Colors.grey,
                             valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
                           )),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error){
+                        if(error == HandshakeException){
+                          if(!useLocal){
+                            setState(() {
+                              useLocal = true;
+                              http = IOClient(HttpClient(context: clientContext));
+                            });
+                          }
+                        }
+                        return Icon(Icons.error);
+                      },
                     ),
                     Container(
                       padding: EdgeInsets.all(10),

@@ -4,7 +4,8 @@ import 'dart:io';
 import 'package:barcode/barcode.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 import 'package:intl/intl.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 import '../main.dart';
@@ -18,7 +19,9 @@ import 'package:mime/mime.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+
 class Util{
+
   launchBrowserURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -34,7 +37,7 @@ class Util{
     if(globVar.tokenRest==null||globVar.tokenRest.token==null||(globVar.tokenRest.expire != null && DateTime.now().isAfter(globVar.tokenRest.expire))){
       final tokenEndpoint = Uri.parse('https://loyalty.thamrin.xyz/ords/loyalty/oauth/token');
       var clients =  JsonDecoder().convert(prefs.getString("clientCred"));
-      oauth2.Client grant = await oauth2.clientCredentialsGrant(tokenEndpoint, clients["id"], clients["secret"]);
+      oauth2.Client grant = await oauth2.clientCredentialsGrant(tokenEndpoint, clients["id"], clients["secret"],httpClient: http);
       globVar.tokenRest=Rest(grant.credentials.accessToken,grant.credentials.expiration);
       await backupGlobVar();
     }
@@ -54,10 +57,10 @@ class Util{
         headers["Authorization"] =
         "bearer ${globVar.tokenRest.token}";
       }
-      Future<http.Response> futureResponse = http.post(
+      Future<Response> futureResponse = http.post(
           Uri.parse(url), headers: headers,
           body: json.encode(jsonData));
-      http.Response response;
+      Response response;
       if (timeout)
         response = await futureResponse.timeout(
             Duration(seconds: second));
@@ -90,6 +93,16 @@ class Util{
       // print(e);
       return {"STATUS":0,"DATA":"Request Timeout"};
     }
+    on HandshakeException catch(e){
+      if(useLocal){
+        return {"STATUS":0,"DATA":"Not Connected to Server. $e"};
+      }
+      else{
+        useLocal = true;
+        http = IOClient(HttpClient(context: clientContext));
+        return await post(jsonData, url,secure:secure,timeout:timeout,second:second,many:many,customHeader:customHeader);
+      }
+    }
     on Exception catch(exception){
       print([url,exception]);
 //      Toast("Not Connected to Server", Colors.red);
@@ -111,13 +124,13 @@ class Util{
         headers["Authorization"] =
         "bearer ${globVar.tokenRest.token}";
       }
-      Future<http.Response> futureResponse = http.post(
+      Future<Response> futureResponse = http.post(
           Uri.parse('$url'), headers: headers,
           body: file.readAsBytesSync());
       if (timeout)
         futureResponse.timeout(
             Duration(seconds: second));
-      http.Response response = await Future.sync(() => futureResponse);
+      Response response = await Future.sync(() => futureResponse);
       if(htmlErrorTitle(response.body.toString())!=""){
         return {"STATUS":(response.statusCode != 200)?0:1,"DATA":htmlErrorTitle(response.body.toString())};
       }
@@ -139,6 +152,16 @@ class Util{
     } on TimeoutException catch(e){
       return {"STATUS":0,"DATA":"Request Timeout"};
     }
+    on HandshakeException catch(e){
+      if(useLocal){
+        return {"STATUS":0,"DATA":"Not Connected to Server. $e"};
+      }
+      else{
+        useLocal = true;
+        http = IOClient(HttpClient(context: clientContext));
+        return await postImage(file, url,secure:secure,timeout:timeout,second:second,many:many,customHeader:customHeader);
+      }
+    }
     on Exception catch(exception){
       print([url,exception]);
 //      Toast("Not Connected to Server", Colors.red);
@@ -155,13 +178,13 @@ class Util{
         headers["Authorization"] =
         "bearer ${globVar.tokenRest.token}";
       }
-      Future<http.Response> futureResponse = http.put(
+      Future<Response> futureResponse = http.put(
           Uri.parse('$url'), headers: headers,
           body: json.encode(jsonData));;
       if (timeout)
         futureResponse.timeout(
             Duration(seconds: second));
-      http.Response response = await Future.sync(() => futureResponse);
+      Response response = await Future.sync(() => futureResponse);
       // print(response.body.toString());
       if(htmlErrorTitle(response.body.toString())!=""){
         return {"STATUS":(response.statusCode != 200)?0:1,"DATA":htmlErrorTitle(response.body.toString())};
@@ -185,6 +208,16 @@ class Util{
     on TimeoutException catch(e){
       return {"STATUS":0,"DATA":"Request Timeout"};
     }
+    on HandshakeException catch(e){
+      if(useLocal){
+        return {"STATUS":0,"DATA":"Not Connected to Server. $e"};
+      }
+      else{
+        useLocal = true;
+        http = IOClient(HttpClient(context: clientContext));
+        return await put(jsonData, url,secure:secure,timeout:timeout,second:second);
+      }
+    }
     on SocketException catch(e){
       // print([url,exception]);
 //      Toast("Not Connected to Server", Colors.red);
@@ -200,12 +233,12 @@ class Util{
         headers["Authorization"] =
             "bearer ${globVar.tokenRest.token}";
       }
-      Future<http.Response> futureResponse = http.get(
+      Future<Response> futureResponse = http.get(
           Uri.parse('$url'), headers: headers);
       if (timeout)
         futureResponse.timeout(
             Duration(seconds: second));
-      http.Response response = await Future.sync(() => futureResponse);
+      Response response = await Future.sync(() => futureResponse);
       if(htmlErrorTitle(response.body.toString())!=""){
         return {"STATUS":(response.statusCode != 200)?0:1,"DATA":htmlErrorTitle(response.body.toString())};
       }
@@ -215,6 +248,16 @@ class Util{
       }
     } on TimeoutException catch(e){
       return {"STATUS":0,"DATA":"Request Timeout"};
+    }
+    on HandshakeException catch(e){
+      if(useLocal){
+        return {"STATUS":0,"DATA":"Not Connected to Server. $e"};
+      }
+      else{
+        useLocal = true;
+        http = IOClient(HttpClient(context: clientContext));
+        return await get(url,secure:secure,timeout:timeout,second:second);
+      }
     }
     on Exception catch(exception){
       print([url,exception]);

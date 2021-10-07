@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:http/io_client.dart';
 import 'CustomShape/circle_tab_indicator.dart';
 import 'DataType/contents.dart';
 import 'main.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class FirstPage extends StatefulWidget {
   final List<Content> features;
@@ -12,6 +15,7 @@ class FirstPage extends StatefulWidget {
 
 class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMixin {
   TabController _controller;
+
   @override
   void initState() {;
     _controller = TabController(length: widget.features.length, vsync: this);
@@ -83,6 +87,14 @@ class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMix
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               CachedNetworkImage(
+                                cacheManager: CacheManager(
+                                  Config(
+                                    'testCache',
+                                    fileService: HttpFileService(
+                                      httpClient: http,
+                                    ),
+                                  ),
+                                ),
                                 httpHeaders: {
                                   "Authorization":"bearer ${globVar.tokenRest.token}"
                                 },
@@ -104,7 +116,17 @@ class _FirstPageState extends State<FirstPage> with SingleTickerProviderStateMix
                                       backgroundColor: Colors.grey,
                                       valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
                                     )),
-                                errorWidget: (context, url, error) => Icon(Icons.error),
+                                errorWidget: (context, url, error){
+                                  if(error == HandshakeException){
+                                    if(!useLocal){
+                                      setState(() {
+                                        useLocal = true;
+                                        http = IOClient(HttpClient(context: clientContext));
+                                      });
+                                    }
+                                  }
+                                  return Icon(Icons.error);
+                                },
                               ),
                               // Container(
                               //   height: 194,

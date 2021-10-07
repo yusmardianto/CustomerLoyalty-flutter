@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:my_thamrin_club/home_page.dart';
-
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:http/io_client.dart';
 import 'CustomWidget/bottom_appbar.dart';
 import 'main.dart';
 import 'package:flutter/cupertino.dart';
@@ -278,6 +278,14 @@ class _ProfileState extends State<Profile> {
                                   child: Icon(Icons.person,color: Colors.white,size: 150,),
                                 )
                                 :CachedNetworkImage(
+                                  cacheManager: CacheManager(
+                                    Config(
+                                      'testCache',
+                                      fileService: HttpFileService(
+                                        httpClient: http,
+                                      ),
+                                    ),
+                                  ),
                                   httpHeaders: {
                                     "Authorization": "bearer ${globVar.tokenRest.token}"
                                   },
@@ -288,7 +296,17 @@ class _ProfileState extends State<Profile> {
                                     radius: 70,
                                     backgroundImage: imageProvider,
                                   ),
-                                  errorWidget: (context, url, error) => Icon(Icons.error),
+                                  errorWidget: (context, url, error){
+                                    if(error == HandshakeException){
+                                      if(!useLocal){
+                                        setState(() {
+                                          useLocal = true;
+                                          http = IOClient(HttpClient(context: clientContext));
+                                        });
+                                      }
+                                    }
+                                    return Icon(Icons.error);
+                                  },
                                 ),
                               ),
                             ),
