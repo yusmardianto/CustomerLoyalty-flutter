@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
@@ -137,7 +138,7 @@ class MyApp extends StatelessWidget {
               return Splashscreen();
             } else {
               // Loading is done, return the app:
-              _check_Update(context);
+              if(defaultTargetPlatform != TargetPlatform.iOS)_check_Update(context);
               return ((prefs.getBool("first_time")??true)&&featureList.length!=0)?FirstPage(featureList):(globVar.user!=null)?HomePage():LoginPage();
             }
           },
